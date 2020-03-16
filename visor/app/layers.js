@@ -18,6 +18,14 @@ var highlight = new ol.layer.Vector({
     source: new ol.source.Vector()
 });
 //
+var Deptos = new ol.layer.Tile({
+    visible: true,
+    source: new ol.source.TileWMS({
+        url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
+        params: {LAYERS: 'Visor:departamentos', STYLES: ''}
+    }), name: 'Departamentos'
+});
+//
 //Grupos de capas
 //
 var layerBase = new ol.layer.Group({
@@ -38,7 +46,7 @@ map = new ol.Map({
     target: document.getElementById('map'),
     // use the Canvas renderer
     renderer: 'canvas',
-    layers: [layerBase, /*new ol.layer.Tile({ source: new ol.source.OSM()})/*, highlight*/],
+    layers: [layerBase, Deptos/*new ol.layer.Tile({ source: new ol.source.OSM()})/*, highlight*/],
     view: new ol.View({
         center: [-8113332, 464737],
         zoom: 5.373

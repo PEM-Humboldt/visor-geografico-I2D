@@ -16,6 +16,12 @@ $(document).ready(function () {
     var dropdownMenu = document.createElement('div');
     dropdownMenu.className = 'dropdown-menu';
     dropdown.appendChild(dropdownMenu);
+    
+    var a = document.createElement('a');
+    a.className = 'dropdown-item';
+    a.innerHTML = 'Amazonas';
+    dropdownMenu.appendChild(a);
+    
     //Mapa
     var map = document.createElement('div');
     map.id = 'map';
