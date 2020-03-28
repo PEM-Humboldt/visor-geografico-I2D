@@ -85,6 +85,8 @@ $(document).ready(function () {
             document.getElementById('BuListMpio').innerHTML = 'Seleccione Municipio';
             document.getElementById('BuListMpio').disabled = false;
         } else {
+            ECP.setVisible(true);
+            document.getElementById('layertree').getElementsByTagName("li")[1].getElementsByTagName("input")[0].checked = true;
             document.getElementById('BuListMpio').innerHTML = event.target.text;
             document.getElementById('BuListMpio').disabled = true;
         }
