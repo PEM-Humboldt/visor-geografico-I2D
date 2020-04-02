@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <title>Visor Geográfico · Instituto Humboldt</title>
+        <link rel="icon" href="iconos/logo.png" type="iconos/png">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/map.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="librerias/ol-6.2.1/ol.css">
+        <script src="librerias/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+        <script src="librerias/bootstrap-4.4.1/popper.min.js"></script>
+        <link rel="stylesheet" href="librerias/bootstrap-4.4.1/css/bootstrap.min.css">
+        <script src="librerias/bootstrap-4.4.1/js/bootstrap.min.js"></script>
+        <script src="librerias/ol-6.2.1/ol.js"></script>
+        <script src="app/index.js"></script>
+    </head>
+    <body>
+        <header>
+            <div class="row">
+                <div class="col">
+                    <a class="float-left" href="http://datos.humboldt.org.co"><img src="iconos/logo.png" alt="Infraestructura Institucional de Datos e Información"></img></a>
+                    <h1>VISOR<br>geográfico</h1>
+                    <a href="http://humboldt.org.co" target="_blank" class="float-right"><img src="iconos/humboldt.png" alt="Instituto de Investigación de Recursos Biológicos Alexander von Humboldt"></a>
+                </div>
+            </div>
+        </header>
+        <div id="map">
+            <img id="ControlCapas" name="ControlCapas" class="float-right" src="iconos/CAPAS.png" onclick="ControlCapas()">
+        </div>
+        <div id="herramientas" class='container' hidden="hidden">
+            <div id="layertree" class="tree" style="background: #ffffff; box-shadow: 0px 1px 8px 1px;">
+                <img class="btn btn-success" style="background-color:#198c19; border: 0px solid" >
+            </div> 
+        </div>
+
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header">
+                    <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                        Collapsible Group Item #1
+                    </a>
+                </div>
+                <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                    <div class="card-body">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="fixed-bottom">
+            <p> Infraestructura Institucional de</br>Datos e Información © 2017</p>
+            <div class="links">
+                <a href="http://i2d.humboldt.org.co/ceiba/" target="_blank" class="linksftr">Ceiba</a>
+                <a href="http://geonetwork.humboldt.org.co/" target="_blank" class="linksftr">Geonetwork</a>
+                <a href="https://sites.google.com/humboldt.org.co/i2dwiki/inicio" target="_blank" class="linksftr">Guías</a>
+                <a href="mailto:i2d@humboldt.org.co" target="_blank" class="linksftr">Contacto</a>
+            </div>
+        </footer>
+    </body>
+
+</html>

@@ -1,0 +1,14 @@
+#map {
+    /*height: 100%;*/
+    /*height: 500px;*/
+    /*width: 100%;*/
+    /*overflow: hidden;*/
+    z-index: 0;
+    position: relative;
+}
+#ControlCapas{
+    z-index: 1;
+    position: absolute;
+    right: 0px;
+    width: 3%;
+}
