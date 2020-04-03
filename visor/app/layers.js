@@ -35,112 +35,114 @@ var Mpios = new ol.layer.Tile({
 //ECP
 //
 var Agrologia = new ol.layer.Tile({
-    visible: true,
+    visible: false,
     source: new ol.source.TileWMS({
         url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
         params: {LAYERS: 'Visor:agrologico', STYLES: ''}
     }), name: 'Agrologia'
 });
 var avu = new ol.layer.Tile({
-    visible: true,
+    visible: false,
     source: new ol.source.TileWMS({
         url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
         params: {LAYERS: 'Visor:avu', STYLES: ''}
     }), name: 'avu'
 });
 var Bosque = new ol.layer.Tile({
-    visible: true,
+    visible: false,
     source: new ol.source.TileWMS({
         url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
         params: {LAYERS: 'Visor:bosque', STYLES: ''}
-    }), name: 'Bosque'
+    }),
+    //name: 'Bosque'
+    name: 'Coberturas vegetales y ecosistemas'
 });
 var CuerposAgua = new ol.layer.Tile({
-    visible: true,
+    visible: false,
     source: new ol.source.TileWMS({
         url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
         params: {LAYERS: 'Visor:cuerpos_agua', STYLES: ''}
     }), name: 'Cuerpos Agua'
 });
 var Cultivos = new ol.layer.Tile({
-    visible: true,
+    visible: false,
     source: new ol.source.TileWMS({
         url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
         params: {LAYERS: 'Visor:cultivos', STYLES: ''}
     }), name: 'Cultivos'
 });
 var EquipamientoUrbano = new ol.layer.Tile({
-    visible: true,
+    visible: false,
     source: new ol.source.TileWMS({
         url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
         params: {LAYERS: 'Visor:equipamiento_urbano', STYLES: ''}
     }), name: 'Equipamiento Urbano'
 });
 var EspacioPublico = new ol.layer.Tile({
-    visible: true,
+    visible: false,
     source: new ol.source.TileWMS({
         url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
         params: {LAYERS: 'Visor:espacio_publico', STYLES: ''}
     }), name: 'Espacio Publico'
 });
 var EstructuraEcologica = new ol.layer.Tile({
-    visible: true,
+    visible: false,
     source: new ol.source.TileWMS({
         url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
         params: {LAYERS: 'Visor:estructura_ecologica_urbana_envigado', STYLES: ''}
     }), name: 'Estructura Ecologica Urbana'
 });
 var Humedales = new ol.layer.Tile({
-    visible: true,
+    visible: false,
     source: new ol.source.TileWMS({
         url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
         params: {LAYERS: 'Visor:humedales', STYLES: ''}
     }), name: 'Humedales'
 });
 var Nacimientos = new ol.layer.Tile({
-    visible: true,
+    visible: false,
     source: new ol.source.TileWMS({
         url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
         params: {LAYERS: 'Visor:nacimientos', STYLES: ''}
     }), name: 'Nacimientos'
 });
 var Plantaciones = new ol.layer.Tile({
-    visible: true,
+    visible: false,
     source: new ol.source.TileWMS({
         url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
         params: {LAYERS: 'Visor:plantaciones', STYLES: ''}
     }), name: 'Plantaciones'
 });
 var Predios_Priorizados = new ol.layer.Tile({
-    visible: true,
+    visible: false,
     source: new ol.source.TileWMS({
         url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
         params: {LAYERS: 'Visor:predios_priorizados', STYLES: ''}
     }), name: 'Predios Priorizados'
 });
 var Ronda_Hidrica = new ol.layer.Tile({
-    visible: true,
+    visible: false,
     source: new ol.source.TileWMS({
         url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
         params: {LAYERS: 'Visor:ronda_hidrica', STYLES: ''}
     }), name: 'Ronda Hidrica'
 });
 var Senderos = new ol.layer.Tile({
-    visible: true,
+    visible: false,
     source: new ol.source.TileWMS({
         url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
         params: {LAYERS: 'Visor:senderos', STYLES: ''}
     }), name: 'Senderos'
 });
 var Urbano = new ol.layer.Tile({
-    visible: true,
+    visible: false,
     source: new ol.source.TileWMS({
         url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
         params: {LAYERS: 'Visor:urbano', STYLES: ''}
     }), name: 'Urbano'
 });
 var Zonas_Verdes = new ol.layer.Tile({
-    visible: true,
+    visible: false,
     source: new ol.source.TileWMS({
         url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
         params: {LAYERS: 'Visor:zonas_verdes', STYLES: ''}
@@ -154,9 +156,38 @@ var layerBase = new ol.layer.Group({
     name: 'Capas Base'
 });
 var ECP = new ol.layer.Group({
-    layers: [Agrologia, avu, Bosque, CuerposAgua, Cultivos, EquipamientoUrbano, EspacioPublico, EstructuraEcologica, Humedales, Nacimientos, Plantaciones, Predios_Priorizados, Ronda_Hidrica, Senderos, Urbano, Zonas_Verdes, highlight],
-    name: 'Estructura Ecologica Principal',
-    visible: false
+    //layers: [Agrologia, avu, Bosque, CuerposAgua, Cultivos, EquipamientoUrbano, EspacioPublico, EstructuraEcologica, Humedales, Nacimientos, Plantaciones, Predios_Priorizados, Ronda_Hidrica, Senderos, Urbano, Zonas_Verdes, highlight],
+    layers: [EstructuraEcologica],
+    //name: 'Estructura Ecologica Principal',
+    name: 'Soporte'//,
+    //visible: true
+});
+var ServEco = new ol.layer.Group({
+    layers: [Bosque],
+    name: 'Biodiversidad y Servicios ecosistémicos',
+    visible: true
+});
+var InfraVerde = new ol.layer.Group({
+    layers: [],
+    name: 'Infraestructura verde',
+    visible: true
+});
+var CalAmbUrb = new ol.layer.Group({
+    layers: [],
+    name: 'Calidad ambiental urbana',
+    visible: true
+});
+var InCiu = new ol.layer.Group({
+    layers: [],
+    name: 'Iniciativas ciudadanas',
+    visible: true
+});
+var otros = new ol.layer.Group({
+    layers: [Agrologia, avu, CuerposAgua, Cultivos, EquipamientoUrbano, EspacioPublico, Humedales, Nacimientos, Plantaciones, Predios_Priorizados, Ronda_Hidrica, Senderos, Urbano, Zonas_Verdes],
+    //layers: [EstructuraEcologica],
+    //name: 'Estructura Ecologica Principal',
+    name: 'Otros',
+    visible: true
 });
 //
 //
@@ -172,62 +203,377 @@ map = new ol.Map({
     target: document.getElementById('map'),
     // use the Canvas renderer
     renderer: 'canvas',
-    layers: [layerBase, ECP, highlight],
+    layers: [layerBase, ECP, ServEco, InfraVerde, CalAmbUrb, InCiu, otros],
     view: new ol.View({
         center: [-8113332, 464737],
         zoom: 5.373
     })
 });
 function buildLayerTree(layer) {
-    var elem;
     var name = layer.get('name') ? layer.get('name') : "Group";
-    if (!layer.get('name')) {
-        var div = "<li data-layerid='CAPAS'>" + "<span><img src='iconos/CAPAS.png' alt='Smiley face' height='50' width='50'>CAPAS</span>";
-    } else if (layer.values_.visible === true) {
-        var div = "<li data-layerid='" + name + "'>" + "<span><img src='iconos/" + layer.get('name') + ".jpg' alt='Smiley face' height='20' width='20' >" + layer.get('name') + "</span>" + "<input type='checkbox' checked>";
-    } else {
-        var div = "<li data-layerid='" + name + "'>" + "<span><img src='image/" + layer.get('name') + ".jpg' alt='Smiley face' height='20' width='20'>" + layer.get('name') + "</span>" + "<input type='checkbox'>";
-    }
-    if (layer.getLayers) {
-        var sublayersElem = '';
-        var layers = layer.getLayers().getArray();
-        var len = layers.length;
-        for (var i = len - 2; i >= 0; i--) {
-            sublayersElem += buildLayerTree(layers[i]);
-        }
-        elem = div + " <ul>" + sublayersElem + "</ul></li>";
-    } else {
-        elem = div + " </li>";
-    }
-    return elem;
-}
-function initializeTree() {
-    var elem = buildLayerTree(map.getLayerGroup());
-    $('#layertree').empty().append(elem);
-    $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
-    var longitud = $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch').length;
-    for (var i = 0; i < longitud; i++) {
-        var colapse = $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch')[i];
-        var colap = $(colapse).parent('li.parent_li').find(' > ul > li');
-        colap.hide('fast');
-    }
-    $('.tree li.parent_li > span').on('click', function (e) {
-        var children = $(this).parent('li.parent_li').find(' > ul > li');
-        if (children.is(":visible")) {
-            children.hide('fast');
-            $(this).attr('title', 'Expand this branch').find(' > i').addClass('glyphicon-plus').removeClass('glyphicon-minus');
+    var layers = layer.getLayers().getArray();
+    var len = layers.length;
+    for (var i = 0; i < len; i++) {
+        var name = layers[i].get('name');
+        if (i === 0) {
+            var accordion = document.getElementById('accordion');
+            card = document.createElement('div');
+            card.className = "overflow-auto card";
+            card.id = "capas";
+            accordion.appendChild(card);
+            cardh = document.createElement('div');
+            cardh.className = "card-header";
+            card.appendChild(cardh);
+            cardlink = document.createElement('a');
+            cardlink.className = "card-link";
+            cardlink.setAttribute('data-toggle', 'collapse');
+            cardlink.setAttribute('href', '#collapse' + i);
+            cardlink.innerHTML = name;
+            cardh.appendChild(cardlink);
+            close = document.createElement('a');
+            close.className = "card-link float-right";
+            close.setAttribute('data-toggle', 'collapse');
+            close.setAttribute('href', '#');
+            close.onclick = ControlLayerClose;
+            close.innerHTML = 'X';
+            cardh.appendChild(close);
+            collapseOne = document.createElement('div');
+            collapseOne.id = "collapse" + i;
+            collapseOne.className = "collapse container";
+            collapseOne.setAttribute('data-parent', '#accordion');
+            card.appendChild(collapseOne);
         } else {
-            children.show('fast');
-            $(this).attr('title', 'Collapse this branch').find(' > i').addClass('glyphicon-minus').removeClass('glyphicon-plus');
+            var accordion = document.getElementById('accordion');
+            card = document.createElement('div');
+            card.className = "overflow-auto card";
+            card.id = "capas";
+            accordion.appendChild(card);
+            cardh = document.createElement('div');
+            cardh.className = "card-header";
+            card.appendChild(cardh);
+            cardlink = document.createElement('a');
+            cardlink.className = "card-link";
+            cardlink.setAttribute('data-toggle', 'collapse');
+            cardlink.setAttribute('href', '#collapse' + i);
+            cardlink.innerHTML = name;
+            cardh.appendChild(cardlink);
+            collapseOne = document.createElement('div');
+            collapseOne.id = "collapse" + i;
+            collapseOne.className = "collapse container";
+            collapseOne.setAttribute('data-parent', '#accordion');
+            card.appendChild(collapseOne);
         }
-        e.stopPropagation();
-    });
+        var lay = layers[i].getLayers().getArray();
+        var leng = lay.length;
+        if (i === 1) {
+            for (var j = 0; j <= leng; j++) {
+                if (lay[j]) {
+                    var subname = lay[j].get('name');
+                    var cardbody = document.createElement('div');
+                    cardbody.className = "card-body";
+                    collapseOne.appendChild(cardbody);
+                    var fcheck = document.createElement('div');
+                    fcheck.className = "form-check";
+                    var check = document.createElement('input');
+                    check.className = "form-check-input";
+                    check.setAttribute('type', 'checkbox');
+                    check.id = subname;
+                    //check.checked = true;
+                    cardbody.appendChild(check);
+                    var lab = document.createElement('label');
+                    lab.className = "form-check-label";
+                    lab.setAttribute('for', 'defaultCheck1');
+                    lab.innerHTML = subname;
+                    cardbody.appendChild(lab);
+                    var cardbody = document.createElement('div');
+                    cardbody.className = "card-body";
+                    collapseOne.appendChild(cardbody);
+                    var fcheck = document.createElement('div');
+                    fcheck.className = "form-check";
+                    var check = document.createElement('input');
+                    check.className = "form-check-input";
+                    check.setAttribute('type', 'checkbox');
+                    check.id = 'Conectividad';
+                    //check.checked = true;
+                    check.disabled = true;
+                    cardbody.appendChild(check);
+                    var lab = document.createElement('label');
+                    lab.className = "form-check-label";
+                    lab.setAttribute('for', 'defaultCheck1');
+                    lab.innerHTML = 'Conectividad';
+                    cardbody.appendChild(lab);
+                }
+            }
+        } else if (i === 2) {
+            for (var j = 0; j <= leng + 1; j++) {
+                if (lay[j]) {
+                    var subname = lay[j].get('name');
+                    var cardbody = document.createElement('div');
+                    cardbody.className = "card-body";
+                    collapseOne.appendChild(cardbody);
+                    var fcheck = document.createElement('div');
+                    fcheck.className = "form-check";
+                    var check = document.createElement('input');
+                    check.className = "form-check-input";
+                    check.setAttribute('type', 'checkbox');
+                    check.id = subname;
+                    //check.checked = true;
+                    cardbody.appendChild(check);
+                    var lab = document.createElement('label');
+                    lab.className = "form-check-label";
+                    lab.setAttribute('for', 'defaultCheck1');
+                    lab.innerHTML = subname;
+                    cardbody.appendChild(lab);
+                } else if (j === 1) {
+                    var cardbody = document.createElement('div');
+                    cardbody.className = "card-body";
+                    collapseOne.appendChild(cardbody);
+                    var fcheck = document.createElement('div');
+                    fcheck.className = "form-check";
+                    var check = document.createElement('input');
+                    check.className = "form-check-input";
+                    check.setAttribute('type', 'checkbox');
+                    check.id = 'Conectividad';
+                    check.disabled = true;
+                    cardbody.appendChild(check);
+                    var lab = document.createElement('label');
+                    lab.className = "form-check-label";
+                    lab.setAttribute('for', 'defaultCheck1');
+                    lab.innerHTML = 'Oferta de Servicios ecosistémicos';
+                    cardbody.appendChild(lab);
+                } else if (j === 2) {
+                    var cardbody = document.createElement('div');
+                    cardbody.className = "card-body";
+                    collapseOne.appendChild(cardbody);
+                    var fcheck = document.createElement('div');
+                    fcheck.className = "form-check";
+                    var check = document.createElement('input');
+                    check.className = "form-check-input";
+                    check.setAttribute('type', 'checkbox');
+                    check.id = 'Conectividad';
+                    check.disabled = true;
+                    cardbody.appendChild(check);
+                    var lab = document.createElement('label');
+                    lab.className = "form-check-label";
+                    lab.setAttribute('for', 'defaultCheck1');
+                    lab.innerHTML = 'Inventarios oficiales de especies';
+                    cardbody.appendChild(lab);
+                }
+            }
+        } else if (i === 3) {
+            for (var j = 0; j <= leng + 3; j++) {
+                if (j === 0) {
+                    var cardbody = document.createElement('div');
+                    cardbody.className = "card-body";
+                    collapseOne.appendChild(cardbody);
+                    var fcheck = document.createElement('div');
+                    fcheck.className = "form-check";
+                    var check = document.createElement('input');
+                    check.className = "form-check-input";
+                    check.setAttribute('type', 'checkbox');
+                    check.id = 'Conectividad';
+                    check.disabled = true;
+                    cardbody.appendChild(check);
+                    var lab = document.createElement('label');
+                    lab.className = "form-check-label";
+                    lab.setAttribute('for', 'defaultCheck1');
+                    lab.innerHTML = 'Inventario arbolado urbano';
+                    cardbody.appendChild(lab);
+                } else if (j === 1) {
+                    var cardbody = document.createElement('div');
+                    cardbody.className = "card-body";
+                    collapseOne.appendChild(cardbody);
+                    var fcheck = document.createElement('div');
+                    fcheck.className = "form-check";
+                    var check = document.createElement('input');
+                    check.className = "form-check-input";
+                    check.setAttribute('type', 'checkbox');
+                    check.id = 'Conectividad';
+                    check.disabled = true;
+                    cardbody.appendChild(check);
+                    var lab = document.createElement('label');
+                    lab.className = "form-check-label";
+                    lab.setAttribute('for', 'defaultCheck1');
+                    lab.innerHTML = 'Parques';
+                    cardbody.appendChild(lab);
+                } else if (j === 2) {
+                    var cardbody = document.createElement('div');
+                    cardbody.className = "card-body";
+                    collapseOne.appendChild(cardbody);
+                    var fcheck = document.createElement('div');
+                    fcheck.className = "form-check";
+                    var check = document.createElement('input');
+                    check.className = "form-check-input";
+                    check.setAttribute('type', 'checkbox');
+                    check.id = 'Conectividad';
+                    check.disabled = true;
+                    cardbody.appendChild(check);
+                    var lab = document.createElement('label');
+                    lab.className = "form-check-label";
+                    lab.setAttribute('for', 'defaultCheck1');
+                    lab.innerHTML = 'Terrazas y techos verdes';
+                    cardbody.appendChild(lab);
+                } else if (j === 3) {
+                    var cardbody = document.createElement('div');
+                    cardbody.className = "card-body";
+                    collapseOne.appendChild(cardbody);
+                    var fcheck = document.createElement('div');
+                    fcheck.className = "form-check";
+                    var check = document.createElement('input');
+                    check.className = "form-check-input";
+                    check.setAttribute('type', 'checkbox');
+                    check.id = 'Conectividad';
+                    check.disabled = true;
+                    cardbody.appendChild(check);
+                    var lab = document.createElement('label');
+                    lab.className = "form-check-label";
+                    lab.setAttribute('for', 'defaultCheck1');
+                    lab.innerHTML = 'Catálogo de especies y recomendaciones de diseño';
+                    cardbody.appendChild(lab);
+                }
+            }
+        } else if (i === 4) {
+            for (var j = 0; j <= leng + 2; j++) {
+                if (j === 0) {
+                    var cardbody = document.createElement('div');
+                    cardbody.className = "card-body";
+                    collapseOne.appendChild(cardbody);
+                    var fcheck = document.createElement('div');
+                    fcheck.className = "form-check";
+                    var check = document.createElement('input');
+                    check.className = "form-check-input";
+                    check.setAttribute('type', 'checkbox');
+                    check.id = 'Conectividad';
+                    check.disabled = true;
+                    cardbody.appendChild(check);
+                    var lab = document.createElement('label');
+                    lab.className = "form-check-label";
+                    lab.setAttribute('for', 'defaultCheck1');
+                    lab.innerHTML = 'Calidad del aire';
+                    cardbody.appendChild(lab);
+                } else if (j === 1) {
+                    var cardbody = document.createElement('div');
+                    cardbody.className = "card-body";
+                    collapseOne.appendChild(cardbody);
+                    var fcheck = document.createElement('div');
+                    fcheck.className = "form-check";
+                    var check = document.createElement('input');
+                    check.className = "form-check-input";
+                    check.setAttribute('type', 'checkbox');
+                    check.id = 'Conectividad';
+                    check.disabled = true;
+                    cardbody.appendChild(check);
+                    var lab = document.createElement('label');
+                    lab.className = "form-check-label";
+                    lab.setAttribute('for', 'defaultCheck1');
+                    lab.innerHTML = 'Islas de calor';
+                    cardbody.appendChild(lab);
+                } else if (j === 2) {
+                    var cardbody = document.createElement('div');
+                    cardbody.className = "card-body";
+                    collapseOne.appendChild(cardbody);
+                    var fcheck = document.createElement('div');
+                    fcheck.className = "form-check";
+                    var check = document.createElement('input');
+                    check.className = "form-check-input";
+                    check.setAttribute('type', 'checkbox');
+                    check.id = 'Conectividad';
+                    check.disabled = true;
+                    cardbody.appendChild(check);
+                    var lab = document.createElement('label');
+                    lab.className = "form-check-label";
+                    lab.setAttribute('for', 'defaultCheck1');
+                    lab.innerHTML = 'Ruido';
+                    cardbody.appendChild(lab);
+                }
+            }
+        } else if (i === 5) {
+            for (var j = 0; j <= leng + 2; j++) {
+                if (j === 0) {
+                    var cardbody = document.createElement('div');
+                    cardbody.className = "card-body";
+                    collapseOne.appendChild(cardbody);
+                    var fcheck = document.createElement('div');
+                    fcheck.className = "form-check";
+                    var check = document.createElement('input');
+                    check.className = "form-check-input";
+                    check.setAttribute('type', 'checkbox');
+                    check.id = 'Conectividad';
+                    check.disabled = true;
+                    cardbody.appendChild(check);
+                    var lab = document.createElement('label');
+                    lab.className = "form-check-label";
+                    lab.setAttribute('for', 'defaultCheck1');
+                    lab.innerHTML = 'Huertas privadas y comunitarias/bancos de semillas';
+                    cardbody.appendChild(lab);
+                } else if (j === 1) {
+                    var cardbody = document.createElement('div');
+                    cardbody.className = "card-body";
+                    collapseOne.appendChild(cardbody);
+                    var fcheck = document.createElement('div');
+                    fcheck.className = "form-check";
+                    var check = document.createElement('input');
+                    check.className = "form-check-input";
+                    check.setAttribute('type', 'checkbox');
+                    check.id = 'Compostaje';
+                    check.disabled = true;
+                    cardbody.appendChild(check);
+                    var lab = document.createElement('label');
+                    lab.className = "form-check-label";
+                    lab.setAttribute('for', 'defaultCheck1');
+                    lab.innerHTML = 'Islas de calor';
+                    cardbody.appendChild(lab);
+                } else if (j === 2) {
+                    var cardbody = document.createElement('div');
+                    cardbody.className = "card-body";
+                    collapseOne.appendChild(cardbody);
+                    var fcheck = document.createElement('div');
+                    fcheck.className = "form-check";
+                    var check = document.createElement('input');
+                    check.className = "form-check-input";
+                    check.setAttribute('type', 'checkbox');
+                    check.id = 'Conectividad';
+                    check.disabled = true;
+                    cardbody.appendChild(check);
+                    var lab = document.createElement('label');
+                    lab.className = "form-check-label";
+                    lab.setAttribute('for', 'defaultCheck1');
+                    lab.innerHTML = 'Organizaciones de la sociedad civil';
+                    cardbody.appendChild(lab);
+                }
+            }
+        } else {
+            for (var j = 0; j <= leng; j++) {
+                if (lay[j] && j !== 3) {
+                    var subname = lay[j].get('name');
+                    var cardbody = document.createElement('div');
+                    cardbody.className = "card-body";
+                    collapseOne.appendChild(cardbody);
+                    var fcheck = document.createElement('div');
+                    fcheck.className = "form-check";
+                    var check = document.createElement('input');
+                    check.className = "form-check-input";
+                    check.setAttribute('type', 'checkbox');
+                    check.id = subname;
+                    if (lay[j].values_.visible === true) {
+                        check.checked = true;
+                    }
+                    cardbody.appendChild(check);
+                    var lab = document.createElement('label');
+                    lab.className = "form-check-label";
+                    lab.setAttribute('for', 'defaultCheck1');
+                    lab.innerHTML = subname;
+                    cardbody.appendChild(lab);
+                }
+            }
+        }
+    }
 }
 function findBy(layer, key, value) {
     if (layer.get(key) === value) {
         return layer;
     }
-    // Find recursively if it is a group
+// Find recursively if it is a group
     if (layer.getLayers) {
         var layers = layer.getLayers().getArray(),
                 len = layers.length, result;
@@ -241,17 +587,14 @@ function findBy(layer, key, value) {
     return null;
 }
 $(document).ready(function () {
-    initializeTree();
-    // Handle opacity slider control
-    $('input.opacity').slideDown().on('slide', function (ev) {
-        var layername = $(this).closest('li').data('layerid');
-        var layer = findBy(map.getLayerGroup(), 'name', layername);
-        layer.setOpacity(ev.value);
-    });
+    buildLayerTree(map.getLayerGroup());
     // Handle visibility control
     $('input').on('click', function () {
-        var layername = $(this).closest('li').data('layerid');
+        layername = this.id;
+        //console.log(layername);
         var layer = findBy(map.getLayerGroup(), 'name', layername);
+        console.log(layer);
+        console.log(!layer.getVisible());
         layer.setVisible(!layer.getVisible());
     });
 });

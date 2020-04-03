@@ -11,10 +11,11 @@ $(document).ready(function () {
     //lista departamento
     var dropdown = document.createElement('div');
     dropdown.className = 'dropdown';
+    dropdown.id = 'ListMunDepto';
     var button = document.createElement('button');
     button.type = 'button';
     button.id = 'BuListDepto';
-    button.className = 'btn btn-primary dropdown-toggle';
+    button.className = 'btn btn-secondary btn-sm dropdown-toggle';
     button.setAttribute('data-toggle', 'dropdown');
     button.onclick = AgregarListDepto;
     button.innerHTML = 'Seleccione Departamento';
@@ -28,17 +29,15 @@ $(document).ready(function () {
     var button1 = document.createElement('button');
     button1.type = 'button';
     button1.id = 'BuListMpio';
-    button1.className = 'btn btn-primary dropdown-toggle';
+    button1.className = 'btn btn-secondary btn-sm dropdown-toggle';
     button1.setAttribute('data-toggle', 'dropdown');
     button1.onclick = AgregarListMpio;
     button1.innerHTML = 'Seleccione Municipio';
     dropdown.appendChild(button1);
-    document.querySelector('body').appendChild(dropdown);
+    //document.querySelector('body').appendChild(dropdown);
+    document.getElementById('map').appendChild(dropdown);
 
     //Mapa
-    var mapd = document.createElement('div');
-    mapd.id = 'map';
-    document.querySelector('body').appendChild(mapd);
     $(".dropdown-menu").on("click", "a", function (event) {
         if (document.getElementById('BuListDepto').innerHTML === 'Seleccione Departamento' || document.getElementById('BuListMpio').innerHTML !== 'Seleccione Municipio') {
             var viewParamsStr = viewparamsToStr({
@@ -82,11 +81,13 @@ $(document).ready(function () {
             var filtro = '"nombre_dpt=' + "'" + event.target.text + "'" + '"';
             Mpios.getSource().updateParams({'STYLES': 'Mpio', 'CQL_FILTER': eval(filtro)});
             Mpios.setVisible(true);
+            document.getElementById('Municipios').checked = true;
             document.getElementById('BuListMpio').innerHTML = 'Seleccione Municipio';
             document.getElementById('BuListMpio').disabled = false;
         } else {
-            ECP.setVisible(true);
-            document.getElementById('layertree').getElementsByTagName("li")[1].getElementsByTagName("input")[0].checked = true;
+            //console.log(EstructuraEcologica);
+            EstructuraEcologica.setVisible(true);
+            document.getElementById('Estructura Ecologica Urbana').checked = true;
             document.getElementById('BuListMpio').innerHTML = event.target.text;
             document.getElementById('BuListMpio').disabled = true;
         }
@@ -153,4 +154,11 @@ function viewparamsToStr(obj) {
         str += k + ':' + v;
     });
     return str;
+}
+//
+function ControlLayer() {
+    document.getElementById('accordion').className = 'd-block';
+}
+function ControlLayerClose(){
+    document.getElementById('accordion').className = 'd-none';
 }

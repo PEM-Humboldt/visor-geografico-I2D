@@ -1,0 +1,56 @@
+body{
+    position: relative;
+}
+header {
+    height: 70px;
+}
+header h1 {
+    display: inline-block;
+    text-transform: uppercase;
+    color: #0e4853;
+    font-size: 30px;
+}
+footer {
+    height: 50px;
+    background-color: #2f6285;
+}
+footer .links {
+    padding-top: 15px;
+    text-align: right;
+}
+footer a {
+    text-decoration: none;
+    font-size: 12px;
+    padding: 5px 15px 5px 10px;
+    color: #fff;
+    border-right: 1px solid #9f9f9f;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+footer a:hover {
+    color: #7bceb7;
+}
+footer a:last-child {
+    border: none;
+}
+footer p {
+    margin-top: 10px;
+    margin-left: 15px;
+    font-size: 13px;
+    color: #9c9c9c;
+    float: left;
+    margin-bottom: 0;
+}
+#loghum{
+    height: 75px;
+}
+#ListMunDepto{
+    z-index: 2;
+    position: absolute;
+    left: 50px;
+}
+#ListDepto{
+    position: relative;
+    top: 500px;
+}

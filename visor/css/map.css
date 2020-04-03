@@ -1,39 +1,27 @@
 #map {
-    /*height: 100%;*/
-    height: 500px;
-    width: 100%;
-    overflow: hidden;  
+    height: 520px;
+    z-index: 0;
+    position: relative;
 }
-/*#herramientas{
+#ControlCapas{
+    z-index: 2;
     position: absolute;
-    bottom: 0em;	
-    left: 0em;
+    right: 0px;
+    width: 3%;
 }
-.container {
-    margin-right: auto;
-    margin-left: auto;
-    padding-left: 0px;
-    padding-right: 0px;
-    width: 1400px;
-}*/
-.tree {
-    position: fixed;
-    list-style:none;
-    overflow: auto;
-    bottom: 1em;	
-    right: 1em;
-    min-width: 14em;
-    min-height: 3em;
-    background-color: #ffffff;
-    box-shadow: 0px 1px 8px 1px rgba(0,0,0,0);
-    border-radius: 25.5px;
-    width: auto;
-    max-height: 70%; 
-    z-index: 1;
+#accordion{
+    z-index: 3;
+    position: absolute;
+    right: 0px;
+    width: 350px;
+    height: 202px;
 }
-
-.scrollable-menu {
-    height: auto;
-    max-height: 400px;
-    overflow-x: hidden;
+#capas{
+    max-height: 290px;
+}
+.card-body{
+   max-height: 1px;
+}
+.card-header{
+   max-height: 36px;
 }
