@@ -19,37 +19,18 @@
             <div class="row">
                 <div class="col">
                     <a class="float-left" href="http://datos.humboldt.org.co"><img src="iconos/logo.png" alt="Infraestructura Institucional de Datos e Información"></img></a>
-                    <h1>VISOR<br>geográfico</h1>
-                    <a href="http://humboldt.org.co" target="_blank" class="float-right"><img src="iconos/humboldt.png" alt="Instituto de Investigación de Recursos Biológicos Alexander von Humboldt"></a>
+                    <h1>VISOR<br>GEOGRÁFICO</h1>
+                    <a href="http://humboldt.org.co" target="_blank" class="float-right"><img id="loghum" src="iconos/humboldt.png" alt="Instituto de Investigación de Recursos Biológicos Alexander von Humboldt"></a>
                 </div>
             </div>
         </header>
         <div id="map">
-            <img id="ControlCapas" name="ControlCapas" class="float-right" src="iconos/CAPAS.png" onclick="ControlCapas()">
-        </div>
-        <div id="herramientas" class='container' hidden="hidden">
-            <div id="layertree" class="tree" style="background: #ffffff; box-shadow: 0px 1px 8px 1px;">
-                <img class="btn btn-success" style="background-color:#198c19; border: 0px solid" >
-            </div> 
-        </div>
-
-        <div id="accordion">
-            <div class="card">
-                <div class="card-header">
-                    <a class="card-link" data-toggle="collapse" href="#collapseOne">
-                        Collapsible Group Item #1
-                    </a>
-                </div>
-                <div id="collapseOne" class="collapse show" data-parent="#accordion">
-                    <div class="card-body">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    </div>
-                </div>
+            <a href="#"><img id="ControlCapas" name="ControlCapas" src="iconos/CAPAS.png" onclick="ControlLayer()"></a>
+            <div id="accordion" class="d-none">
             </div>
         </div>
-
         <footer class="fixed-bottom">
-            <p> Infraestructura Institucional de</br>Datos e Información © 2017</p>
+            <p> Infraestructura Institucional de</br>Datos e Información © 2020</p>
             <div class="links">
                 <a href="http://i2d.humboldt.org.co/ceiba/" target="_blank" class="linksftr">Ceiba</a>
                 <a href="http://geonetwork.humboldt.org.co/" target="_blank" class="linksftr">Geonetwork</a>

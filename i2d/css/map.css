@@ -1,14 +1,27 @@
 #map {
-    /*height: 100%;*/
-    /*height: 500px;*/
-    /*width: 100%;*/
-    /*overflow: hidden;*/
+    height: 520px;
     z-index: 0;
     position: relative;
 }
 #ControlCapas{
-    z-index: 1;
+    z-index: 2;
     position: absolute;
     right: 0px;
     width: 3%;
+}
+#accordion{
+    z-index: 3;
+    position: absolute;
+    right: 0px;
+    width: 350px;
+    height: 202px;
+}
+#capas{
+    max-height: 290px;
+}
+.card-body{
+   max-height: 1px;
+}
+.card-header{
+   max-height: 36px;
 }

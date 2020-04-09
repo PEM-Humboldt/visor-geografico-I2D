@@ -43,7 +43,8 @@ footer p {
     margin-bottom: 0;
 }
 #loghum{
-    height: 75px;
+    margin-top: 1px;
+    height: 68px;
 }
 #ListMunDepto{
     z-index: 2;

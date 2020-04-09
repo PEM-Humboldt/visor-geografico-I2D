@@ -196,10 +196,7 @@ map = new ol.Map({
     controls: ol.control.defaults().extend([new ol.control.ScaleLine(), new ol.control.ZoomToExtent({
             extent: [-7430902, -479413, -8795762, 1408887]
         })
-    ])/*.extend([mousePositionControl])*/,
-    // add the popup as a map overlay
-    //overlays: [popup],
-    // render the map in the 'map' div
+    ]),
     target: document.getElementById('map'),
     // use the Canvas renderer
     renderer: 'canvas',
@@ -590,11 +587,8 @@ $(document).ready(function () {
     buildLayerTree(map.getLayerGroup());
     // Handle visibility control
     $('input').on('click', function () {
-        layername = this.id;
-        //console.log(layername);
+        var layername = this.id;
         var layer = findBy(map.getLayerGroup(), 'name', layername);
-        console.log(layer);
-        console.log(!layer.getVisible());
         layer.setVisible(!layer.getVisible());
     });
 });
