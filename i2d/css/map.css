@@ -1,12 +1,12 @@
 #map {
-    height: 520px;
+    height: 100%;
     z-index: 0;
     position: relative;
 }
 #ControlCapas{
     z-index: 2;
     position: absolute;
-    right: 0px;
+    right: 1px;
     width: 3%;
 }
 #accordion{

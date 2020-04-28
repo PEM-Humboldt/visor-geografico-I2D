@@ -5,6 +5,9 @@ $(document).ready(function () {
     //
     importarScript("app/layers.js");
     importarScript("app/jsSearch.js");
+    importarScript("app/mapclick.js");
+    importarScript("app/animation.js");
+    importarScript("app/FeaturesSelect.js");
     //
     //Agragar elementos principales DOM
     //
@@ -37,13 +40,7 @@ $(document).ready(function () {
             type: "GET",
             dataType: "json",
             success: function (data) {
-                var vectorSource = new ol.source.Vector({
-                    features: (new ol.format.GeoJSON()).readFeatures(data)
-                });
-                highlight.getSource().clear();
-                highlight.getSource().addFeature(vectorSource.getFeatures()[0]);
-                var view = map.getView()
-                view.fit(vectorSource.getExtent());
+                FeatSelect(data, 'NewSelection','ZoomSelect');
             }
         });
         if (tempname === 'Visor:SelGeomDepto') {

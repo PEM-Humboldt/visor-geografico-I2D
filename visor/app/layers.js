@@ -518,7 +518,7 @@ function buildLayerTree(layer) {
                     var lab = document.createElement('label');
                     lab.className = "form-check-label";
                     lab.setAttribute('for', 'defaultCheck1');
-                    lab.innerHTML = 'Islas de calor';
+                    lab.innerHTML = 'Compostaje';
                     cardbody.appendChild(lab);
                 } else if (j === 2) {
                     var cardbody = document.createElement('div');

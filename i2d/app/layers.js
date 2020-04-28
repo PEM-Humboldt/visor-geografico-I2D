@@ -53,7 +53,7 @@ var Mpios = new ol.layer.Tile({
     }), name: 'Municipios'
 });
 //
-//ECP
+//CAPAS PUBLICAS
 //
 var aicas = new ol.layer.Tile({
     visible: false,
@@ -228,7 +228,7 @@ var Registros_Ceiba = new ol.layer.Tile({
     source: new ol.source.TileWMS({
         url: 'http://geoservicios.humboldt.org.co/geoserver/Registros_Ceiba/wms',
         params: {LAYERS: 'Registros_Ceiba:Registros_Ceiba'}
-    }), name: 'Registros CEIBA'//,
+    }), name: 'Registros CEIBA.'//,
             //urldownload: ''
 });
 //
@@ -275,6 +275,9 @@ map = new ol.Map({
         zoom: 5.373
     })
 });
+//AllLayers = new Set();
+AllLayers = [];
+var k = 0;
 $(document).ready(function () {
     buildLayerTree(map.getLayerGroup());
     // Handle visibility control
@@ -292,47 +295,47 @@ function buildLayerTree(layer) {
         var name = layers[i].get('name');
         if (i === 0) {
             var accordion = document.getElementById('accordion');
-            card = document.createElement('div');
+            var card = document.createElement('div');
             card.className = "overflow-auto card";
             card.id = "capas";
             accordion.appendChild(card);
-            cardh = document.createElement('div');
+            var cardh = document.createElement('div');
             cardh.className = "card-header";
             card.appendChild(cardh);
-            cardlink = document.createElement('a');
+            var cardlink = document.createElement('a');
             cardlink.className = "card-link";
             cardlink.setAttribute('data-toggle', 'collapse');
             cardlink.setAttribute('href', '#collapse' + i);
             cardlink.innerHTML = name;
             cardh.appendChild(cardlink);
-            close = document.createElement('a');
+            var close = document.createElement('a');
             close.className = "card-link float-right";
             close.setAttribute('data-toggle', 'collapse');
             close.setAttribute('href', '#');
             close.onclick = ControlLayerClose;
             close.innerHTML = 'X';
             cardh.appendChild(close);
-            collapseOne = document.createElement('div');
+            var collapseOne = document.createElement('div');
             collapseOne.id = "collapse" + i;
             collapseOne.className = "collapse container";
             collapseOne.setAttribute('data-parent', '#accordion');
             card.appendChild(collapseOne);
         } else {
             var accordion = document.getElementById('accordion');
-            card = document.createElement('div');
+            var card = document.createElement('div');
             card.className = "overflow-auto card";
             card.id = "capas";
             accordion.appendChild(card);
-            cardh = document.createElement('div');
+            var cardh = document.createElement('div');
             cardh.className = "card-header";
             card.appendChild(cardh);
-            cardlink = document.createElement('a');
+            var cardlink = document.createElement('a');
             cardlink.className = "card-link";
             cardlink.setAttribute('data-toggle', 'collapse');
             cardlink.setAttribute('href', '#collapse' + i);
             cardlink.innerHTML = name;
             cardh.appendChild(cardlink);
-            collapseOne = document.createElement('div');
+            var collapseOne = document.createElement('div');
             collapseOne.id = "collapse" + i;
             collapseOne.className = "collapse container";
             collapseOne.setAttribute('data-parent', '#accordion');
@@ -368,7 +371,11 @@ function buildLayerTree(layer) {
                 down.setAttribute('onclick', 'window.open("' + lay[j].values_.urldownload + '")');
                 cardbody.appendChild(down);
             }
-
+            if (i !== 0) {
+                //AllLayers.add(lay[j]);
+                AllLayers[k] = lay[j];
+                k = k + 1;
+            }
         }
     }
 }
