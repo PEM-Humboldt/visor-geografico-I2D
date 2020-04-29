@@ -5,6 +5,9 @@ $(document).ready(function () {
     //
     importarScript("app/layers.js");
     importarScript("app/jsSearch.js");
+    importarScript("app/mapclick.js");
+    importarScript("app/animation.js");
+    importarScript("app/FeaturesSelect.js");
     //
     //Agragar elementos principales DOM
     //
@@ -34,8 +37,9 @@ $(document).ready(function () {
     button1.onclick = AgregarListMpio;
     button1.innerHTML = 'Seleccione Municipio';
     dropdown.appendChild(button1);
-    //document.querySelector('body').appendChild(dropdown);
-    document.getElementById('map').appendChild(dropdown);
+    document.querySelector('body').appendChild(dropdown);
+    //document.getElementById('map').appendChild(dropdown);
+    //document.getElementsByTagName("body")[0]
 
     //Mapa
     $(".dropdown-menu").on("click", "a", function (event) {

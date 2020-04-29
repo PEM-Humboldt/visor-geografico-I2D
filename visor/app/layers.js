@@ -148,6 +148,27 @@ var Zonas_Verdes = new ol.layer.Tile({
         params: {LAYERS: 'Visor:zonas_verdes', STYLES: ''}
     }), name: 'Zonas Verdes'
 });
+var Ago_1991 = new ol.layer.Tile({
+    visible: false,
+    source: new ol.source.TileWMS({
+        url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
+        params: {LAYERS: 'Visor:ago_1991', STYLES: ''}
+    }), name: 'Ago 1991'
+});
+var Ago_2000 = new ol.layer.Tile({
+    visible: false,
+    source: new ol.source.TileWMS({
+        url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
+        params: {LAYERS: 'Visor:ago_2000', STYLES: ''}
+    }), name: 'Ago 2000'
+});
+var Ene_2015 = new ol.layer.Tile({
+    visible: false,
+    source: new ol.source.TileWMS({
+        url: 'http://34.231.25.67:8080/geoserver/Visor/wms',
+        params: {LAYERS: 'Visor:ene_2015', STYLES: ''}
+    }), name: 'Ene 2015'
+});
 //
 //Grupos de capas
 //
@@ -156,11 +177,11 @@ var layerBase = new ol.layer.Group({
     name: 'Capas Base'
 });
 var ECP = new ol.layer.Group({
-    //layers: [Agrologia, avu, Bosque, CuerposAgua, Cultivos, EquipamientoUrbano, EspacioPublico, EstructuraEcologica, Humedales, Nacimientos, Plantaciones, Predios_Priorizados, Ronda_Hidrica, Senderos, Urbano, Zonas_Verdes, highlight],
-    layers: [EstructuraEcologica],
+    layers: [Agrologia, avu, Bosque, CuerposAgua, Cultivos, EquipamientoUrbano, EspacioPublico, EstructuraEcologica, Humedales, Nacimientos, Plantaciones, Predios_Priorizados, Ronda_Hidrica, Senderos, Urbano, Zonas_Verdes],
+    //layers: [EstructuraEcologica],
     //name: 'Estructura Ecologica Principal',
     name: 'Soporte'//,
-    //visible: true
+            //visible: true
 });
 var ServEco = new ol.layer.Group({
     layers: [Bosque],
@@ -182,13 +203,18 @@ var InCiu = new ol.layer.Group({
     name: 'Iniciativas ciudadanas',
     visible: true
 });
-var otros = new ol.layer.Group({
-    layers: [Agrologia, avu, CuerposAgua, Cultivos, EquipamientoUrbano, EspacioPublico, Humedales, Nacimientos, Plantaciones, Predios_Priorizados, Ronda_Hidrica, Senderos, Urbano, Zonas_Verdes],
-    //layers: [EstructuraEcologica],
-    //name: 'Estructura Ecologica Principal',
-    name: 'Otros',
+var HuellaUrbana = new ol.layer.Group({
+    layers: [Ene_2015, Ago_2000, Ago_1991],
+    name: 'Huella Urbana',
     visible: true
 });
+/*var otros = new ol.layer.Group({
+ layers: [Agrologia, avu, CuerposAgua, Cultivos, EquipamientoUrbano, EspacioPublico, Humedales, Nacimientos, Plantaciones, Predios_Priorizados, Ronda_Hidrica, Senderos, Urbano, Zonas_Verdes],
+ //layers: [EstructuraEcologica],
+ //name: 'Estructura Ecologica Principal',
+ name: 'Otros',
+ visible: true
+ });*/
 //
 //
 //
@@ -200,12 +226,14 @@ map = new ol.Map({
     target: document.getElementById('map'),
     // use the Canvas renderer
     renderer: 'canvas',
-    layers: [layerBase, ECP, ServEco, InfraVerde, CalAmbUrb, InCiu, otros],
+    layers: [layerBase, ECP, ServEco, InfraVerde, CalAmbUrb, InCiu, HuellaUrbana/*, otros*/],
     view: new ol.View({
         center: [-8113332, 464737],
         zoom: 5.373
     })
 });
+AllLayers = [];
+var k = 0;
 function buildLayerTree(layer) {
     var name = layer.get('name') ? layer.get('name') : "Group";
     var layers = layer.getLayers().getArray();
@@ -265,40 +293,66 @@ function buildLayerTree(layer) {
         if (i === 1) {
             for (var j = 0; j <= leng; j++) {
                 if (lay[j]) {
-                    var subname = lay[j].get('name');
-                    var cardbody = document.createElement('div');
-                    cardbody.className = "card-body";
-                    collapseOne.appendChild(cardbody);
-                    var fcheck = document.createElement('div');
-                    fcheck.className = "form-check";
-                    var check = document.createElement('input');
-                    check.className = "form-check-input";
-                    check.setAttribute('type', 'checkbox');
-                    check.id = subname;
-                    //check.checked = true;
-                    cardbody.appendChild(check);
-                    var lab = document.createElement('label');
-                    lab.className = "form-check-label";
-                    lab.setAttribute('for', 'defaultCheck1');
-                    lab.innerHTML = subname;
-                    cardbody.appendChild(lab);
-                    var cardbody = document.createElement('div');
-                    cardbody.className = "card-body";
-                    collapseOne.appendChild(cardbody);
-                    var fcheck = document.createElement('div');
-                    fcheck.className = "form-check";
-                    var check = document.createElement('input');
-                    check.className = "form-check-input";
-                    check.setAttribute('type', 'checkbox');
-                    check.id = 'Conectividad';
-                    //check.checked = true;
-                    check.disabled = true;
-                    cardbody.appendChild(check);
-                    var lab = document.createElement('label');
-                    lab.className = "form-check-label";
-                    lab.setAttribute('for', 'defaultCheck1');
-                    lab.innerHTML = 'Conectividad';
-                    cardbody.appendChild(lab);
+
+                    if (j === 0) {
+                        var subname = lay[j].get('name');
+                        var cardbody = document.createElement('div');
+                        cardbody.className = "card-body";
+                        collapseOne.appendChild(cardbody);
+                        var fcheck = document.createElement('div');
+                        fcheck.className = "form-check";
+                        var check = document.createElement('input');
+                        check.className = "form-check-input";
+                        check.setAttribute('type', 'checkbox');
+                        check.id = subname;
+                        //check.checked = true;
+                        cardbody.appendChild(check);
+                        var lab = document.createElement('label');
+                        lab.className = "form-check-label";
+                        lab.setAttribute('for', 'defaultCheck1');
+                        lab.innerHTML = subname;
+                        cardbody.appendChild(lab);
+                        AllLayers[k] = lay[j];
+                        k = k + 1;
+
+                        var cardbody = document.createElement('div');
+                        cardbody.className = "card-body";
+                        collapseOne.appendChild(cardbody);
+                        var fcheck = document.createElement('div');
+                        fcheck.className = "form-check";
+                        var check = document.createElement('input');
+                        check.className = "form-check-input";
+                        check.setAttribute('type', 'checkbox');
+                        check.id = 'Conectividad';
+                        //check.checked = true;
+                        check.disabled = true;
+                        cardbody.appendChild(check);
+                        var lab = document.createElement('label');
+                        lab.className = "form-check-label";
+                        lab.setAttribute('for', 'defaultCheck1');
+                        lab.innerHTML = 'Conectividad';
+                        cardbody.appendChild(lab);
+                    } else {
+                        var subname = lay[j].get('name');
+                        var cardbody = document.createElement('div');
+                        cardbody.className = "card-body";
+                        collapseOne.appendChild(cardbody);
+                        var fcheck = document.createElement('div');
+                        fcheck.className = "form-check";
+                        var check = document.createElement('input');
+                        check.className = "form-check-input";
+                        check.setAttribute('type', 'checkbox');
+                        check.id = subname;
+                        //check.checked = true;
+                        cardbody.appendChild(check);
+                        var lab = document.createElement('label');
+                        lab.className = "form-check-label";
+                        lab.setAttribute('for', 'defaultCheck1');
+                        lab.innerHTML = subname;
+                        cardbody.appendChild(lab);
+                        AllLayers[k] = lay[j];
+                        k = k + 1;
+                    }
                 }
             }
         } else if (i === 2) {
@@ -321,6 +375,8 @@ function buildLayerTree(layer) {
                     lab.setAttribute('for', 'defaultCheck1');
                     lab.innerHTML = subname;
                     cardbody.appendChild(lab);
+                    AllLayers[k] = lay[j];
+                    k = k + 1;
                 } else if (j === 1) {
                     var cardbody = document.createElement('div');
                     cardbody.className = "card-body";
@@ -330,7 +386,7 @@ function buildLayerTree(layer) {
                     var check = document.createElement('input');
                     check.className = "form-check-input";
                     check.setAttribute('type', 'checkbox');
-                    check.id = 'Conectividad';
+                    check.id = 'Oferta de Servicios ecosistémicos';
                     check.disabled = true;
                     cardbody.appendChild(check);
                     var lab = document.createElement('label');
@@ -347,7 +403,7 @@ function buildLayerTree(layer) {
                     var check = document.createElement('input');
                     check.className = "form-check-input";
                     check.setAttribute('type', 'checkbox');
-                    check.id = 'Conectividad';
+                    check.id = 'Inventarios oficiales de especies';
                     check.disabled = true;
                     cardbody.appendChild(check);
                     var lab = document.createElement('label');
@@ -368,7 +424,7 @@ function buildLayerTree(layer) {
                     var check = document.createElement('input');
                     check.className = "form-check-input";
                     check.setAttribute('type', 'checkbox');
-                    check.id = 'Conectividad';
+                    check.id = 'Inventario arbolado urbano';
                     check.disabled = true;
                     cardbody.appendChild(check);
                     var lab = document.createElement('label');
@@ -385,7 +441,7 @@ function buildLayerTree(layer) {
                     var check = document.createElement('input');
                     check.className = "form-check-input";
                     check.setAttribute('type', 'checkbox');
-                    check.id = 'Conectividad';
+                    check.id = 'Parques';
                     check.disabled = true;
                     cardbody.appendChild(check);
                     var lab = document.createElement('label');
@@ -402,7 +458,7 @@ function buildLayerTree(layer) {
                     var check = document.createElement('input');
                     check.className = "form-check-input";
                     check.setAttribute('type', 'checkbox');
-                    check.id = 'Conectividad';
+                    check.id = 'Terrazas y techos verdes';
                     check.disabled = true;
                     cardbody.appendChild(check);
                     var lab = document.createElement('label');
@@ -419,7 +475,7 @@ function buildLayerTree(layer) {
                     var check = document.createElement('input');
                     check.className = "form-check-input";
                     check.setAttribute('type', 'checkbox');
-                    check.id = 'Conectividad';
+                    check.id = 'Catálogo de especies y recomendaciones de diseño';
                     check.disabled = true;
                     cardbody.appendChild(check);
                     var lab = document.createElement('label');
@@ -427,6 +483,11 @@ function buildLayerTree(layer) {
                     lab.setAttribute('for', 'defaultCheck1');
                     lab.innerHTML = 'Catálogo de especies y recomendaciones de diseño';
                     cardbody.appendChild(lab);
+                }
+                if (check.disabled !== true) {
+                    console.log(lay[j])
+                    AllLayers[k] = lay[j];
+                    k = k + 1;
                 }
             }
         } else if (i === 4) {
@@ -440,7 +501,7 @@ function buildLayerTree(layer) {
                     var check = document.createElement('input');
                     check.className = "form-check-input";
                     check.setAttribute('type', 'checkbox');
-                    check.id = 'Conectividad';
+                    check.id = 'Calidad del aire';
                     check.disabled = true;
                     cardbody.appendChild(check);
                     var lab = document.createElement('label');
@@ -457,7 +518,7 @@ function buildLayerTree(layer) {
                     var check = document.createElement('input');
                     check.className = "form-check-input";
                     check.setAttribute('type', 'checkbox');
-                    check.id = 'Conectividad';
+                    check.id = 'Islas de calor';
                     check.disabled = true;
                     cardbody.appendChild(check);
                     var lab = document.createElement('label');
@@ -474,7 +535,7 @@ function buildLayerTree(layer) {
                     var check = document.createElement('input');
                     check.className = "form-check-input";
                     check.setAttribute('type', 'checkbox');
-                    check.id = 'Conectividad';
+                    check.id = 'Ruido';
                     check.disabled = true;
                     cardbody.appendChild(check);
                     var lab = document.createElement('label');
@@ -482,6 +543,11 @@ function buildLayerTree(layer) {
                     lab.setAttribute('for', 'defaultCheck1');
                     lab.innerHTML = 'Ruido';
                     cardbody.appendChild(lab);
+                }
+                if (check.disabled !== true) {
+                    console.log(lay[j])
+                    AllLayers[k] = lay[j];
+                    k = k + 1;
                 }
             }
         } else if (i === 5) {
@@ -495,7 +561,7 @@ function buildLayerTree(layer) {
                     var check = document.createElement('input');
                     check.className = "form-check-input";
                     check.setAttribute('type', 'checkbox');
-                    check.id = 'Conectividad';
+                    check.id = 'Huertas privadas y comunitarias/bancos de semillas';
                     check.disabled = true;
                     cardbody.appendChild(check);
                     var lab = document.createElement('label');
@@ -529,7 +595,7 @@ function buildLayerTree(layer) {
                     var check = document.createElement('input');
                     check.className = "form-check-input";
                     check.setAttribute('type', 'checkbox');
-                    check.id = 'Conectividad';
+                    check.id = 'Organizaciones de la sociedad civil';
                     check.disabled = true;
                     cardbody.appendChild(check);
                     var lab = document.createElement('label');
@@ -537,6 +603,11 @@ function buildLayerTree(layer) {
                     lab.setAttribute('for', 'defaultCheck1');
                     lab.innerHTML = 'Organizaciones de la sociedad civil';
                     cardbody.appendChild(lab);
+                }
+                if (check.disabled !== true) {
+                    console.log(lay[j])
+                    AllLayers[k] = lay[j];
+                    k = k + 1;
                 }
             }
         } else {
@@ -561,10 +632,21 @@ function buildLayerTree(layer) {
                     lab.setAttribute('for', 'defaultCheck1');
                     lab.innerHTML = subname;
                     cardbody.appendChild(lab);
+                    if (subname !== 'Street Map') {
+                        AllLayers[k] = lay[j];
+                        k = k + 1;
+                    }
                 }
+                /*console.log(check.disabled);
+                 if (check.disabled !== true) {
+                 console.log(lay[j]);
+                 AllLayers[k] = lay[j];
+                 k = k + 1;
+                 }*/
             }
         }
     }
+    console.log(AllLayers);
 }
 function findBy(layer, key, value) {
     if (layer.get(key) === value) {
@@ -583,8 +665,9 @@ function findBy(layer, key, value) {
     }
     return null;
 }
+buildLayerTree(map.getLayerGroup());
 $(document).ready(function () {
-    buildLayerTree(map.getLayerGroup());
+
     // Handle visibility control
     $('input').on('click', function () {
         var layername = this.id;
