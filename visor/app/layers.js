@@ -646,7 +646,6 @@ function buildLayerTree(layer) {
             }
         }
     }
-    console.log(AllLayers);
 }
 function findBy(layer, key, value) {
     if (layer.get(key) === value) {
