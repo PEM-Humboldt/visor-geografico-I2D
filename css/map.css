@@ -1,0 +1,31 @@
+#map {
+    height: 100%;
+    z-index: 0;
+    position: relative;
+}
+/*Contenedor de listado de capass*/
+#ControlCapas{
+    z-index: 2;
+    position: absolute;
+    right: 1px;
+    width: 3%;
+}
+#accordion{
+    z-index: 3;
+    position: absolute;
+    right: 0px;
+    width: 350px;
+    height: 202px;
+}
+#capas{
+    max-height: 290px;
+}
+#IcoDownload{
+    width: 9%;
+}
+.card-body{
+   max-height: 1px;
+}
+.card-header{
+   max-height: 36px;
+}

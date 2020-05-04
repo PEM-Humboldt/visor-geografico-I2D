@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <title>Visor Geográfico · Instituto Humboldt</title>
+        <link rel="icon" href="iconos/logo.png" type="iconos/png">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/map.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="librerias/ol-6.2.1/ol.css">
+        <script src="librerias/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="librerias/bootstrap-4.4.1/popper.min.js"></script>
+        <link rel="stylesheet" href="librerias/bootstrap-4.4.1/css/bootstrap.min.css">
+        <script src="librerias/bootstrap-4.4.1/js/bootstrap.min.js"></script>
+        <script src="librerias/ol-6.2.1/ol.js"></script>
+        <script src="app/index.js"></script>
+    </head>
+    <body>
+        <header>
+            <div class="row">
+                <div class="col">
+                    <a class="float-left" href="http://datos.humboldt.org.co"><img src="iconos/logo.png" alt="Infraestructura Institucional de Datos e Información"></img></a>
+                    <h1>VISOR<br>GEOGRÁFICO</h1>
+                    <a href="http://humboldt.org.co" target="_blank" class="float-right"><img id="loghum" src="iconos/humboldt.png" alt="Instituto de Investigación de Recursos Biológicos Alexander von Humboldt"></a>
+                </div>
+            </div>
+        </header>
+        <div id="map">
+            <a href="#"><img id="ControlCapas" name="ControlCapas" src="iconos/CAPAS.png" onclick="ControlLayer()"></a>
+            <div id="accordion" class="d-none">
+            </div>
+        </div>
+        <div id="contenedorg" class="contenedor"></div> 
+        <div id="carga2"><img id="imgprocess" src="./iconos/loading.gif"></div>
+        <footer class="fixed-bottom">
+            <p> Infraestructura Institucional de</br>Datos e Información © 2020</p>
+            <div class="links">
+                <a href="http://i2d.humboldt.org.co/ceiba/" target="_blank" class="linksftr">Ceiba</a>
+                <a href="http://geonetwork.humboldt.org.co/" target="_blank" class="linksftr">Geonetwork</a>
+                <a href="https://sites.google.com/humboldt.org.co/i2dwiki/inicio" target="_blank" class="linksftr">Guías</a>
+                <a href="mailto:i2d@humboldt.org.co" target="_blank" class="linksftr">Contacto</a>
+            </div>
+        </footer>
+    </body>
+</html>
