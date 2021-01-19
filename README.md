@@ -1,4 +1,4 @@
-# Visor-I2D v1
+# Visor-I2D
 Visor geografico I2D
 
 Esta es una version preliminar para actualizar el actual visor de la I2D.
