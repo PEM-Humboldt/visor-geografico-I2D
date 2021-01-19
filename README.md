@@ -1,27 +1,43 @@
-# visori2d v1
-visor geografico I2D
+# Visor-I2D v1
+Visor geografico I2D
 
 Esta es una version preliminar para actualizar el actual visor de la I2D.
 
-se implementaran nuevas funcionalidades y capas.
+Se implementarán nuevas funcionalidades y capas.
 
-# Requirements
+## Configuración inicial
 
+### Instalación y ejecución
 
-## Services
+Clone el repositorio:
 
+```
+$ git clone //github.com/PEM-Humboldt/visor-geografico-I2D.git
+```
 
-## Software
+No es necesario realizar una instalación, basta con abrir el archivo index.html para ejecutar el sitio de manera local.
 
-- Git
+## Despliegue
 
+Copie toda la carpeta del proyecto en el directorio de despliegue según el servidor web seleccionado. Posteriormente inicie el servidor
 
-# Setup
+Para el caso de apache-tomcat:
 
-## Download the source code
+- Copie la carpeta del proyecto en el siguiente directorio
+```
+/DIRECTORIO-APACHE-TOMCAT/webapps/
+```
+- Inicie el servicio de tomcat
+```
+/DIRECTORIO-APACHE-TOMCAT/bin/startup.sh
+```
 
-Clone el repositorio en el servidor donde está implementando la aplicación:
+## Autores
 
-```$ git clone //github.com/PEM-Humboldt/visor-geografico-I2D.git```
+* **Julián David Torres Caicedo** - *Creación del sitio* - [juliant8805](https://github.com/juliant8805)
 
-No es necesario realizar una instalación, basta con ejecutar el archivo index.html 
+Ingeniería de Datos y Desarrollo, Programa de Evaluación y Monitoreo de la Biodiversidad, Instituto Alexander von Humboldt Colombia
+
+## Licencia
+
+Este proyecto es licenciado bajo licencia MIT - consulte [LICENSE.md](LICENSE.md) para mas detalles
