@@ -1,0 +1,70 @@
+@import '../../../scss/sizes.scss';
+@import '../../../scss/color';
+#sideBar{
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    /* background-color:#222; */
+    background-color:#fff;
+    z-index: 2000;
+    opacity: 10;
+    &.active{
+        @include tablet{
+            width: 95%; 
+            ul{
+                li{
+                    #closebtn.active{	
+                        display: block;
+                        position: absolute;
+                        top: 0;
+                        right: 10px;
+                    }
+                }
+            }
+        }
+        @include desktop {
+            width: 200px; 
+        }
+    };
+
+    &.nonactive{
+        @include tablet {
+            width: 46px;
+        }
+        @include desktop {
+            width: 46px; 
+        }
+    };
+    ul{
+        &.bottom{
+            bottom: 0px;
+            position: absolute;
+        }
+        li{
+            &.centerLiIcons{
+                padding:5px 10px;
+            };
+            &.centerLiImg{
+                padding: 5px 0px;
+                text-align: center;
+            };
+            a{
+                color: $color_primary;
+                text-decoration: none;
+                &:hover{
+                    color:$color_secundary;
+                };
+                &#closebtn.nonactive {	
+                    display: none;
+                };
+                .sideBarSpanActive {
+                    display:inline-block;
+                };
+                .sideBarSpanNoActive {
+                    display:none;
+                }                             
+            }
+        }
+    };
+}

@@ -1,0 +1,53 @@
+@import '../../../scss/sizes.scss';
+@import '../../../scss/color';
+#sideOptions {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    padding: 10px;
+    background-color: white;
+    &.nonactive{
+        display: none;
+    }
+    @include tablet{
+        width: 100%;
+        z-index: 2000;  
+    }
+    @include desktop {
+        width: 40%;
+        z-index: 100;  
+    }
+}
+
+#closeSideOptions{
+    z-index: 1000;
+    position: relative;
+    float: left;
+    padding: 0px 5px 0px 5px;
+}
+
+
+// dropdown
+
+.menuItemsTooltip{
+    text-align: center;
+    justify-content: center;
+    display: flex;
+}
+
+.dropdown{
+    margin:5%
+}
+a.nav-link{
+    color:$color_primary;
+}
+a.nav-link.active{
+    color:$color_secundary
+}
+
+// tab navbar
+
+.tab-pane{
+    margin-top: 20px;
+}

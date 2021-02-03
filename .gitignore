@@ -1,1 +1,3 @@
-/visor/nbproject/private/
+node_modules/
+.cache/
+dist/

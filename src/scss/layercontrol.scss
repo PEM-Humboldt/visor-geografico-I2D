@@ -1,0 +1,73 @@
+@import 'sizes';
+@import 'color';
+/*Contenedor de listado de capass*/
+#ControlCapas{
+    z-index: 2;
+    position: absolute;
+    width: 3%;
+    color: $color_primary;
+    padding: 5px;
+    @include tablet{
+        right: 7vh;
+    }
+    @include desktop {
+        right: 1px;
+    }
+
+}
+
+#accordion{
+    position: absolute;
+    z-index: 3;
+    right: 0px;
+    height: 202px;
+    @include desktop {
+        width: 350px;
+    }
+}
+#capas{
+    max-height: 50vh;
+    // height:100vh;
+}
+
+.card-body{
+    max-height: 1px;
+    margin-bottom: 10px;
+    padding: 1.2rem 2.25rem;
+}
+.card-header {
+    padding: 0rem ;
+    background-color: white;
+}
+
+.btn-link {
+    color: $color_primary;
+    text-decoration: none;
+}
+
+.btn-link:hover {
+    color: $color_secundary;
+    text-decoration: none;
+}
+
+/*tabla de atributos*/
+.contenedor{
+    display: -ms-flexbox;
+    position: absolute;
+    top: 5em;
+    left: 0em;
+    width: 28em;
+    margin: auto;
+    background: rgba(255, 255, 255, 1);
+    color: #000000;
+    z-index: 2;
+    visibility: hidden;
+}
+.navbar .container {
+    display: block;
+}
+.card-link{
+    &:hover{
+        color:$color_secundary
+    }
+}
