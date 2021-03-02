@@ -2,34 +2,21 @@
 @import 'color';
 #map { 
   height:  100vh; 
+  width: 100%;
+}
+#mapSection{
   position:absolute;
-  right:0;
   top:0;
   bottom:0;
-  width: calc(100% - 46px);
-  width: -moz-calc(100% - 46px);
-  width: -webkit-calc(100% - 46px);
-  @include tablet{
-    &.nonactive{
-        width: 85%;
-    }
-    &.active{
-      width: 87%;
-    }
+  &.nonactive{
+    right:0;
+    width: calc(100% - 46px);
   }
-  @include desktop{
-    &.nonactive{
-      width: 97%;
-    } 
-    &.active{
-      width: 87%;
-      width: calc(100% - 200px);
-      width: -moz-calc(100% - 200px);
-      width: -webkit-calc(100% - 200px);
-    }
+  &.active{
+    left: 46px;
+    width: calc(60% - 46px);
   }
 }
-
 .logo_on_map.leaflet-control{
   margin-bottom: 0px;
 }
@@ -43,9 +30,12 @@
   color:  $color_primary;
   border-top: none;
 }
-
+.ol-control {
+  padding: 0px;
+}
 .ol-control button{
   background-color:$color_primary;
+  font-size: 1em;
   &:hover{
     background-color:$color_secundary
   }

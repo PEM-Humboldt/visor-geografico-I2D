@@ -9,9 +9,9 @@ import {geojsonLayer} from '../geoserverComponent/geojson'
 //Capa base
 var streetmap = new TileLayer({title: 'Streetmap',source: new OSM({crossOrigin: null}),maxZoom: 10,minResolution: 2,name: 'Street Map'});
 
-var otm = new TileLayer({ title: 'OTM', visible: false,source: new XYZ({url: "https://tile.opentopomap.org/{z}/{x}/{y}.png"}), name: 'OTM'});
-var bw = new TileLayer({title: 'B & W', visible: false,source: new XYZ({url: "http://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"}), name: 'BW'});
-var terrain = new TileLayer({title: 'Terrain',visible: false,source: new XYZ({url: "http://a.tile.stamen.com/terrain/{z}/{x}/{y}.png"}), name: 'Terrain'});
+var otm = new TileLayer({ title: 'OTM', visible: false,source: new XYZ({url: "https://tile.opentopomap.org/{z}/{x}/{y}.png", attributions:' © OpenStreetMap contributors'}), name: 'OTM'});
+var bw = new TileLayer({title: 'B & W', visible: false,source: new XYZ({url: "http://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png", attributions:' © OpenStreetMap contributors'}), name: 'BW'});
+var terrain = new TileLayer({title: 'Terrain',visible: false,source: new XYZ({url: "http://a.tile.stamen.com/terrain/{z}/{x}/{y}.png", attributions:' © OpenStreetMap contributors'}), name: 'Terrain'});
 
 
 //capa para seleccion
@@ -23,14 +23,11 @@ export var highlight = new VectorLayer({style: styleHighlight,source: new Vector
 // var mpios = wmsLayer('i2d','mpio_politico','Municipios',false); 
 
 
-// var departamentos = geojsonLayer('i2d','dpto_politico');
-// var municipios = geojsonLayer('i2d','mpio_politico'); 
+var deptos = geojsonLayer('i2d','dpto_politico',styleDepto);
+var mpios = geojsonLayer('i2d','mpio_politico',styleMpio); 
 
-var deptos = geojsonLayer('Visor','departamento',styleDepto);
-var mpios = geojsonLayer('Visor','municipio',styleMpio); 
-
-
-// export var deptos = geojsonLayer('i2d','dpto_politico');
+// var deptos = geojsonLayer('Visor','departamento',styleDepto);
+// var mpios = geojsonLayer('Visor','municipio',styleMpio); 
 
 
 //CAPAS PUBLICAS
@@ -60,6 +57,9 @@ var unicidad = wmsLayer('Proyecto_PACBAO_Ecopetrol','unicidad','Unicidad',false,
 var unidades_analisis = wmsLayer('Proyecto_PACBAO_Ecopetrol','unidades_analisis','Unidades de Análisis',false,'f6f304bd-a5f0-450c-a836-d30b12acbaff'); 
 
 var registros_ceiba = wmsLayer('Registros_Ceiba','Registros_Ceiba','Registros CEIBA',false,''); 
+
+
+var procesos_gobernanza_multiescalar = wmsLayer('Procesos_de_gobernanza_multiescalar','Procesos_de_gobernanza_multiescalar','Posibles procesos de gobernanza',false,'a6fcfe1b-11e8-4383-a38e-a7f0035dece5'); 
 
 
 
@@ -100,4 +100,11 @@ export var ceiba = new GroupLayer({
     layers: [registros_ceiba],
     name: 'Registros CEIBA'
 });
+export var gobernanza = new GroupLayer({
+    fold:'close',
+    title: 'Gobernanza',
+    layers: [procesos_gobernanza_multiescalar],
+    name: 'Gobernanza'
+});
+
 

@@ -15,7 +15,8 @@ export const interaction=()=>{
         var selectClick = new Select({
             condition: function(evt) {return evt.type === "singleclick" && !altKeyOnly(evt);},
             style: function(feature) {
-                style_selected.getText().setText(feature.values_.nombre_mpi)
+                console.log(feature.values_.mpio_cnmbr)
+                style_selected.getText().setText(feature.values_.mpio_cnmbr)
                 return style_selected;
             },
         });
@@ -28,25 +29,7 @@ export const interaction=()=>{
 
 }
 
-
-//         if (select !== null) {
-//             console.log(select);
-//             // map.removeInteraction(select);
-//             map.addInteraction(select);
-//             select.on('select', function(e) {
-//                 var features =e.target.getFeatures();
-//                 var length =features.getLength();
-//                 if(length>0){
-//                     // console.log(e.target.getFeatures(),e.target.getFeatures().getLength(),e.deselected.length)
-//                     features.forEach(function(feature) {
-//                         // var layer = me.select.getLayer(feature);
-//                         // alert('Selected ' + feature.getId());
-//                         console.log(feature.values_,feature.values_.mpi,feature.values_.nombre_dpt,e.target.getFeatures().getLength())
-
-//                     });
-//                 }
-
-               
-//             });
-//         }
-// }
+export var showInteraction=(map)=>{
+    let selection= interaction();
+    map.addInteraction(selection);
+}

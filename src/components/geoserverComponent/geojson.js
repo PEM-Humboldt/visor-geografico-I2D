@@ -9,13 +9,9 @@ import {GEOSERVER_URL,GEOSERVER_URL_AMAZON} from './url'
 export var geojsonLayer = (store,layer,color,params)=>{
   var vector;
   try {
-    // geoserver humboldt
-    // var url_request=`${GEOSERVER_URL}wfs?service=WFS&`;
-    // var url_params=`version=2.0.0&request=GetFeature&typename=${store}:${layer}&outputFormat=application/json&srsname=EPSG:3857&viewparams=${params}&`;
-   
-    // geoserver amazon
-    var url_request=`${GEOSERVER_URL_AMAZON}wfs?service=WFS&`;
-    var url_params=`version=2.0.0&request=GetFeature&typename=${store}:${layer}&outputFormat=application/json&srsname=EPSG:3857&`;
+    // geoserver 
+    var url_request=`${GEOSERVER_URL}wfs?service=WFS&`;
+    var url_params=`version=2.0.0&request=GetFeature&typename=${store}:${layer}&outputFormat=application/json&srsname=EPSG:3857`;
  
     // console.log(url_request + url_params +',EPSG:3857');
     var vectorSource = new VectorSource({

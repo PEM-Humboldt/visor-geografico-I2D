@@ -44,6 +44,9 @@
         li{
             &.centerLiIcons{
                 padding:5px 10px;
+                &.nonactive{
+                    text-align: center;
+                }
             };
             &.centerLiImg{
                 padding: 5px 0px;

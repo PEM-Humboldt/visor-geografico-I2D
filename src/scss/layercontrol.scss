@@ -4,16 +4,14 @@
 #ControlCapas{
     z-index: 2;
     position: absolute;
-    width: 3%;
     color: $color_primary;
     padding: 5px;
     @include tablet{
         right: 7vh;
     }
     @include desktop {
-        right: 1px;
+        right: 2vh;
     }
-
 }
 
 #accordion{

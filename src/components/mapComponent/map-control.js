@@ -11,7 +11,7 @@ import {ScaleLine, ZoomToExtent,defaults as defaultControls} from 'ol/control';
 
 import {buildLayerTree,findBy} from './controls/tree-layers';
 
-import {layer_base, historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, ceiba, highlight} from './control-layers'
+import {layer_base, historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, ceiba, gobernanza, highlight} from './control-layers'
 import {onClickMap} from './controls/map-click'
 
 var zoom = document.createElement('span');
@@ -27,8 +27,7 @@ const map = new Map({
   ]),
   target: document.getElementById('map'),
   renderer: 'canvas',
-  // layers: [controlLayers.layer_base],
-  layers: [layer_base, historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, ceiba, highlight,],
+  layers: [layer_base, historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, ceiba,gobernanza, highlight,],
   view: new View({
     center: [-8113332, 464737],
     zoom: 5.373
@@ -46,6 +45,8 @@ document.addEventListener("DOMContentLoaded",function(){
       layer.setVisible(!layer.getVisible());
   });
 });
+
+export const removeInteraction=()=>{map.removeInteraction()}
 
 export const updateSize=()=>{map.updateSize()}
 

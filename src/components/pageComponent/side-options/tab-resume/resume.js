@@ -1,18 +1,13 @@
 import $ from "jquery";
+import {charCreate} from "./chart"
 
-export const resumeData =(title_mupio)=>{
+export const resumeData =(title_mupio,data)=>{
     try{
-        console.log('entra')
-        var createOptionsVar=(title_mupio)=>{
-            let existingSidebar = $('#resumeData');
-            let title = document.createElement('h5');
-            title.id = "titleResume";
-            title.innerHTML = "Información " + title_mupio;
-            existingSidebar.append(title)
-        }
-   
-        createOptionsVar(title_mupio);
-        
+
+        let existingSidebar = $('#titleResume');
+        existingSidebar[0].innerText = "Información " + title_mupio;
+           
+        charCreate(data)
 
     }catch{
         console.log('no fue posible cargar la información')
