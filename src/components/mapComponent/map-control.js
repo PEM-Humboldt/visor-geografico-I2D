@@ -11,12 +11,11 @@ import {ScaleLine, ZoomToExtent,defaults as defaultControls} from 'ol/control';
 
 import {buildLayerTree,findBy} from './controls/tree-layers';
 
-import {layer_base, historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, ceiba, gobernanza, highlight} from './control-layers'
+import {layer_base, division_base,historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, ceiba, gobernanza, highlight} from './layers'
 import {onClickMap} from './controls/map-click'
 
 var zoom = document.createElement('span');
 zoom.innerHTML = '<i class="fas fa-expand"></i>';
-
 
 const map = new Map({
   controls: defaultControls().extend([new ScaleLine(), new ZoomToExtent({
@@ -27,7 +26,7 @@ const map = new Map({
   ]),
   target: document.getElementById('map'),
   renderer: 'canvas',
-  layers: [layer_base, historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, ceiba,gobernanza, highlight,],
+  layers: [layer_base, division_base,historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, ceiba,gobernanza, highlight],
   view: new View({
     center: [-8113332, 464737],
     zoom: 5.373
@@ -46,10 +45,21 @@ document.addEventListener("DOMContentLoaded",function(){
   });
 });
 
+export const view=()=>{return map.getView()}
+export const fitView=(ext)=>{map.getView().fit(ext)}
+
+export const addInteraction=(selection)=>{map.addInteraction(selection)}
 export const removeInteraction=()=>{map.removeInteraction()}
+
+export const getFeaturesAtPixel=(pixel)=>{return map.getFeaturesAtPixel(pixel,(feature) =>{return feature })}
+
+
+export const getResolution=()=>{return map.getView().getResolution()}
+export const getProjection=()=>{return map.getView().getProjection()}
 
 export const updateSize=()=>{map.updateSize()}
 
-onClickMap(map);
 
-export {map}
+map.on('singleclick', function (evt) {
+  onClickMap(evt);
+});

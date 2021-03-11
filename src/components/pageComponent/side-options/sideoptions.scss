@@ -51,3 +51,12 @@ a.nav-link.active{
 .tab-pane{
     margin-top: 20px;
 }
+
+a.card-link{
+    font-weight: bold;
+    color:$color_primary
+}
+
+#contenedorg{
+    overflow-y: scroll;
+}

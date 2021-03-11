@@ -34,7 +34,7 @@ export var charCreate=(dataChart)=>{
 
         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
         valueAxis.min = 0;
-        valueAxis.extraMax = 1;
+        valueAxis.max = valueAxis.maxZoomed;
 
         // Create series
         var series = chart.series.push(new am4charts.ColumnSeries());
@@ -74,7 +74,8 @@ export var charCreate=(dataChart)=>{
         // Cursor
         chart.cursor = new am4charts.XYCursor();
 
-        chart.data = dataChart;        
+        chart.data = dataChart;      
+        
     });
 }
 

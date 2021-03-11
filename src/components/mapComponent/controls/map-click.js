@@ -1,21 +1,42 @@
-import {openSideOptions} from '../../pageComponent/side-options/open-sideoptions'
-import {showInteraction} from './interact-map'
+import $ from "jquery";
 
-export var onClickMap=(map)=>{
-    map.on('singleclick', function (evt) {
-        // var coordinate = evt.coordinate;
-        // alert ('<p>You clicked here:</p><code>' + coordinate + '</code>');
+import {openSideOptions} from '../../pageComponent/side-options/side-options'
+import {layerSelection} from './layersSelect'
 
-        var features = map.getFeaturesAtPixel(evt.pixel,(feature) =>{return feature; });
-        if (features.length == 0) {
-            console.log('none')
-        }else{
-            showInteraction(map);
-   
+// chart tab
+import {pythonGetRequest} from '../../server/pythonserver/pythonGetRequest'
+import {resumeData} from "../../pageComponent/side-options/tab-resume/resume"
+
+import {getFeaturesAtPixel,fitView} from '../map-control';
+
+export var onClickMap=(evt)=>{
+        // select the wms layers
+        $('#contenedorg').html('');
+
+        layerSelection(evt.coordinate);
+
+        var features = getFeaturesAtPixel(evt.pixel);
+        if (features.length != 0) {
+            // console.log('hh',features);
+            // select geojson for opening stadistics
             var ext=features[0].getGeometry().getExtent();
-            map.getView().fit(ext);
+            fitView(ext);
 
-            openSideOptions(features[0].values_)
-        }
-    });
+            var layerSelect=features[0].values_;
+            openMupioData(layerSelect);
+        }else{
+            $('#nav-chart').attr("style", "display:none");
+            $('#layers-data-tab').tab('show');
+        };
+}
+
+var openMupioData=(layerSelect)=>{
+    // get species data from python
+    var selectName=layerSelect.mpio_cnmbr;
+    if(selectName){
+        $('#nav-chart').attr("style", "display:block");        
+        $('#resume-data-tab').tab('show');
+        pythonGetRequest(resumeData,layerSelect.mpio_ccnct,selectName);
+        openSideOptions();
+    }
 }

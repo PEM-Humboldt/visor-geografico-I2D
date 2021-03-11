@@ -1,4 +1,5 @@
 import $ from "jquery";
+import {hightlightRemove} from '../layers'
 
 var AllLayers = [];
 var k = 0;
@@ -63,6 +64,7 @@ export function buildLayerTree(layer) {
 
             var check = document.createElement('input');
             check.className = "form-check-input layers-input";
+            check.onclick=hightlightRemove;
             check.setAttribute('type', 'checkbox');
             check.id = subname;
             // console.log(subname,lay[j].values_.visible);
@@ -76,7 +78,7 @@ export function buildLayerTree(layer) {
             lab.setAttribute('for', 'defaultCheck1');
             lab.innerHTML = lay[j].values_.title;
             cardbody.appendChild(lab);
-            if (lay[j].values_.urldownload) {
+            if (lay[j].values_.urldownload && lay[j].values_.urldownload!='') {
                 var down= document.createElement('div');
                 down.innerHTML='<i class="fas fa-info"></i>';
                 down.className = "card-link float-right";
@@ -84,6 +86,7 @@ export function buildLayerTree(layer) {
                 down.setAttribute('onclick', 'window.open("' + lay[j].values_.urldownload + '")');
                 cardbody.appendChild(down);
             }
+            
             if (i !== 0) {
                 AllLayers[k] = lay[j];
                 k = k + 1;
@@ -91,6 +94,8 @@ export function buildLayerTree(layer) {
         }
     }
 }
+
+export var AllLayerss=AllLayers; 
 //Busca si es capa o grupo de capas
 export function findBy(layer, key, value) {
     if (layer.get(key) === value) {
@@ -118,5 +123,5 @@ $('#ControlCapas').on('click',function(){
     document.getElementById('accordion').className = 'd-block';
 });
 function ControlLayerClose() {
-     document.getElementById('accordion').className = 'd-none';
+    document.getElementById('accordion').className = 'd-none';
 }
