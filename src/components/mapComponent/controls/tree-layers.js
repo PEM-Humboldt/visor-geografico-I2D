@@ -1,5 +1,5 @@
 import $ from "jquery";
-import {hightlightRemove} from '../layers'
+import {hightlightRemove,highlightMupioRemove} from '../layers'
 
 var AllLayers = [];
 var k = 0;
@@ -9,9 +9,9 @@ export function buildLayerTree(layer) {
     var name = layer.get('name') ? layer.get('name') : "Group";
     var layers = layer.getLayers().getArray();
     var len = layers.length;
-    
+
     // recorre la cantidad de grupos de layers
-    for (var i = 0; i < len - 1; i++) {
+    for (var i = 0; i < len - 2; i++) {
         var name = layers[i].get('name');
 
         var accordion = document.getElementById('accordion');
@@ -54,7 +54,6 @@ export function buildLayerTree(layer) {
         var leng = lay.length;
         for (var j = 0; j < leng; j++) {
             var subname = lay[j].get('name');
-
             var cardbody = document.createElement('div');
             cardbody.className = "card-body";
             collapseOne.appendChild(cardbody);
@@ -64,9 +63,15 @@ export function buildLayerTree(layer) {
 
             var check = document.createElement('input');
             check.className = "form-check-input layers-input";
-            check.onclick=hightlightRemove;
+            // check.onclick = cleanHighlights("'"+subname+"'");
+            // check.onclick=cleanHighlights;            
             check.setAttribute('type', 'checkbox');
             check.id = subname;
+            check.onclick = function(ev){    
+                cleanHighlights(ev)
+                // console.log(ev.toElement)
+            }
+
             // console.log(subname,lay[j].values_.visible);
     
             if (lay[j].values_.visible === true) {
@@ -122,6 +127,20 @@ export function findBy(layer, key, value) {
 $('#ControlCapas').on('click',function(){
     document.getElementById('accordion').className = 'd-block';
 });
-function ControlLayerClose() {
+
+var ControlLayerClose=()=> {
     document.getElementById('accordion').className = 'd-none';
 }
+
+var cleanHighlights=(ev)=>{
+    if(ev.toElement.id=='mpio_politico'){
+        $('#nav-chart').attr("style", "display:none");
+        $('#layers-data-tab').tab('show');
+        $('#nav-layers').attr("style", "display:block"); 
+        
+        hightlightRemove();
+        highlightMupioRemove();
+    }
+
+}
+

@@ -4,8 +4,8 @@ import {polygonStyle} from '../layer-style/polygon-style'
 
 export var styleMpio=polygonStyle({
     "strokeColor": "orange",
-    "strokeWidth":1.5,
-    "fillColor": "rgba(247, 212, 197, 0.2)",
+    "strokeWidth":5,
+    "fillColor": "rgba(247, 212, 200, 0.3)",
     "textFillColor":"orange",
     "textStrokeColor":"#fff",
     "textStrokeWidth":3,
@@ -14,11 +14,11 @@ export var styleMpio=polygonStyle({
 
 export var styleHighlight=polygonStyle({
     "strokeColor": "rgba(42, 71, 80, 1)",
-    "strokeWidth":1,
+    "strokeWidth":4,
     "fillColor": "rgba(42, 71, 80, 0.2)",
     "textFillColor":"#FFF",
     "textStrokeColor":"rgba(42, 71, 80, 1)",
-    "textStrokeWidth":5,
+    "textStrokeWidth":3,
     "fontSize":"14px"
 });
 

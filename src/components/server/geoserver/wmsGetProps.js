@@ -9,10 +9,14 @@ var infoFormat = 'application/json';
 
 import {getProjection,getResolution} from '../../mapComponent/map-control'
 
+import {feats} from '../../mapComponent/layers'
+import {fitView} from '../../mapComponent/map-control'
+
+
 var format = [], wmsSource = [];
 
 // select wms layers if turn on
-export var wmsGetProps=(AllLayers,i,coordinate,FeatSelect)=>{
+export var wmsGetProps=(AllLayers,i,coordinate,Selection)=>{
     
     var featureType = AllLayers[i].values_.source.params_.LAYERS;
     format[i] = new WFS({featureNS: featureNS, featureType: featureType.split(':')[1]});
@@ -24,33 +28,31 @@ export var wmsGetProps=(AllLayers,i,coordinate,FeatSelect)=>{
         },
         serverType: 'geoserver'
     });
-    
-    var sel = 'NewSelection';
 
     var url = wmsSource[i].getFeatureInfoUrl(
         coordinate, getResolution(), getProjection(),
         {'INFO_FORMAT': infoFormat}
     );
-    console.log(url);
-
+ 
     $.ajax({
         url: url,
         success: function (data) {
-                
-            if (sel === 'NewSelection') {
-                var sele = FeatSelect(i,data, sel)
-                if (sele === 'AddSelection') {
-                    sel = 'AddSelection';
+            var feat = feats(data);
+            var features = feat.getFeatures();
+    
+            if(features.length>0){
+                // zoom a mupios
+                if(i==1){
+                    var ext=feat.getExtent();
+                    fitView(ext);
                 }
-            } else {
-                FeatSelect(i,data);
+
+                Selection(features,i);
             }
-            
 
             // console.log(sele,data,sel);
         }
     });
-
 }
 
 

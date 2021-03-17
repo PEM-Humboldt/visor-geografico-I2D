@@ -2,7 +2,7 @@ import $ from "jquery";
 import './sideoptions.scss';
 
 import {updateSize} from '../../mapComponent/map-control'
-import {removeInteraction} from '../../mapComponent/map-control'
+import {hightlightRemove,highlightMupioRemove} from '../../mapComponent/layers'
 
 $('#closeSideOptions').on( "click", function() {
     closeSideOptions()
@@ -11,10 +11,13 @@ $('#closeSideOptions').on( "click", function() {
 // open side options
 export const openSideOptions=()=>{
     // resize map
-    $('#mapSection').removeClass('nonactive').addClass('active');
-    updateSize();
-    // show side Options
-    $('#sideOptions').removeClass('nonactive');
+    if($('#sideOptions').hasClass('nonactive')){
+        $('#mapSection').removeClass('nonactive').addClass('active');
+        updateSize();
+        // show side Options
+        $('#sideOptions').removeClass('nonactive');
+    }
+
 }
 
 // close side options
@@ -23,7 +26,8 @@ export const closeSideOptions=()=>{
     $('#sideOptions').addClass('nonactive');
 
     updateSize();
-    removeInteraction();
+    hightlightRemove();
+    highlightMupioRemove();
 
     $('#chartdiv').html('');
     $('#titleResume').html('');

@@ -1,13 +1,16 @@
 import $ from "jquery";
 import {charCreate} from "./chart"
 
-export const resumeData =(title_mupio,data)=>{
+export const resumeData =(feature,title_mupio,data)=>{
+    let existingSidebar = $('#titleResume');
     try{
-        let existingSidebar = $('#titleResume');
+        // console.log(existingSidebar[0].innerText,feature);
         existingSidebar[0].innerText = "Información " + title_mupio;
         // create chart and replace data
         charCreate(data);
+        $('#loading-chart').attr("style", "display:none");
+        
     }catch{
-        console.log('No fue posible cargar la información')
+        console.log('no se puede cargar')
     }
 }
