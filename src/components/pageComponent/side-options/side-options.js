@@ -16,6 +16,8 @@ export const openSideOptions=()=>{
         updateSize();
         // show side Options
         $('#sideOptions').removeClass('nonactive');
+
+        $('#tutorialstep4').addClass('activeSide');
     }
 
 }
@@ -25,6 +27,7 @@ export const closeSideOptions=()=>{
     $('#mapSection').removeClass('active').addClass('nonactive');
     $('#sideOptions').addClass('nonactive');
 
+    $('#tutorialstep4').removeClass('activeSide')
     updateSize();
     hightlightRemove();
     highlightMupioRemove();

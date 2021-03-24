@@ -7,6 +7,8 @@ export var openSideBar=()=>{
     $('#closebtn').addClass('active');
     $('.centerLiIcons').removeClass('nonactive');
     $('.sideBarSpanNoActive').addClass('sideBarSpanActive').removeClass('sideBarSpanNoActive');
+    
+    $('#tutorialstep2').addClass('active');
     // map resize when change view
     setTimeout(function(){ updateSize()}, 100);
 }

@@ -95,10 +95,77 @@
                 </div>
             </section>
 
-        </div>
-    
-        </div> 
 
+
+
+            
+            <!-- tutorial -->
+            <div class="modal fade" id="tutorialstep1" tabindex="-1" role="dialog" aria-labelledby="tutorial1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="row">
+                            <button type="button" class="close closed closeTutorial" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="row m-4">
+                            <h5 class="titleh5">Bienvenido al Visor Geográfico de la I2D</h5>
+                        </div>
+                        <div class="row m-3">
+                            <p class="justifyCenter">El visor geográfico I2D es un proyecto que permite interactuar con un visor de información geográfica que contiene información de registros biologicos.
+                                Fue desarrollado por el Instituto Humboldt con el objetivo de disponer e integrar datos geográficos en una plataforma abierta y fácil de usar por ciudadanos y entidades. 
+                                Con esta iniciativa se busca mejorar la toma de decisiones en el ámbito nacional, regional, local y personal.</p>
+                            <p> 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <p class="steptutorial">1 de 4 </p>
+                        <button type="button" class="btn btn-terciary" id="goStep2">Siguiente</button>
+                        <button type="button" class="btn btn-primary closeTutorial" data-dismiss="modal">Cerrar</button>
+                        
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <!-- step2 tutorial -->
+            <div class="popover fade bs-popover-right hide tutorialleft" role="tooltip" id="tutorialstep2" >
+                <div class="arrow arrowLeft"></div>
+                <div class="popover-body">
+                    <p class="justifyCenter">Menu lateral con links a información relevante.</p>
+                    <div class="row"> 
+                        <p class="steptutorial">2 de 4 </p>   
+                        <a href="#" class="btn btn-terciary mx-1" id="goStep3">Siguiente</a>
+                        <a href="#" class="btn btn-primary mx-1 closeTutorial">Cerrar</a>
+                    </div>
+                </div>
+            </div>
+            <!-- step3 tutorial -->
+            <div class="popover fade bs-popover-right hide tutorialcenter" role="tooltip" id="tutorialstep3">
+                <div class="arrow arrowLeft"></div>
+                <div class="popover-body">
+                    <p class="justifyCenter">Selecciona un municipio para obtener las estadísticas o selecciona una capa para conocer sus atributos</p>
+                    <div class="row"> 
+                        <p class="steptutorial">3 de 4 </p> 
+                        <a href="#" class="btn btn-terciary mx-1" id="goStep4">Siguiente</a>
+                        <a href="#" class="btn btn-primary mx-1 closeTutorial">Cerrar</a>
+                    </div>
+                
+                </div>
+            </div>
+            <!-- step4 tutorial -->
+            <div class="popover fade bs-popover-left hide" role="tooltip" id="tutorialstep4">
+                <div class="arrow arrowRight"></div>
+                <div class="popover-body">
+                    <p class="justifyCenter">Control de capas geográficas</p>
+                    <div class="row"> 
+                        <p class="steptutorial">4 de 4 </p> 
+                        <a href="#" class="btn btn-primary closeTutorial">Cerrar</a>
+                    </div>   
+                </div>
+            </div>
+            
+        </div>
         <script src="index.js"></script>
     </body>
 

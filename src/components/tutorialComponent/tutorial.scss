@@ -1,0 +1,79 @@
+@import '../../scss/sizes.scss';
+@import '../../scss/color';
+
+.row{
+    margin:0;
+    padding: 0;
+}
+.closed{
+    position: absolute;
+    right: 20px;
+}
+
+.steptutorial{
+    margin-right: 10%;
+}
+
+.justifyCenter{
+    text-align: justify;
+}
+.tutorialleft {
+    left: 46px;
+    top: 50px;
+    &.active{
+        @include desktop {
+            left: 200px; 
+        }
+    };
+}
+
+.tutorialcenter {
+    left: 50%;
+    top: 50%;
+    @include tablet{
+        left: 20%; 
+    }
+}
+
+#tutorialstep4{
+    right: 50px;
+    left: auto;
+    &.activeSide{
+        @include desktop {
+            right: 43%;
+        }
+    }
+}
+
+#tutorialstep1{
+    z-index: 10000;
+}
+
+.bs-popover-right > .arrow, .bs-popover-auto[x-placement^="right"] > .arrow {
+    left: calc(-0.5rem - 1px);
+    width: 0.5rem;
+    height: 1rem;
+    margin: 0.3rem 0;
+}
+
+.arrowRight{
+    left: auto;
+}
+
+.arrowLeft{
+    left: calc(-0.5rem - 1px);
+}
+
+.popover .arrow {
+    position: absolute;
+    display: block;
+    top: 12px;
+}
+
+.popover .arrow::before, .popover .arrow {
+    position: absolute;
+    display: block;
+    content: "";
+    border-color: transparent;
+    border-style: solid;
+}

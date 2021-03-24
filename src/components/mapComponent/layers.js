@@ -8,7 +8,7 @@ import {styleMpio,styleHighlight} from './layer-style/layers-style'
 
 // import {geojsonLayer} from '../server/geoserver/geojson'
 //Capa base
-var streetmap = new TileLayer({title: 'Streetmap',visible: false,source: new OSM({crossOrigin: null}),maxZoom: 10,minResolution: 2,name: 'Street Map'});
+var streetmap = new TileLayer({title: 'Streetmap',visible: true,source: new OSM({crossOrigin: null}),maxZoom: 10,minResolution: 2,name: 'Street Map'});
 
 var otm = new TileLayer({ title: 'OTM', visible: false,source: new XYZ({url: "https://tile.opentopomap.org/{z}/{x}/{y}.png", attributions:' © OpenStreetMap contributors'}), name: 'OTM'});
 var bw = new TileLayer({title: 'B & W', visible: false,source: new XYZ({url: "http://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png", attributions:' © OpenStreetMap contributors'}), name: 'BW'});
@@ -17,7 +17,7 @@ var terrain = new TileLayer({title: 'Terrain',visible: false,source: new XYZ({ur
 var Esri_WorldPhysical = new TileLayer({title: 'Esri WorldPhysical',visible: false, attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service',source: new XYZ({url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}'}),maxZoom: 8,name: 'Esri WorldPhysical'});
 var Esri_WorldImagery = new TileLayer({title: 'Esri WorldImagery', visible: false,source: new XYZ({url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'}), attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community', name: 'Esri WorldImagery'});
 
-var CartoDB_Positron = new TileLayer({title: 'CartoDB Positron', visible: true,source: new XYZ({url:'http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'}), attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',subdomains: 'abcd',maxZoom: 19, name: 'CartoDB Positron'});
+var CartoDB_Positron = new TileLayer({title: 'CartoDB Positron', visible: false,source: new XYZ({url:'http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'}), attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',subdomains: 'abcd',maxZoom: 19, name: 'CartoDB Positron'});
 
 //capa para seleccion
 export var highlight = new VectorLayer({style: styleHighlight,source: new VectorSource()});

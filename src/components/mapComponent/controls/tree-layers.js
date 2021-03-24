@@ -1,6 +1,6 @@
 import $ from "jquery";
 import {hightlightRemove,highlightMupioRemove} from '../layers'
-
+import {closeTutorialOnStep4} from '../../tutorialComponent/tutorial'
 var AllLayers = [];
 var k = 0;
 
@@ -126,6 +126,7 @@ export function findBy(layer, key, value) {
 //oculta el control de capas
 $('#ControlCapas').on('click',function(){
     document.getElementById('accordion').className = 'd-block';
+    closeTutorialOnStep4();
 });
 
 var ControlLayerClose=()=> {
