@@ -26,6 +26,8 @@ export var layerSelection=(coordinate)=>{
             // mupios is not active
             $('#layers-data-tab').tab('show');
             $('#nav-layers').attr("style", "display:block"); 
+            highlightMupioRemove();
+            $('#nav-chart').attr("style", "display:none"); 
         }
     }
 }
@@ -35,7 +37,8 @@ var Selection=(features,i)=>{
     if(features.length>0){
         openSideOptions();
         $('#nav-layers').attr("style", "display:block"); 
-
+        // $('#nav-chart').attr("style", "display:none"); 
+        // highlightMupioRemove();
         // municipios stadistics i=1
         if(i==1){
             // get data from python and create chart
@@ -43,6 +46,7 @@ var Selection=(features,i)=>{
         }else{
             // $('#layers-data-tab').tab('show');
              // if layer different to mupio
+
             hightlightRemove();
             hightlightAdd(feature);
         }
@@ -63,7 +67,7 @@ var openMupioData=(feature)=>{
         $('#loading-chart').attr("style", "display:block");
         $('#resume-data-tab').tab('show');
         pythonGetRequest(resumeData,feature);
-        highlightMupioRemove()
+        highlightMupioRemove();
         hightlightMupioAdd(feature);
         if($('#nav-chart').css('display') == 'none'){
             $('#nav-chart').attr("style", "display:block"); 

@@ -48,6 +48,9 @@
 #tutorialstep1{
     z-index: 10000;
 }
+.hide{
+    display: none;
+}
 
 .bs-popover-right > .arrow, .bs-popover-auto[x-placement^="right"] > .arrow {
     left: calc(-0.5rem - 1px);
