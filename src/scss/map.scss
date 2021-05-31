@@ -25,6 +25,17 @@
   background-color:rgba(255, 255, 255, 0.123);
 }
 
+.ol-attribution:not(.ol-collapsed) {
+  background-color: rgba(255,255,255,0.4);
+}
+
+.ol-zoom {
+  top: 3em;
+}
+
+.ol-zoom-extent {
+  top: 6.6em;
+}
 .ol-scale-line-inner{
   border:1px solid $color_primary;
   color:  $color_primary;
@@ -39,6 +50,11 @@
   &:hover{
     background-color:$color_secundary
   }
+}
+
+.search-control{
+  left: 0.5em;
+  top: 0.8em;
 }
 .layer-switcher button{
   background-color:white;

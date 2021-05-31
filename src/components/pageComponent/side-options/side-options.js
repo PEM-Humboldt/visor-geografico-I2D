@@ -3,7 +3,7 @@ import './sideoptions.scss';
 
 import {updateSize} from '../../mapComponent/map-control'
 import {hightlightRemove,highlightMupioRemove} from '../../mapComponent/layers'
-
+import {exportData} from './tab-export/export'
 $('#closeSideOptions').on( "click", function() {
     closeSideOptions()
 })
@@ -18,6 +18,8 @@ export const openSideOptions=()=>{
         $('#sideOptions').removeClass('nonactive');
 
         $('#tutorialstep4').addClass('activeSide');
+
+        exportData()
     }
 
 }

@@ -10,8 +10,8 @@ export function buildLayerTree(layer) {
     var layers = layer.getLayers().getArray();
     var len = layers.length;
 
-    // recorre la cantidad de grupos de layers
-    for (var i = 0; i < len - 2; i++) {
+    // recorre la cantidad de grupos de layers y excluye los ultimos layers
+    for (var i = 0; i < len - 3; i++) {
         var name = layers[i].get('name');
 
         var accordion = document.getElementById('accordion');
@@ -55,11 +55,12 @@ export function buildLayerTree(layer) {
         for (var j = 0; j < leng; j++) {
             var subname = lay[j].get('name');
             var cardbody = document.createElement('div');
-            cardbody.className = "card-body";
+            cardbody.className = "card-body-layers";
             collapseOne.appendChild(cardbody);
 
             var fcheck = document.createElement('div');
             fcheck.className = "form-check";
+            cardbody.appendChild(fcheck);
 
             var check = document.createElement('input');
             check.className = "form-check-input layers-input";
@@ -77,19 +78,19 @@ export function buildLayerTree(layer) {
             if (lay[j].values_.visible === true) {
                 check.checked = true;
             }
-            cardbody.appendChild(check);
+            fcheck.appendChild(check);
             var lab = document.createElement('label');
             lab.className = "form-check-label";
             lab.setAttribute('for', 'defaultCheck1');
             lab.innerHTML = lay[j].values_.title;
-            cardbody.appendChild(lab);
+            fcheck.appendChild(lab);
             if (lay[j].values_.urldownload && lay[j].values_.urldownload!='') {
                 var down= document.createElement('div');
                 down.innerHTML='<i class="fas fa-info"></i>';
                 down.className = "card-link float-right";
                 close.setAttribute('style', 'position:absolute; right:8px; color: rgb(42, 71, 80)');
                 down.setAttribute('onclick', 'window.open("' + lay[j].values_.urldownload + '")');
-                cardbody.appendChild(down);
+                fcheck.appendChild(down);
             }
             
             if (i !== 0) {

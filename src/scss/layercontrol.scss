@@ -6,6 +6,9 @@
     position: absolute;
     color: $color_primary;
     padding: 5px;
+    &:hover{
+        color:$color_secundary;
+    }
     @include tablet{
         right: 3vh;
     }
@@ -68,4 +71,44 @@
     &:hover{
         color:$color_secundary
     }
+}
+
+#searchDiv{
+    z-index: 2;
+    position: absolute;
+    @include tablet{
+        width: 70%;
+    }
+    @include desktop {
+        width: 30%;
+    }
+}
+
+.card-body-layers{
+    padding: 0.5em 1em;
+}
+
+.dropdown-item{
+    padding: 0.25rem 0.5rem;
+    font-weight: 350;
+}
+
+.dropdown-menu{
+    width: 120%;
+}
+
+#dropdown-menu-mupio{
+    position: absolute; 
+    transform: translate3d(48px, 42px, 0px); 
+    top: 0px; 
+    left: 0px; 
+    will-change: transform;
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #000;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgb(0 0 0 / 25%);
 }

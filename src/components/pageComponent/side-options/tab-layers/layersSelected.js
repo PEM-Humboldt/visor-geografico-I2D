@@ -1,3 +1,6 @@
+import $ from "jquery";
+
+import {hightlightAdd,hightlightRemove} from '../../../mapComponent/layers'
 // create dynamic selection
 export function FeatSelect(features,i) {
     var feature=features[0];
@@ -12,14 +15,32 @@ export function FeatSelect(features,i) {
         accordion.appendChild(card);
         var cardh = document.createElement('div');
         cardh.className = "card-header";
+        cardh.id='#ch' + feature.ol_uid;
         card.appendChild(cardh);
 
-        var cardlink = document.createElement('a');
-        cardlink.className = "card-link";
+        var cardlink = document.createElement('p');
+        cardlink.className = "toggle-header m-2 collapsed";
+        cardlink.id='#collapse' + feature.ol_uid;
         cardlink.setAttribute('data-toggle', 'collapse');
         cardlink.setAttribute('href', '#collapse' + feature.ol_uid);
-        cardlink.innerHTML = feature.id_;
+        cardlink.onclick=function(e){  
+            // console.log(feature.getGeometry().getType())
+            hightlightRemove();
+            $('#contenedorg').on('shown.bs.collapse', function () {
+                hightlightRemove();
+                feature.getGeometry().getType()=='Point'?hightlightAdd(feature,'point'):hightlightAdd(feature);
+            })
+        }
         cardh.appendChild(cardlink);
+
+        var cardIcon = document.createElement('i');
+        cardIcon.className = "fas fa-angle-down rotate-icon mx-2";
+        cardlink.appendChild(cardIcon);
+
+        var cardTitle = document.createElement('b');
+        cardTitle.className = "";
+        cardTitle.innerHTML = feature.id_;
+        cardlink.appendChild(cardTitle);
 
         var collapseOne = document.createElement('div');
         collapseOne.id = "collapse" + feature.ol_uid;
@@ -36,7 +57,7 @@ export function FeatSelect(features,i) {
         var table = document.createElement('table');
         table.className = "table table-sm";
         cardbody.appendChild(table);
-
+        
         var j = 0;
         // atributos
         for (i in feature.values_) {

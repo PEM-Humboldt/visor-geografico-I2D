@@ -4,7 +4,7 @@ import {Group as GroupLayer,Tile as TileLayer, Vector as VectorLayer} from 'ol/l
 import {Vector as VectorSource, OSM,XYZ } from 'ol/source';
 import {GeoJSON} from 'ol/format'
 import {wmsLayer} from '../server/geoserver/wms'
-import {styleMpio,styleHighlight} from './layer-style/layers-style'
+import {styleMpio,styleHighlight,styleHighlightPoint} from './layer-style/layers-style'
 
 // import {geojsonLayer} from '../server/geoserver/geojson'
 //Capa base
@@ -21,6 +21,7 @@ var CartoDB_Positron = new TileLayer({title: 'CartoDB Positron', visible: false,
 
 //capa para seleccion
 export var highlight = new VectorLayer({style: styleHighlight,source: new VectorSource()});
+export var highlightPoint = new VectorLayer({style: styleHighlightPoint,source: new VectorSource()});
 
 var mpioStyle=styleMpio;
 export var highlightMupio = new VectorLayer({
@@ -33,23 +34,26 @@ export var highlightMupio = new VectorLayer({
 
 
 //Capas Basica
-var mpios = wmsLayer('Capas_Base','mpio_politico','Municipios',true,''); 
-var deptos = wmsLayer('Capas_Base','dpto_politico','Departamentos',true,''); 
+export var mpios = wmsLayer('Capas_Base','mpio_politico','Municipios',true,''); 
+export var deptos = wmsLayer('Capas_Base','dpto_politico','Departamentos',true,''); 
 
 // var deptos = geojsonLayer('Capas_Base','dpto_politico',styleDepto);
 // var mpios = geojsonLayer('Capas_Base','mpio_politico',styleMpio); 
 
 //CAPAS PUBLICAS
 var aicas = wmsLayer('Historicos','aicas','AICAS',false,'09ee583d-d397-4eb8-99df-92bb6f0d0c4c'); 
-var bosque_seco_tropical = wmsLayer('Historicos','bosque_seco_tropical','Bosque Seco Tropical',false,'eca845f9-dea1-4e86-b562-27338b79ef29'); 
+var bosque_seco_tropical = wmsLayer('Historicos','bosque_seco_tropical','Bosque Seco Tropical 2014',false,'eca845f9-dea1-4e86-b562-27338b79ef29'); 
+var bosque_seco_tropical_2018 = wmsLayer('Historicos','BST2018','Bosque Seco Tropical 2018',false,'6ccd867c-5114-489f-9266-3e5cf657a375'); 
+
+
 var complejos_paramos_escala100k= wmsLayer('Historicos','complejos_paramos_escala100k','Complejos Páramos Escala 100k',false,'c9a5d546-33b5-41d6-a60e-57cfae1cff82'); 
 
 var ecosistemas_cuenca_rio_orinoco = wmsLayer('Historicos','ecosistemas_cuenca_rio_orinoco','Ecosistemas Cuenca Río Orinoco',false,'05281f18-d63e-469d-a2df-5796e8fd1769'); 
 var ecosistemas_generales_etter = wmsLayer('Historicos','ecosistemas_generales_etter','Ecosistemas Generales Etter',false,'52be9cc9-a139-4568-8781-bbbda5590eab'); 
 var grado_transformacion_humedales_m10k = wmsLayer('Historicos','grado_transformacion_humedales_m10k','Grado Transformación Humedales',false,'532e5414-8906-47ee-a298-a97735fc6cdd'); 
 
-var humedales = wmsLayer('Proyecto_fondo_adaptacion','Humedales','Humedales versión 2012',false,'7ff0663a-129c-43e9-a024-7718dbe59d60'); 
-var humedales_continentales_insulares_2015 = wmsLayer('Proyecto_fondo_adaptacion','Humedales_Continentales_Insulares_2015_Vector','Humedales Continentales Insulares',false); 
+var humedales = wmsLayer('Proyecto_fondo_adaptacion','Humedales','Clasificación de humedales 2015',false,'7ff0663a-129c-43e9-a024-7718dbe59d60'); 
+var humedales_continentales_insulares_2015 = wmsLayer('Proyecto_fondo_adaptacion','Humedales_Continentales_Insulares_2015_Vector','Humedales Continentales Insulares',false,'d68f4329-0385-47a2-8319-8b56c772b4c0'); 
 var limites21paramos_25K_2015 = wmsLayer('Proyecto_fondo_adaptacion','Limites21Paramos_25K_2015','Límite 21 Complejos Páramo 2015',false,'5dbddd78-3e51-45e6-b754-ab4c8f74f1b5'); 
 var limites24paramos_25K_2016 = wmsLayer('Proyecto_fondo_adaptacion','Limites24Paramos_25K_2016','Límite 24 Complejos Páramo 2016',false,''); 
 
@@ -65,7 +69,7 @@ var meta_conservacion = wmsLayer('Proyecto_PACBAO_Ecopetrol','meta_conservacion'
 var unicidad = wmsLayer('Proyecto_PACBAO_Ecopetrol','unicidad','Unicidad',false,'9c0dc2c7-6919-400d-998e-265624c7e781'); 
 var unidades_analisis = wmsLayer('Proyecto_PACBAO_Ecopetrol','unidades_analisis','Unidades de Análisis',false,'f6f304bd-a5f0-450c-a836-d30b12acbaff'); 
 
-var registros_ceiba = wmsLayer('Registros_Ceiba','Registros_Ceiba','Registros CEIBA',false,''); 
+// var registros_ceiba = wmsLayer('Registros_Ceiba','Registros_Ceiba','Registros CEIBA',false,''); 
 
 
 var procesos_gobernanza_multiescalar = wmsLayer('Gobernanza','procesos_gobernanza','Posibles procesos de gobernanza',false,'a6fcfe1b-11e8-4383-a38e-a7f0035dece5'); 
@@ -90,7 +94,7 @@ export var division_base = new GroupLayer({
 export var historicos = new GroupLayer({
     fold:'close',
     title: 'Historicos',
-    layers: [aicas, bosque_seco_tropical, complejos_paramos_escala100k, ecosistemas_cuenca_rio_orinoco, ecosistemas_generales_etter, grado_transformacion_humedales_m10k],
+    layers: [aicas, bosque_seco_tropical,bosque_seco_tropical_2018, complejos_paramos_escala100k, ecosistemas_cuenca_rio_orinoco, ecosistemas_generales_etter, grado_transformacion_humedales_m10k],
     name: 'Historicos'
 });
 export var fondo_adaptacion = new GroupLayer({
@@ -111,12 +115,12 @@ export var conservacion_biodiversidad = new GroupLayer({
     layers: [biomas, colapso_acuatico, colapso_terrestre, colapso_total, distritos_biogeograficos, hidrobiologia, lineamientos, meta_conservacion, unicidad, unidades_analisis],
     name: 'Conservación de la Biodiversidad'
 });
-export var ceiba = new GroupLayer({
-    fold:'close',
-    title: 'Registros CEIBA',
-    layers: [registros_ceiba],
-    name: 'Registros CEIBA'
-});
+// export var ceiba = new GroupLayer({
+//     fold:'close',
+//     title: 'Registros CEIBA',
+//     layers: [registros_ceiba],
+//     name: 'Registros CEIBA'
+// });
 export var gobernanza = new GroupLayer({
     fold:'close',
     title: 'Gobernanza',
@@ -131,8 +135,13 @@ export var feats=(data)=>{
     });
 }
 
-export const hightlightAdd=(feature)=> {highlight.getSource().addFeature(feature);}
-export const hightlightRemove=()=> {highlight.getSource().clear();}
+export const hightlightAdd=(feature,type)=> {
+    type=='point'?highlightPoint.getSource().addFeature(feature): highlight.getSource().addFeature(feature);
+}
+export const hightlightRemove=()=> {
+    highlightPoint.getSource().clear();
+    highlight.getSource().clear();
+}
 
 export const hightlightMupioAdd=(feature)=> {highlightMupio.getSource().addFeature(feature);}
 export const highlightMupioRemove=()=> {highlightMupio.getSource().clear();}

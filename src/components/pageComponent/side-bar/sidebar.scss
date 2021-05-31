@@ -37,6 +37,9 @@
         }
     };
     ul{
+        &.child{
+            padding: 0;
+        }
         &.bottom{
             bottom: 0px;
             position: absolute;
@@ -44,8 +47,18 @@
         li{
             &.centerLiIcons{
                 padding:5px 10px;
+                display: block;
                 &.nonactive{
                     text-align: center;
+                }
+            };
+            &.centerLiIconsDrop{
+                padding:0px 0px;
+                // display: block;
+                display: block;
+                &.nonactive{
+                    padding: 5px 17px;
+                    // text-align: center;
                 }
             };
             &.centerLiImg{
@@ -70,4 +83,14 @@
             }
         }
     };
+}
+
+.dropdown-container {
+    &.nonactive{
+        display: none;
+    }
+    &.active{
+        display: block;
+    }
+    padding-left: 10px;
 }

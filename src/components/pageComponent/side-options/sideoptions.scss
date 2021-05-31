@@ -1,11 +1,12 @@
 @import '../../../scss/sizes.scss';
 @import '../../../scss/color';
 #sideOptions {
+    overflow: scroll;
     position: absolute;
     right: 0;
     top: 0;
     height: 100vh;
-    padding: 10px;
+    padding: 10px 0px;
     background-color: white;
     &.nonactive{
         display: none;
@@ -24,7 +25,7 @@
     z-index: 1000;
     position: relative;
     float: left;
-    padding: 0px 5px 0px 5px;
+    padding: 0px 5px;
 }
 
 
@@ -49,7 +50,7 @@ a.nav-link.active{
 // tab navbar
 
 .tab-pane{
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 a.card-link{
@@ -57,6 +58,13 @@ a.card-link{
     color:$color_primary
 }
 
-#contenedorg{
-    overflow-y: scroll;
+.toggle-header{
+    cursor:pointer
 }
+
+#layersData{
+    margin-top: 0px;
+}
+// #contenedorg{
+//     overflow-y: scroll;
+// }

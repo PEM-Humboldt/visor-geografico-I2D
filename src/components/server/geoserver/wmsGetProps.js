@@ -33,7 +33,7 @@ export var wmsGetProps=(AllLayers,i,coordinate,Selection)=>{
         coordinate, getResolution(), getProjection(),
         {'INFO_FORMAT': infoFormat}
     );
- 
+
     $.ajax({
         url: url,
         success: function (data) {

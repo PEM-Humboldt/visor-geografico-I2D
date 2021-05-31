@@ -8,11 +8,14 @@ import $ from "jquery";
 
 import {Map, View} from 'ol';
 import {ScaleLine, ZoomToExtent,defaults as defaultControls} from 'ol/control';
+import {getCenter} from 'ol/extent';
 
 import {buildLayerTree,findBy} from './controls/tree-layers';
 
-import {layer_base, division_base,historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, ceiba, gobernanza, highlight, highlightMupio} from './layers'
+import {layer_base, division_base,historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, gobernanza, highlight, highlightPoint, highlightMupio} from './layers'
 import {onClickMap} from './controls/map-click'
+import './controls/search'
+
 
 var zoom = document.createElement('span');
 zoom.innerHTML = '<i class="fas fa-expand"></i>';
@@ -26,7 +29,7 @@ const map = new Map({
   ]),
   target: document.getElementById('map'),
   renderer: 'canvas',
-  layers: [layer_base, division_base,historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, ceiba,gobernanza, highlight,highlightMupio],
+  layers: [layer_base, division_base,historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad,gobernanza,highlightMupio, highlightPoint, highlight],
   view: new View({
     center: [-8113332, 464737],
     zoom: 6
@@ -46,7 +49,11 @@ document.addEventListener("DOMContentLoaded",function(){
 });
 
 export const view=()=>{return map.getView()}
-export const fitView=(ext)=>{map.getView().fit(ext)}
+export const fitView=(ext)=>{
+  let zoom=getZoom()>8?getZoom:8;
+  map.getView().animate({center: getCenter(ext), zoom: zoom})
+  
+}
 
 // export const addInteraction=(selection)=>{map.addInteraction(selection)}
 // export const removeInteraction=()=>{map.removeInteraction()}
@@ -57,6 +64,7 @@ export const fitView=(ext)=>{map.getView().fit(ext)}
 
 export const getResolution=()=>{return map.getView().getResolution()}
 export const getProjection=()=>{return map.getView().getProjection()}
+export const getZoom=()=>{return map.getView().getZoom()}
 
 export const updateSize=()=>{map.updateSize()}
 

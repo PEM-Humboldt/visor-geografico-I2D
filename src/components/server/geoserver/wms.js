@@ -10,7 +10,7 @@ export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,
         title: geoserverName,
         source: new TileWMS({
             url: GEOSERVER_URL+geoserverStore+'/wms',
-            params: {LAYERS:  geoserverStore+':'+geoserverLayer, STYLES: ''}
+            params: {'LAYERS':  geoserverStore+':'+geoserverLayer, 'STYLES': '','TILED':true}
         }), name: geoserverLayer,
         urldownload:geonetwork
     });

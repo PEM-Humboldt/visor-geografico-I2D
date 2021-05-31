@@ -1,6 +1,6 @@
 import $ from "jquery";
 import {updateSize} from '../../mapComponent/map-control'
-
+import {closeDropdown} from './close-sidebar'
 export var openSideBar=()=>{
     $('#sideBar').removeClass('nonactive');
     $('#sideBar').addClass('active');
@@ -12,3 +12,16 @@ export var openSideBar=()=>{
     // map resize when change view
     setTimeout(function(){ updateSize()}, 100);
 }
+
+const sideBarDropdown=(div)=>{
+    if ($(div).hasClass('active')) {
+      closeDropdown(div)
+    } else {
+      $(div).removeClass('nonactive');
+      $(div).addClass('active');
+    }
+}
+
+$('#catalogs-nav').on('click', function(){
+    sideBarDropdown('#dropdown-catalogs')
+});

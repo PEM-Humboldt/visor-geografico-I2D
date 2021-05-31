@@ -1,11 +1,11 @@
 import {Circle as CircleStyle,Stroke, Fill, Style} from 'ol/style';
 
-var PointStyle =(style)=> {
+export var pointStyle =(style)=> {
     return new Style({
       image: new CircleStyle({
-        radius: 10,
-        fill: new Fill({color: '#666666'}),
-        stroke: new Stroke({color: '#bada55', width: 1}),
+        radius: style.radius,
+        fill: new Fill({color: style.fillColor}),
+        stroke: new Stroke({color: style.strokeColor, width: style.strokeWidth}),
       }),
     })
 }

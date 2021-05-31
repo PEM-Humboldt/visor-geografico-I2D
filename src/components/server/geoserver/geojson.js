@@ -12,9 +12,9 @@ export var geojsonLayer = (store,layer,color,params)=>{
  
     // geoserver 
     var url_request=`${GEOSERVER_URL}wfs?service=WFS&`;
-    var url_params=`version=2.0.0&request=GetFeature&typename=${store}:${layer}&outputFormat=application/json&srsname=EPSG:3857`;
+    var url_params=`version=2.0.0&request=GetFeature&typename=${store}:${layer}&srsname=EPSG:3857&outputFormat=application/json`;
  
-    // console.log(url_request + url_params +',EPSG:3857');
+    // console.log(url_request + url_params);
     var vectorSource = new VectorSource({
         format: new GeoJSON(),
         url: function (extent) {
