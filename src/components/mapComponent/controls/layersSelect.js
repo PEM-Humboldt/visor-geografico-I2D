@@ -90,10 +90,11 @@ var openMupioData=(feature)=>{
             pythonGetRequest(gbifData,urlReq)
         }
         $('#loading-chart').attr("style", "display:block");
-        let urlChartReq='mpio/registers/'+feature.values_.codigo;
+        let urlRegReq='mpio/registers/'+feature.values_.codigo;
+        let urlSpecReq='mpio/species/'+feature.values_.codigo;
         
-        pythonGetRequest(chartData,urlChartReq,title_mupio,"chartdiv");
-        pythonGetRequest(chartData,urlChartReq,title_mupio,"chartdiv1");
+        pythonGetRequest(chartData,urlRegReq,title_mupio,"chartdiv");
+        pythonGetRequest(chartData,urlSpecReq,title_mupio,"chartdiv1");
 
         highlightMupioRemove();
         hightlightMupioAdd(feature);

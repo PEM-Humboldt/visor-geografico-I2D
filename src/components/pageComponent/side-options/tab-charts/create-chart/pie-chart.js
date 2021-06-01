@@ -7,11 +7,12 @@ export var charCreate=(dataChart,idChart)=>{
 
     try{   
         // eliminar el chart anterior
-        idChart=='chartdiv'&& am4core.disposeAllCharts();   
+        // idChart=='chartdiv'&& am4core.disposeAllCharts();   
      
         am4core.ready(function() {
             // am4core.disposeAllCharts();
             // Themes begin
+            am4core.options.autoDispose = true;
             am4core.useTheme(am4themes_animated);
             // Themes end
             
