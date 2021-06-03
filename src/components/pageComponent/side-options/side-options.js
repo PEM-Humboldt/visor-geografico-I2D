@@ -1,7 +1,7 @@
 import $ from "jquery";
 import './sideoptions.scss';
 
-import {updateSize} from '../../mapComponent/map-control'
+import {updateSize} from '../../mapComponent/map'
 import {hightlightRemove,highlightMupioRemove} from '../../mapComponent/layers'
 import {exportData} from './tab-export/export'
 $('#closeSideOptions').on( "click", function() {

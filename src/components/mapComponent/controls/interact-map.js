@@ -5,7 +5,7 @@ import {altKeyOnly} from 'ol/events/condition';
 
 import {styleHighlightClickMpio} from '../layer-style/layers-style'
 
-import {addInteraction} from '../map-control';
+import {addInteraction} from '../map';
 
 export const interaction=()=>{
     try{

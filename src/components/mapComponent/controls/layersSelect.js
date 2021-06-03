@@ -10,7 +10,7 @@ import {pythonGetRequest} from '../../server/pythonserver/pythonGetRequest'
 import {chartData} from "../../pageComponent/side-options/tab-charts/chart"
 import {gbifData} from "../../pageComponent/side-options/tab-charts/gbif-info"
 
-import {GEOSERVER_URL} from '../../server/url'
+// import {GEOSERVER_URL} from '../../server/url'
 // =========================================================================
 
 // get wms layers if turn on
@@ -93,6 +93,15 @@ var openMupioData=(feature)=>{
         let urlRegReq='mpio/registers/'+feature.values_.codigo;
         let urlSpecReq='mpio/species/'+feature.values_.codigo;
         
+        if($('#collapseChart').hasClass('show')==false){
+            $('#collapseChart').addClass('show')
+            $('#registerTab').removeClass('collapsed')
+        }
+        if($('#collapseSpeciesChart').hasClass('show')==false){
+            $('#collapseSpeciesChart').addClass('show')
+            $('#speciesTab').removeClass('collapsed')
+        }
+
         pythonGetRequest(chartData,urlRegReq,title_mupio,"chartdiv");
         pythonGetRequest(chartData,urlSpecReq,title_mupio,"chartdiv1");
 

@@ -1,5 +1,5 @@
 import $ from "jquery";
-import {updateSize} from '../../mapComponent/map-control'
+import {updateSize} from '../../mapComponent/map'
 import {closeDropdown} from './close-sidebar'
 export var openSideBar=()=>{
     $('#sideBar').removeClass('nonactive');

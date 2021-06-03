@@ -7,17 +7,16 @@ import {TileWMS} from 'ol/source';
 var featureNS = 'http://humboldt.co';
 var infoFormat = 'application/json';
 
-import {getProjection,getResolution} from '../../mapComponent/map-control'
+import {getProjection} from '../../mapComponent/map'
 
 import {feats} from '../../mapComponent/layers'
-import {fitView} from '../../mapComponent/map-control'
+import {fitView} from '../../mapComponent/map'
 
 
 var format = [], wmsSource = [];
 
 // select wms layers if turn on
 export var wmsGetProps=(AllLayers,i,coordinate,Selection)=>{
-    
     var featureType = AllLayers[i].values_.source.params_.LAYERS;
     format[i] = new WFS({featureNS: featureNS, featureType: featureType.split(':')[1]});
     wmsSource[i] = new TileWMS({
@@ -28,9 +27,10 @@ export var wmsGetProps=(AllLayers,i,coordinate,Selection)=>{
         },
         serverType: 'geoserver'
     });
-
+    // let resolution=getResolution()
+    let resolution=1;
     var url = wmsSource[i].getFeatureInfoUrl(
-        coordinate, getResolution(), getProjection(),
+        coordinate, resolution, getProjection(),
         {'INFO_FORMAT': infoFormat}
     );
 

@@ -63,18 +63,13 @@ export function buildLayerTree(layer) {
             cardbody.appendChild(fcheck);
 
             var check = document.createElement('input');
-            check.className = "form-check-input layers-input";
-            // check.onclick = cleanHighlights("'"+subname+"'");
-            // check.onclick=cleanHighlights;            
+            check.className = "form-check-input layers-input";       
             check.setAttribute('type', 'checkbox');
-            check.id = subname;
+            check.id = subname.replace(' ', '');
             check.onclick = function(ev){    
                 cleanHighlights(ev)
-                // console.log(ev.toElement)
             }
 
-            // console.log(subname,lay[j].values_.visible);
-    
             if (lay[j].values_.visible === true) {
                 check.checked = true;
             }
@@ -143,6 +138,8 @@ var cleanHighlights=(ev)=>{
         hightlightRemove();
         highlightMupioRemove();
     }
-
 }
 
+$('#accordion').on('click',function(e){
+    console.log('aa',e)
+})

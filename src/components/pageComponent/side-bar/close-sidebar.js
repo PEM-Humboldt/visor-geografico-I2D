@@ -1,5 +1,5 @@
 import $ from "jquery";
-import {updateSize} from '../../mapComponent/map-control'
+import {updateSize} from '../../mapComponent/map'
 
 export function closeSideBar(){
     $('#sideBar').removeClass('active');
