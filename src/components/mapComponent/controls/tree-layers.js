@@ -65,7 +65,8 @@ export function buildLayerTree(layer) {
             var check = document.createElement('input');
             check.className = "form-check-input layers-input";       
             check.setAttribute('type', 'checkbox');
-            check.id = subname.replace(' ', '');
+            // check.id = subname.replace(' ', '');
+            check.id = subname;
             check.onclick = function(ev){    
                 cleanHighlights(ev)
             }

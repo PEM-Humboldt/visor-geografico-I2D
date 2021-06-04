@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import {streetmap,CartoDB_Positron} from '../layers'
-import {mapZoomEnd,addLayer,removeLayer,getZoom} from '../map'
+import {mapZoomEnd,getZoom} from '../map'
 
 var changeBasemap=(currentbm,newbm)=>{
     currentbm.setVisible(false);
@@ -9,13 +9,17 @@ var changeBasemap=(currentbm,newbm)=>{
 
 var zoomChangeBasemap=()=>{
     if(getZoom() > 10){
-        $('input#CartoDBPositron').prop('checked', true);
-        $('input#StreetMap').prop('checked', false);
-        changeBasemap(streetmap,CartoDB_Positron)
+        if($('input#StreetMap').is(':checked')==true){
+            $('input#CartoDBPositron').prop('checked', true);
+            $('input#StreetMap').prop('checked', false);
+            changeBasemap(streetmap,CartoDB_Positron)
+        }
     }else{
-        $('input#CartoDBPositron').prop('checked', false);
-        $('input#StreetMap').prop('checked', true);
-        changeBasemap(CartoDB_Positron,streetmap)
+        if($('input#CartoDBPositron').is(':checked')==true){
+            $('input#CartoDBPositron').prop('checked', false);
+            $('input#StreetMap').prop('checked', true);
+            changeBasemap(CartoDB_Positron,streetmap)
+        }
     }
 }
 

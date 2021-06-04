@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded",function(){
   //Prender o apagar capas
   $('.layers-input').on('click', function () {
       var layername = this.id;
+      // console.log(map.getLayerGroup())
       var layer = findBy(map.getLayerGroup(), 'name', layername);
       layer.setVisible(!layer.getVisible());
   });
