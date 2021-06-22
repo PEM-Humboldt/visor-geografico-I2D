@@ -12,7 +12,9 @@ export const pythonGetRequest=(handleData,param)=>{
         },
         error: function (jqXHR, exception) {
             $('#layers-data-tab').tab('show');
-            $('#nav-chart').hide()
+            $('#nav-chart').hide();
+            $('#resumeData').hide();
+            
             $('.toast').toast('show');
             $('#toastBody').html('No fue posible cargar las estadisticas, intente nuevamente')
             
