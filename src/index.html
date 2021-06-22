@@ -18,7 +18,7 @@
             <nav id="sideBar" class="nonactive">
                 <ul class="nav navbar-nav side-nav">
                     <li class="centerLiIcons">
-                        <a title="cerrar panel lateral" href="javascript:void(0)" id="closebtn" class="nonactive" onclick="closeSideBar()">
+                        <a title="cerrar panel lateral" href="javascript:void(0)" id="closebtn" class="nonactive">
                             <i class="fas fa-times"></i>
                         </a>
                     </li>
@@ -71,7 +71,7 @@
                         <i id="ControlCapas" name="ControlCapas" class="fas fa-layer-group fa-2x"></i>
                     </a>
                     <!-- open control de capas -->
-                    <div id="accordion" class="accordion d-none"></div>
+                    <div id="accordion" class="accordion d-none"></div>                
                 </div>
             </section>
 
@@ -104,14 +104,14 @@
                         <div class='accordion' id="charts" style="width: 100%;">
                             <div class="card">
                               <div class="card-header" id="headingChart">
-                                <p id="registerTab" class="toggle-header m-2"  data-toggle="collapse" data-target="#collapseChart" aria-expanded="true" aria-controls="collapseChart">
+                                <p id="registerTab" class="tabChart toggle-header m-2"  data-toggle="collapse" data-target="#collapseChart" aria-expanded="true" aria-controls="collapseChart">
                                     <i class="fas fa-angle-down rotate-icon"></i> 
-                                    <b>Número de Registros Biológicos </b>
+                                    <b>Número de registros biológicos </b>
                                 </p>
                               </div>
                           
-                              <div id="collapseChart" class="collapse show" aria-labelledby="headingChart" data-parent="#charts">
-                                <div class="chartdiv" id="chartdiv"></div>
+                              <div id="collapseChart" class="collapseChart collapse show" aria-labelledby="headingChart" data-parent="#charts">
+                                <div class="chartdiv" id="chartdivRg"></div>
                                 <p class="gbifInfo"></p>
                               </div>
                               
@@ -119,15 +119,54 @@
 
                             <div class="card">
                               <div class="card-header" id="headingSpeciesChart">
-                                <p id="speciesTab" class="toggle-header m-2"  data-toggle="collapse" data-target="#collapseSpeciesChart" aria-expanded="false" aria-controls="collapseSpeciesChart">
+                                <p id="speciesTab" class="tabChart toggle-header m-2"  data-toggle="collapse" data-target="#collapseSpeciesChart" aria-expanded="false" aria-controls="collapseSpeciesChart">
                                     <i class="fas fa-angle-down rotate-icon"></i> 
                                     <b>Número de especies</b>
                                 </p>
                               </div>
-                              <div id="collapseSpeciesChart" class="collapse show" aria-labelledby="headingSpeciesChart" data-parent="#charts">
-                                <div class="chartdiv" id="chartdiv1"></div>
+                              <div id="collapseSpeciesChart" class="collapseChart collapse show" aria-labelledby="headingSpeciesChart" data-parent="#charts">
+                                <div class="chartdiv" id="chartdivSp"></div>
                                 <p class="gbifInfo"></p>
                               </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="headingSpeciesEndChart">
+                                  <p id="speciesEndTab" class="tabChart toggle-header m-2"  data-toggle="collapse" data-target="#collapseSpeciesEndChart" aria-expanded="false" aria-controls="collapseSpeciesEndChart">
+                                      <i class="fas fa-angle-down rotate-icon"></i> 
+                                      <b>Número de especies endémicas</b>
+                                  </p>
+                                </div>
+                                <div id="collapseSpeciesEndChart" class="collapseChart collapse show" aria-labelledby="headingSpeciesEndChart" data-parent="#charts">
+                                  <div class="chartdiv" id="chartdivSpEnd"></div>
+                                  <p class="gbifInfo"></p>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="headingSpeciesExChart">
+                                  <p id="speciesExTab" class="tabChart toggle-header m-2"  data-toggle="collapse" data-target="#collapseSpeciesExChart" aria-expanded="false" aria-controls="collapseSpeciesExChart">
+                                      <i class="fas fa-angle-down rotate-icon"></i> 
+                                      <b>Número de especies exóticas</b>
+                                  </p>
+                                </div>
+                                <div id="collapseSpeciesExChart" class="collapseChart collapse show" aria-labelledby="headingSpeciesExChart" data-parent="#charts">
+                                  <div class="chartdiv" id="chartdivSpEx"></div>
+                                  <p class="gbifInfo"></p>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="headingDangerSpeciesChart">
+                                  <p id="dangerSpeciesTab" class="tabChart toggle-header m-2"  data-toggle="collapse" data-target="#collapseDangerSpeciesChart" aria-expanded="false" aria-controls="collapseDangerSpeciesChart">
+                                      <i class="fas fa-angle-down rotate-icon"></i> 
+                                      <b>Número de especies amenazadas</b>
+                                  </p>
+                                </div>
+                                <div id="collapseDangerSpeciesChart" class="collapseChart collapse show" aria-labelledby="headingDangerSpeciesChart" data-parent="#charts">
+                                  <div class="chartdiv" id="chartdivDangerSp"></div>
+                                  <p class="gbifInfo"></p>
+                                </div>
                             </div>
                         </div>   
                     </div>
@@ -138,14 +177,17 @@
                     <!-- <div class="tab-pane fade" id="exportData" role="tabpanel" aria-labelledby="export-data-tab">
                         <h5 id="titleSideOptions">Exportar información</h5>
                     </div> -->
-                    
                 </div>
             </section>
 
-
-
-
-            
+            <!-- toast -->
+            <div class="toast fade" data-delay="3000">
+                <div class="toast-header">
+                    <strong class="mr-auto"><i class="fa fa-info-circle"></i> Advertencia</strong>
+                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                </div>
+                <div class="toast-body" id="toastBody"></div>
+            </div>
             <!-- tutorial -->
             <div class="modal fade" id="tutorialstep1" tabindex="-1" role="dialog" aria-labelledby="tutorial1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">

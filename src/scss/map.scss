@@ -33,9 +33,25 @@
   top: 3em;
 }
 
-.ol-zoom-extent {
-  top: 6.6em;
+@include tablet{
+  .ol-touch .ol-zoom-extent {
+    top: 7.6em;
+  }
+  .ol-control button {
+    width: 1.2em;
+    height: 1.5em;
+  }
+  .ol-touch .ol-control button {
+    font-size: 1.1em;
+  }
 }
+@include desktop {
+  .ol-zoom-extent {
+    top: 6.6em;
+  }
+}
+
+
 .ol-scale-line-inner{
   border:1px solid $color_primary;
   color:  $color_primary;

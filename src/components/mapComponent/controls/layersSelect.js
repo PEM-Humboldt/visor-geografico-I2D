@@ -7,7 +7,7 @@ import $ from "jquery";
 import {hightlightRemove,hightlightMupioAdd,highlightMupioRemove} from '../layers'
 import {mpios,deptos} from '../layers'
 import {pythonGetRequest} from '../../server/pythonserver/pythonGetRequest'
-import {chartData} from "../../pageComponent/side-options/tab-charts/chart"
+import {chartData,chartDangerData} from "../../pageComponent/side-options/tab-charts/chart"
 import {gbifData} from "../../pageComponent/side-options/tab-charts/gbif-info"
 
 // import {GEOSERVER_URL} from '../../server/url'
@@ -90,20 +90,19 @@ var openMupioData=(feature)=>{
             pythonGetRequest(gbifData,urlReq)
         }
         $('#loading-chart').attr("style", "display:block");
-        let urlRegReq='mpio/registers/'+feature.values_.codigo;
-        let urlSpecReq='mpio/species/'+feature.values_.codigo;
-        
-        if($('#collapseChart').hasClass('show')==false){
-            $('#collapseChart').addClass('show')
-            $('#registerTab').removeClass('collapsed')
-        }
-        if($('#collapseSpeciesChart').hasClass('show')==false){
-            $('#collapseSpeciesChart').addClass('show')
-            $('#speciesTab').removeClass('collapsed')
-        }
 
-        pythonGetRequest(chartData,urlRegReq,title_mupio,"chartdiv");
-        pythonGetRequest(chartData,urlSpecReq,title_mupio,"chartdiv1");
+        // open chart div on click
+        for ( let i = 0; i < $('.collapseChart').length; i++ ){
+            if ( $($('.collapseChart')[i]).hasClass('show')==false ){
+                $($('.collapseChart')[i]).addClass('show');
+                $($('.tabChart')[i]).removeClass('collapsed');
+            }
+        }
+        let urlMpioReq='mpio/charts/'+feature.values_.codigo;
+        pythonGetRequest(chartData,urlMpioReq);
+
+        let urlMpioDangReq='mpio/dangerCharts/'+feature.values_.codigo;
+        pythonGetRequest(chartDangerData,urlMpioDangReq);
 
         highlightMupioRemove();
         hightlightMupioAdd(feature);

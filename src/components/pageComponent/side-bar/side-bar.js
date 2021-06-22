@@ -6,7 +6,11 @@ import {closeSideBar} from './close-sidebar'
 $('#sideBar').on( "mouseenter touchstart", function() {
   openSideBar();
 })
-$('#sideBar').on( "mouseleave touchend", function() {
+$('#sideBar').on( "mouseleave", function() {
+  closeSideBar();
+});
+
+$('#closebtn').on( "click", function() {
   closeSideBar();
 });
 

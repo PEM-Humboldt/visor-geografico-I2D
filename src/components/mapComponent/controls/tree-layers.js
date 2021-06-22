@@ -141,6 +141,6 @@ var cleanHighlights=(ev)=>{
     }
 }
 
-$('#accordion').on('click',function(e){
-    console.log('aa',e)
-})
+// $('#accordion').on('click',function(e){
+//     console.log('aa',e)
+// })

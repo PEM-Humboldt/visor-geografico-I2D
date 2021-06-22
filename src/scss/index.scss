@@ -29,3 +29,11 @@
         border-color: $color_terciary_trans;    
     }
 }
+
+.toast{
+    margin: auto;
+    z-index: 100;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+}
