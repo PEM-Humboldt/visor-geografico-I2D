@@ -4,6 +4,7 @@ import './sideoptions.scss';
 import {updateSize} from '../../mapComponent/map'
 import {hightlightRemove,highlightMupioRemove} from '../../mapComponent/layers'
 import {exportData} from './tab-export/export'
+
 $('#closeSideOptions').on( "click", function() {
     closeSideOptions()
 })

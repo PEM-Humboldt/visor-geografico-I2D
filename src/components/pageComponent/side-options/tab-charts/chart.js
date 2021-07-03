@@ -3,6 +3,8 @@ import './chart.scss'
 import $ from "jquery";
 import {charCreate} from "./create-chart/pie-chart"
 
+import './create-chart/pie-options/export-resume'
+
 export const chartData =(data)=>{
     try{
         // create chart and replace data
@@ -20,7 +22,7 @@ export const chartData =(data)=>{
 
 export const chartDangerData =(data)=>{
     try{
-        charCreate(data,'chartdivDangerSp','amenazadas');    
+        charCreate(data,'chartdivDangerSp','amenazadas','danger');    
         $('#loading-chart').attr("style", "display:none");  
     }catch{
         console.log('no se puede cargar')

@@ -7,7 +7,8 @@ import {isAllDataZero} from './pie-options/noData'
 import {itemsExport} from './pie-options/export'
 
 import $ from "jquery";
-export var charCreate=(dataChart,idChart,count)=>{
+
+export var charCreate=(dataChart,idChart,count,ccolor)=>{
 
     try{   
         am4core.ready(function() {
@@ -26,6 +27,8 @@ export var charCreate=(dataChart,idChart,count)=>{
             chart.legend.valueLabels.template.align = "right"
             chart.legend.valueLabels.template.textAlign = "end"
             chart.legend.scrollable = true;    
+
+            chart.responsive.enabled = true;
             // chart.legend.width = 200;
             // Add and configure Series
             var pieSeries = chart.series.push(new am4charts.PieSeries());
@@ -55,14 +58,20 @@ export var charCreate=(dataChart,idChart,count)=>{
             // pieSeries.colors.shuffle=true;
 
             /* Create a heat rule */
-            // pieSeries.colors.list = [
-            //     am4core.color("#845EC2"),
-            //     am4core.color("#D65DB1"),
-            //     am4core.color("#FF6F91"),
-            //     am4core.color("#FF9671"),
-            //     am4core.color("#FFC75F"),
-            //     am4core.color("#F9F871"),
-            //   ];
+
+            if(ccolor=='danger'){
+                pieSeries.slices.template.adapter.add('fill', (value, target, key) => {
+                    if (target.dataItem.dataContext.tipo == 'VU') {
+                        return am4core.color('#f9ba1b');
+                    }else if (target.dataItem.dataContext.tipo == 'EN') {
+                        return am4core.color('#f47d20');
+                    }else if (target.dataItem.dataContext.tipo == 'CR') {
+                        return am4core.color('#d51920');
+                    }
+                    return value;
+                });
+            }
+
             let isAllZero=isAllDataZero(dataChart,count);
 
             let name;
@@ -70,7 +79,7 @@ export var charCreate=(dataChart,idChart,count)=>{
             else if(count=='species'){name='Especies'}
             else if(count=='endemicas'){name='Especies Endémicas'}
             else if(count=='exoticas'){name='Especies Exóticas'} 
-            else if(count=='amenazadas'){name='Amenazadas'} 
+            else if(count=='amenazadas'){name='Especies Amenazadas'} 
 
             if(isAllZero){
                 
@@ -86,13 +95,68 @@ export var charCreate=(dataChart,idChart,count)=>{
                 label.verticalCenter="middle"
                 
             }else{
+                let mpio=$('#titleResume').html()
                 // export data define
                 chart.exporting.menu = new am4core.ExportMenu();
-                chart.exporting.filePrefix = "I2d-"+count;
+                chart.exporting.menu.items = itemsExport
+                
+                chart.exporting.events.on("exportstarted", function(ev) {
+                    let jsonExport=`{"tipo": "Tipo","${count}": "${name}"}`
+                    chart.exporting.dataFields = JSON.parse(jsonExport)
+                    chart.exporting.filePrefix = "I2d-"+count;
+                    chart.exporting.useWebFonts = false;
+                    chart.exporting.title=mpio+' - Estadística de '+name
+                });
 
-                let jsonExport=`{"tipo": "Tipo","${count}": "${name}"}`
-                chart.exporting.dataFields = JSON.parse(jsonExport)
 
+                function buildTableBody(data, columns,title) {
+                    let body = [];
+                    
+                    // title
+                    let dataTitle = [];
+                    columns.forEach(function(column) {
+                        dataTitle.push(title[column].toString());
+                    })
+                    body.push(dataTitle);
+
+                    // data info
+                    data.forEach(function(row) {
+                        let dataRow = [];
+                
+                        columns.forEach(function(column) {
+                            dataRow.push(row[column].toString());
+                        })
+                
+                        body.push(dataRow);
+                    });
+                
+                    return body;
+                }
+                
+                function table(data, columns,title) {
+                    return {
+                        table: {
+                            headerRows: 1,
+                            body: buildTableBody(data, columns,title),
+                            widths:['*','*']
+                        }
+                    };
+                }
+  
+                chart.exporting.adapter.add("pdfmakeDocument", function(pdf, target) {
+                    
+                    let data=target.data
+                    let title=target.dataFields
+
+                    var content= [
+                        { text: 'Información en tabla', style: 'header' },
+                        table(data, Object.keys(title),title)
+                    ]
+
+                    pdf.doc.content.push(content);
+                  
+                    return pdf;
+                });
                 // chart.exporting.adapter.add("pdfmakeDocument", function(pdf, target) {
 
                 //     // Add title to the beginning
@@ -108,7 +172,7 @@ export var charCreate=(dataChart,idChart,count)=>{
                 //     return pdf;
                 // });
 
-                chart.exporting.menu.items = itemsExport
+                
             }
             chart.data = dataChart;           
 
