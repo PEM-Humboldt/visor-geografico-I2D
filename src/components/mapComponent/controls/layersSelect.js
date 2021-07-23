@@ -5,11 +5,12 @@ import {openSideOptions} from '../../pageComponent/side-options/side-options'
 import $ from "jquery";
 // chart tab
 import {hightlightRemove,hightlightMupioAdd,highlightMupioRemove} from '../layers'
-import {mpios,deptos} from '../layers'
+
 import {pythonGetRequest} from '../../server/pythonserver/pythonGetRequest'
 import {chartData,chartDangerData} from "../../pageComponent/side-options/tab-charts/chart"
 import {gbifData} from "../../pageComponent/side-options/tab-charts/gbif-info"
 
+import { set_title_mupio,set_title_dpto } from '../../globalVars';
 // import {GEOSERVER_URL} from '../../server/url'
 // =========================================================================
 
@@ -76,7 +77,9 @@ var Selection=(features,i)=>{
 var openMupioData=(feature)=>{
     // get species data from python
     let existingSidebar = $('#titleResume');
-    let title_mupio =feature.values_.nombre
+
+    set_title_dpto(feature.values_.dpto_nombre)
+    let title_mupio =set_title_mupio(feature.values_.nombre)
     // if mupio change
     if(existingSidebar[0].innerText!="Municipio " + title_mupio){
         // title mupio sidebar

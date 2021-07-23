@@ -25,7 +25,7 @@ $('#search-input').on('input',(e)=>{
     timeout = setTimeout(()=> {
         let urlReq='mpio/search/'+e.target.value;
         pythonGetRequest(searchCallback,urlReq)
-    }, 1000);
+    }, 10);
 })
 
 $('#search-input').on('keyup', (e) => {

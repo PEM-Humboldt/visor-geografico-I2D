@@ -4,4 +4,3 @@ export const GEOSERVER_URL_HUMBOLDT='http://geoservicios.humboldt.org.co/geoserv
 export const GEONETWORK_URL='http://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/'
 export const PYTHONSERVER='http://ec2-54-197-164-22.compute-1.amazonaws.com:8000/api/'
 // export const PYTHONSERVER='http://localhost:8000/api/'
-

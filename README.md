@@ -16,7 +16,7 @@ Debe tener instalado npm o yarn en su equipo local, para la instalación de paqu
 ### 1.1. Clone el repositorio:
 
 ```
-$ git clone //github.com/PEM-Humboldt/visor-geografico-I2D.git
+$ git clone https://github.com/PEM-Humboldt/visor-geografico-I2D.git
 ```
 
 ### 1.2. Instalación de paquetes:

@@ -5,10 +5,12 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
 import {isAllDataZero} from './pie-options/noData'
 import {itemsExport} from './pie-options/export'
+import {table} from './exportReport/table-export'
 
 import $ from "jquery";
 
 export var charCreate=(dataChart,idChart,count,ccolor)=>{
+    var chart= undefined;
 
     try{   
         am4core.ready(function() {
@@ -19,7 +21,7 @@ export var charCreate=(dataChart,idChart,count,ccolor)=>{
             // Themes end
             
             // Create chart instance
-            var chart = am4core.create(idChart, am4charts.PieChart);
+            chart = am4core.create(idChart, am4charts.PieChart);
 
             chart.legend = new am4charts.Legend();
             chart.legend.position = "right";
@@ -108,40 +110,6 @@ export var charCreate=(dataChart,idChart,count,ccolor)=>{
                     chart.exporting.title=mpio+' - Estadística de '+name
                 });
 
-
-                function buildTableBody(data, columns,title) {
-                    let body = [];
-                    
-                    // title
-                    let dataTitle = [];
-                    columns.forEach(function(column) {
-                        dataTitle.push(title[column].toString());
-                    })
-                    body.push(dataTitle);
-
-                    // data info
-                    data.forEach(function(row) {
-                        let dataRow = [];
-                
-                        columns.forEach(function(column) {
-                            dataRow.push(row[column].toString());
-                        })
-                
-                        body.push(dataRow);
-                    });
-                
-                    return body;
-                }
-                
-                function table(data, columns,title) {
-                    return {
-                        table: {
-                            headerRows: 1,
-                            body: buildTableBody(data, columns,title),
-                            widths:['*','*']
-                        }
-                    };
-                }
   
                 chart.exporting.adapter.add("pdfmakeDocument", function(pdf, target) {
                     
@@ -176,21 +144,23 @@ export var charCreate=(dataChart,idChart,count,ccolor)=>{
             }
             chart.data = dataChart;           
 
-        });
-        if(count=='exoticas'){
-            // hide stadistics
-            setTimeout(function () {
-                for ( let i = 0; i < $('.collapseChart').length; i++ ){
-                    if ( $($('.collapseChart')[i]).hasClass('show')==true ){
-                        $($('.collapseChart')[i]).removeClass('show');
-                        $($('.tabChart')[i]).addClass('collapsed');
+            if(count=='exoticas'){
+                // hide stadistics
+                setTimeout(function () {
+                    for ( let i = 0; i < $('.collapseChart').length; i++ ){
+                        if ( $($('.collapseChart')[i]).hasClass('show')==true ){
+                            $($('.collapseChart')[i]).removeClass('show');
+                            $($('.tabChart')[i]).addClass('collapsed');
+                        }
                     }
-                }
-            }, 1000);
-        }
+                }, 1000);
+            }
+        });
+
     }catch{
         console.log('no se pudo crear las estadisticas')
     }
+    return chart
 }
 export function toggleSlice(item) {
     var slice = pieSeries.dataItems.getIndex(item);
