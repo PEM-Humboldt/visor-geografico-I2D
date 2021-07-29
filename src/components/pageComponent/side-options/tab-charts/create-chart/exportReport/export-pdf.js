@@ -208,11 +208,11 @@ export function savePDF() {
                     // { canvas: [ { type: 'rect', x: 170, y: 32, w: pageSize.width - 170, h: 40 } ] }
                 ]
             },
-
+            // change the static url if change the domain
             images: {
-                i2d: window.location.origin+logoi2d,
+                i2d: 'http://i2d.humboldt.org.co/'+logoi2d,
                 // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
-                footerpdf: window.location.origin+footeri2d,
+                footerpdf: 'http://i2d.humboldt.org.co/'+footeri2d,
             },
             pageBreakBefore: function(currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {
                 //check if signature part is completely on the last page, add pagebreak if not
