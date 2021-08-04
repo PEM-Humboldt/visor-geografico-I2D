@@ -131,7 +131,7 @@ var ControlLayerClose=()=> {
 }
 
 var cleanHighlights=(ev)=>{
-    if(ev.toElement.id=='mpio_politico'){
+    if(ev.target.id=='mpio_politico'){
         $('#nav-chart').attr("style", "display:none");
         $('#layers-data-tab').tab('show');
         $('#nav-layers').attr("style", "display:block"); 

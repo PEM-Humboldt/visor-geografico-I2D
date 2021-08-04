@@ -10,7 +10,7 @@ var infoFormat = 'application/json';
 import {getProjection} from '../../mapComponent/map'
 
 import {feats} from '../../mapComponent/layers'
-import {fitView} from '../../mapComponent/map'
+import {fitView,getResolution} from '../../mapComponent/map'
 
 
 var format = [], wmsSource = [];
@@ -18,7 +18,8 @@ var format = [], wmsSource = [];
 // select wms layers if turn on
 export var wmsGetProps=(AllLayers,i,coordinate,Selection)=>{
     var featureType = AllLayers[i].values_.source.params_.LAYERS;
-    format[i] = new WFS({featureNS: featureNS, featureType: featureType.split(':')[1]});
+    var layer=featureType.split(':')[1]
+    format[i] = new WFS({featureNS: featureNS, featureType: layer});
     wmsSource[i] = new TileWMS({
         url: GEOSERVER_URL+'ows?',
         params: {
@@ -27,8 +28,7 @@ export var wmsGetProps=(AllLayers,i,coordinate,Selection)=>{
         },
         serverType: 'geoserver'
     });
-    // let resolution=getResolution()
-    let resolution=1;
+    let resolution=layer=='procesos_gobernanza'?getResolution(): 1;
     var url = wmsSource[i].getFeatureInfoUrl(
         coordinate, resolution, getProjection(),
         {'INFO_FORMAT': infoFormat}

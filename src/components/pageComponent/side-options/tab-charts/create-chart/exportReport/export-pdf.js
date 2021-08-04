@@ -112,13 +112,13 @@ export function savePDF() {
                     stack: [
                         {
                             text: [
-                                'A partir de los registros obtenidos se logró obtener las especies que se encuentra en alguna categoría de amenaza de la UICN (Tabla 2) y se obtuvo los siguientes resultados:\n \n',
+                                'A partir de los registros obtenidos se logró obtener las especies que se encuentran en alguna categoría de amenaza de la UICN (Tabla 2) y se obtuvo los siguientes resultados:\n \n',
                             ],
                             style: 'parrafo',
                             margin: [50, 60, 50, 20]
                         },
                         {
-                            text: ['Tabla 2. Categorías de amenaza UICN obtenidos a partir de todos los registros para la zona de interés.\n \n'],
+                            text: ['Tabla 2. Categorías de amenaza Resolución MADS No. 1912 de 2017 obtenidos a partir de todos los registros para la zona de interés.\n \n'],
                             style: 'italic'
                         },
                         table(strDangerSp, Object.keys(titleDangerSp),titleDangerSp),
@@ -149,12 +149,12 @@ export function savePDF() {
                     text: [
                         {text: 'Asunto: ', bold: true},
                         'Información acerca de las especies presentes en el municipio de '+title_mupio+', '+title_depto+'\n \n',
-                        'A partir de la capa geoespacial correspondiente al municipio de '+title_mupio+', '+title_depto+', se extrajo los registros de presencia de especies biológicas que ha reportado el Instituto para la zona. La base de datos utilizada para extraer los registros de presencia es la publicada por la Facilidad Global de Información sobre Biodiversidad (GBIF, ', 
+                        'A partir de la capa geoespacial correspondiente al municipio de '+title_mupio+', '+title_depto+', se extrajo los registros de presencia de especies biológicas que han reportado en GBIF para la zona. La base de datos utilizada para extraer los registros de presencia es la publicada por la Infraestructura Mundial de Información en Biodiversidad (GBIF, ', 
                         {text: 'https://www.gbif.org/',style:'underline'}, 
                         ', base actualizada ', date_gbif_data,
                         ') dicha base de datos es la fuente disponible más completa en este momento y contiene todos los registros de presencia publicados por el Instituto Humboldt, los publicados por otras instituciones colombianas e integrados en el Sistema de Información sobre Biodiversidad de Colombia (SiB Colombia, ', 
                         {text: 'https://www.sibcolombia.net/',style: 'underline'}, 
-                        ') y todos aquellos registros de especies en el territorio Colombiano publicados por instituciones y organizaciones desde el exterior. Desde el Instituto Humboldt garantizamos la calidad de nuestra información. No obstante, la información de otras instituciones debe ser evaluada con precaución y cabe aclarar que los registros de presencia de especies publicados en GBIF son solamente una aproximación a la riqueza y abundancia de especies que se presentan en el territorio nacional.\n \n',
+                        ') y todos aquellos registros de especies en el territorio Colombiano publicados por instituciones y organizaciones desde el exterior. Desde el Instituto Humboldt garantizamos la calidad de nuestra información, no obstante, la información de otras instituciones debe ser evaluada con precaución. Cabe aclarar que los registros de presencia de especies publicados en GBIF son solamente una aproximación a la riqueza y abundancia de especies que se presentan en el territorio nacional.\n \n',
                         'En total se reportaron ', totalRegisters,' registros de presencia de especies que representan ',
                         totalAnimals , ' especies de animales y ',
                         totalPlants , ' de plantas (Tabla 1, Anexo 1) en la zona de interés, de estas cifras se puede resaltar la presencia de ',
@@ -208,11 +208,15 @@ export function savePDF() {
                     // { canvas: [ { type: 'rect', x: 170, y: 32, w: pageSize.width - 170, h: 40 } ] }
                 ]
             },
-            // change the static url if change the domain
+            // TODO: change the static url if change the domain
             images: {
-                i2d: 'http://i2d.humboldt.org.co/visor-I2D/'+logoi2d,
+                // i2d: 'http://i2d.humboldt.org.co/visor-I2D/'+logoi2d,
+                // // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
+                // footerpdf: 'http://i2d.humboldt.org.co/visor-I2D/'+footeri2d,
+
+                i2d: 'http://localhost:1234/'+logoi2d,
                 // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
-                footerpdf: 'http://i2d.humboldt.org.co/visor-I2D/'+footeri2d,
+                footerpdf: 'http://localhost:1234/'+footeri2d,
             },
             pageBreakBefore: function(currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {
                 //check if signature part is completely on the last page, add pagebreak if not
