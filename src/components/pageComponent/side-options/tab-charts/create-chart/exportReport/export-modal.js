@@ -3,6 +3,12 @@ import $ from "jquery";
 import {createModal} from '../../../../modal/createModal'
 import './export-pdf'
 
+import{savePDF} from './export-pdf'
+import {pythonPostRequest} from '../../../../../server/pythonserver/pythonRequest'
+import {downloadData} from '../../../../../server/geoserver/geoserverRequest'
+
+import { cod_mupio } from "../../../../../globalVars";
+
 // modal form json
 var jsonModal=()=>{
     return{
@@ -32,7 +38,9 @@ var jsonModal=()=>{
               <textarea class='form-control' id='objetivoSolicitante' placeholder='Ingrese la razón por la que descarga la información' rows='1'></textarea>
             </div>
 
-            <button type='submit' id="pdfDownload" class='btn btn-primary'>Descargar PDF</button>
+            <button type='submit' id="downloadPDF" value="downloadPDF" class='btn btn-primary btn-block'>Descargar Informe (PDF)</button>
+            <button type='submit' id="downloadCSV" value="downloadCSV" class='btn btn-primary btn-block'>Descargar Datos (CSV)</button>
+            <button type='submit' id="downloadAll" value="downloadAll" class='btn btn-primary btn-block'>Descargar Informe y datos</button>
           `
       }]
     }     
@@ -48,3 +56,41 @@ $('#download-resume').on('click',function(){
     let json=jsonModal()
     createModal('userForm',json,null,onCancel);
 })
+
+
+
+//  modal for export pdf
+$(document).on('submit','form#formSolicitante',function(e){
+  let type=$(this).find("button[type=submit]:focus")[0].value
+  console.log(type)
+  e.preventDefault();
+
+  let json={
+    "entidad": $('#entitySolicitante').val(),
+    "nombre": $('#nameSolicitante').val(),
+    "email": $('#mailSolicitante').val(),
+    "observacion": $('#objetivoSolicitante').val()
+  }
+
+  var handleCallback=()=>{
+    // alert('Su información fue almacenada')
+    $('#userFormModal').remove();
+
+    if(type=='downloadPDF' || type=='downloadAll'){
+      // create and export pdf
+      savePDF();
+    }
+    if(type=='downloadCSV' || type=='downloadAll'){
+      // download csv gbif
+      let urlGbif=`gbif/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=gbif%3Agbif&outputFormat=csv&CQL_FILTER=codigo_mpio=%27${cod_mupio}%27`
+      downloadData(urlGbif)
+    }
+  }
+
+  var handleError=()=>{
+    alert('No fue posible almacenar su información')
+  }
+
+  pythonPostRequest('requestcreate/',json,handleCallback,handleError)
+
+});

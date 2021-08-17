@@ -1,5 +1,5 @@
 import $ from "jquery";
-import {pythonGetRequest} from '../../server/pythonserver/pythonGetRequest'
+import {pythonGetRequest} from '../../server/pythonserver/pythonRequest'
 
 import {createDropdown} from './dropdown'
 
@@ -24,7 +24,7 @@ $('#search-input').on('input',(e)=>{
     clearTimeout(timeout);
     timeout = setTimeout(()=> {
         let urlReq='mpio/search/'+e.target.value;
-        pythonGetRequest(searchCallback,urlReq)
+        pythonGetRequest(searchCallback,urlReq,'No fue posible buscar la información')
     }, 10);
 })
 
@@ -39,3 +39,4 @@ $('#search-input').on('keyup', (e) => {
 var searchCallback=(data)=>{
     createDropdown('mpio','municipio',data);
 }
+

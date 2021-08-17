@@ -5,7 +5,7 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
 import {isAllDataZero} from './pie-options/noData'
 import {itemsExport} from './pie-options/export'
-import {table} from './exportReport/table-export'
+import {table} from './exportReport/config/table-export'
 
 import $ from "jquery";
 
