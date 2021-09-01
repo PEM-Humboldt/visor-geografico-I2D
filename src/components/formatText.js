@@ -21,3 +21,9 @@ export var formatDate=(date)=>{
     let options = { year: 'numeric', month: 'long', day: 'numeric' };
     return date.toLocaleDateString("es-ES", options);
 }
+
+// puntos de miles
+export var milesFormat=(x)=> {
+    console.log(x)
+    return x.toLocaleString('de-DE');
+}

@@ -53,12 +53,6 @@ export var charCreate=(dataChart,idChart,count,ccolor)=>{
             pieSeries.tooltip.background.fill = am4core.color("#000");
             pieSeries.tooltip.label.color = am4core.color("#fff");
             
-            // pieSeries.colors.minColors=7;
-            // pieSeries.colors.baseColor=({r:100,g:100,b:100})
-            // console.log(pieSeries.colors.getCurrentThemes())
-            // random colors
-            // pieSeries.colors.shuffle=true;
-
             /* Create a heat rule */
 
             if(ccolor=='danger'){
@@ -87,7 +81,7 @@ export var charCreate=(dataChart,idChart,count,ccolor)=>{
                 
                 // add label to let users know the chart is empty
                 let label = chart.createChild(am4core.Label);
-                label.text = "[bold] No hay "+name+ "\n en esta área. [/]";
+                label.text = "[bold] Conforme a la información de referencia, no se tiene reporte,\n registro  o  información  de "+name+ " reportadas \npara esta área. [/]";
                 label.fontSize = 15;
                 label.align = "center";
                 label.isMeasured = false;
@@ -117,7 +111,7 @@ export var charCreate=(dataChart,idChart,count,ccolor)=>{
                     let title=target.dataFields
 
                     var content= [
-                        { text: 'Información en tabla', style: 'header' },
+                        // { text: 'Información en tabla', style: 'header' },
                         table(data, Object.keys(title),title)
                     ]
 

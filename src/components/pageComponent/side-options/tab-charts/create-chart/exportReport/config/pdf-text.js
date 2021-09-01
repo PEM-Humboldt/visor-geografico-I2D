@@ -1,4 +1,6 @@
 import {date_gbif_data,doi_gbif_data,title_mupio,title_depto} from '../../../../../../globalVars'
+import {milesFormat} from '../../../../../../formatText'
+
 import{table} from './table-export'
 
 // gbifText
@@ -7,19 +9,25 @@ export var textGbif =(res)=>{
     let str = res.split("data:application/json;charset=utf-8,")[1]      
     str= JSON.parse(decodeURIComponent(str))
     let title= {tipo: "Grupo biológico", registers: 'Número de registros', species:'Número de especies', exoticas: 'Especies exóticas', endemicas: 'Especies endémicas'}
-
-    let totalRegisters = str.reduce((sum, value) => ( sum + value.registers ), 0);
-    let totalEndemicas = str.reduce((sum, value) => ( sum + value.endemicas ), 0);
-    let totalExoticas = str.reduce((sum, value) => ( sum + value.exoticas ), 0);
+    console.log(str)
+    let totalRegisters = milesFormat(str.reduce((sum, value) => ( sum + value.registers ), 0));
+    let totalEndemicas = milesFormat(str.reduce((sum, value) => ( sum + value.endemicas ), 0));
+    let totalExoticas = milesFormat(str.reduce((sum, value) => ( sum + value.exoticas ), 0));
 
     let totalPlants=0,totalAnimals=0,totalSpecies=0;
-
-    str.filter((e)=>{
+    let milesstr;
+    str.map((e)=>{
+        // format table data
+        !milesstr ?  milesstr=[{tipo: milesFormat(e.tipo), registers: milesFormat(e.registers), species:milesFormat(e.species), exoticas: milesFormat(e.exoticas), endemicas: milesFormat(e.endemicas)}]: milesstr=milesstr.concat([{tipo: milesFormat(e.tipo), registers: milesFormat(e.registers), species:milesFormat(e.species), exoticas: milesFormat(e.exoticas), endemicas: milesFormat(e.endemicas)}])
+        // get totals
         totalSpecies+=e.species
         if(e.tipo=='PLANTAS'){ totalPlants=e.species }
         else{ totalAnimals+=e.species }
     })
-    
+    totalSpecies=milesFormat(totalSpecies)
+    totalAnimals=milesFormat(totalAnimals)
+    totalPlants=milesFormat(totalPlants)
+
     var totalData = {tipo: "TOTAL", registers: totalRegisters, species: totalSpecies, exoticas: totalExoticas, endemicas: totalEndemicas};
     str.push(totalData);
 
@@ -48,7 +56,7 @@ export var textGbif =(res)=>{
                 text: 'Tabla 1. Registros de presencia de especies en la zona de interés.\n\n',
                 style: 'italic'
             },
-            table(str, Object.keys(title),title),
+            table(milesstr, Object.keys(title),title),
         ],
         id: 'gbifData'
     }
@@ -69,6 +77,7 @@ export var textDanger =(res)=>{
         // add total to table
         let totalDanger=0
         strDangerSp.filter((e)=>{totalDanger+=e.amenazadas})
+        totalDanger=milesFormat(totalDanger)
         strDangerSp.push({tipo: "TOTAL", amenazadas: totalDanger});
 
         json={
@@ -126,7 +135,7 @@ export var textReferences =()=>{
                 style: 'parrafo'
             },
             {
-                text: ['Instituto de Investigación de Recursos Biológicos Alexander von Humboldt (2019). Lista de especies endémicas, amenazadas e invasoras de Colombia recopilada a partir de literatura. 36385 registros. http://i2d.humboldt.org.co/ceiba/resource.do?r=sp_colombia_i2d'],
+                text: ['Instituto de Investigación de Recursos Biológicos Alexander von Humboldt (2019). Lista de especies endémicas, amenazadas y exóticas de Colombia recopilada a partir de literatura. 36.385 registros. http://i2d.humboldt.org.co/ceiba/resource.do?r=sp_colombia_i2d'],
                 style: 'parrafo'
             }            
         ],
