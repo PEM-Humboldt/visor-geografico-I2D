@@ -29,7 +29,7 @@ export var textGbif =(res)=>{
     totalPlants=milesFormat(totalPlants)
 
     var totalData = {tipo: "TOTAL", registers: totalRegisters, species: totalSpecies, exoticas: totalExoticas, endemicas: totalEndemicas};
-    str.push(totalData);
+    milesstr.push(totalData);
 
     let json={}
 
