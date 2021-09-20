@@ -85,8 +85,8 @@ $(document).on('submit','form#formSolicitante',function(e){
       let urlGbif=`gbif/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=gbif%3Aregistros_biologicos_consulta&outputFormat=csv&PropertyName=(gbifid,datasetkey,occurrenceid,kingdom,phylum,class,order_,family,genus,species,infraspecificepithet,taxonrank,scientificname,verbatimscientificname,verbatimscientificnameauthorship,countrycode,locality,stateprovince,occurrencestatus,individualcount,publishingorgkey,decimallatitude,decimallongitude,coordinateuncertaintyinmeters,coordinateprecision,elevation,elevationaccuracy,depth,depthaccuracy,eventdate,day,month,year,taxonkey,specieskey,basisofrecord,institutioncode,collectioncode,catalognumber,recordnumber,identifiedby,dateidentified,license,rightsholder,recordedby,typestatus,establishmentmeans,lastinterpreted,mediatype,issue)&CQL_FILTER=codigo_mpio=%27${cod_mupio}%27`
       downloadData(urlGbif)
 
-      // let urlAmenazadas=`gbif/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=gbif%3Ampio_especies_amenazadas&outputFormat=csv&CQL_FILTER=codigo_mpio=%27${cod_mupio}%27&PropertyName=(codigo_mpio,tipo,species,nombre)`
-      // downloadData(urlAmenazadas)
+      let urlAmenazadas=`gbif/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=gbif%descarga_amenaza&outputFormat=csv&CQL_FILTER=codigo=%27${cod_mupio}%27&PropertyName=(reino, filo, clase, orden, familia, genero, especies, endemicas, amenazadas, exoticas)`
+      downloadData(urlAmenazadas)
     }
   }
 
