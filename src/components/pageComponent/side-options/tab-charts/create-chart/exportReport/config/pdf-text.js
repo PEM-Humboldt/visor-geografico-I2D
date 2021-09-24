@@ -84,13 +84,13 @@ export var textDanger =(res)=>{
             stack: [
                 {
                     text: [
-                        'Adicionalmente, a partir de los registros obtenidos para la zona, se identificaron las especies que se encuentran en alguna categoría de amenaza según la Resolución MADS No. 1912 de 2017 y se resumen en la tabla 2. \n \n',
+                        'Adicionalmente, a partir de los registros obtenidos para la zona, se identificaron las especies que se encuentran en alguna categoría de amenaza según la Resolución MinAmbiente No. 1912 de 2017 y se resumen en la tabla 2. \n \n',
                     ],
                     style: 'parrafo',
                     margin: [40, 60, 40, 0]
                 },
                 {
-                    text: ['Tabla 2. Categorías de amenaza Resolución MADS No. 1912 de 2017 obtenidos a partir de todos los registros para la zona de interés.\n \n'],
+                    text: ['Tabla 2. Categorías de amenaza Resolución MinAmbiente No. 1912 de 2017 obtenidos a partir de todos los registros para la zona de interés.\n \n'],
                     style: 'italic'
                 },
                 table(strDangerSp, Object.keys(titleDangerSp),titleDangerSp),
