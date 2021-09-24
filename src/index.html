@@ -8,6 +8,10 @@
 
         <meta name="author" content="Liceth Barandica - https://github.com/licethbarandicadiaz" />
 
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,300;0,400;0,600;1,300;1,400&family=Roboto:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+
         <link rel="icon" type="image/png" href="./assets/img/favicon.png">
 
         <link rel="stylesheet" href="scss/index.scss"/>  
@@ -33,34 +37,41 @@
             <!-- SideBar -->   
             <nav id="sideBar" class="nonactive">
                 <ul class="nav navbar-nav side-nav">
-                    <li class="centerLiIcons">
-                        <a title="cerrar panel lateral" href="javascript:void(0)" id="closebtn" class="nonactive">
-                            <i class="fas fa-times"></i>
-                        </a>
+                    <li class="centerLiImg nonactive">
+                        <a href="http://datos.humboldt.org.co/">
+                            <img src="./assets/img/logo-i2d.png" alt="logo_i2d" width="46" height="30">
+                            <div class="sideBarSpanNoActive visortext">Visor</div>
+                            <a title="cerrar panel lateral" href="javascript:void(0)" id="closebtn" class="nonactive">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                            <div class="sideBarSpanNoActive texti2d"> 
+                                Infraestructura Institucional de Datos e Información
+                            </div>
+                        </a> 
                     </li>
-                    <li class="centerLiImg"> <a title="link al Humboldt" href="http://www.humboldt.org.co/es/">
-                        <span class="sideBarSpanNoActive"> 
-                            <img src="./assets/img/logo-humboldt.png" alt="logo_humboldt" width="100" height="auto"> 
-                    </li>
-    
-                    <li class="nav-item centerLiIcons nonactive"> <a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="catalogs-nav"><i class="fas fa-atlas"></i> <span class="sideBarSpanNoActive">Catálogos</span></a>
+                </ul>
+
+                <p class="sideBarSpanNoActive">
+                    Al hacer clic en un municipio se obtiene información de registros geográficos del mismo. También se puede encontrar por nombre del municipio en el buscador de la parte superior izquierda.
+                </p>
+
+                <ul class="nav navbar-nav side-nav">
+                    <li class="nav-item centerLiIcons nonactive"> <a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="catalogs-nav"><i class="far fa-folder"></i> <div class="sideBarSpanNoActive">Catálogos</div></a>
                         <div class="dropdown-container nonactive" id="dropdown-catalogs">
-                            <a class="dropdown-item" title="link a Ceiba" href="http://i2d.humboldt.org.co/ceiba/" target="_blank" rel="noopener"><i class="fas fa-seedling"></i> <span class="sideBarSpanNoActive">Ceiba</span></a>
-                            <a class="dropdown-item" title="link a Geonetwork" href="http://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/home" target="_blank" rel="noopener"><i class="fas fa-globe"></i> <span class="sideBarSpanNoActive">Geonetwork</span></a>
+                            <a class="dropdown-item" title="Catálogo Ceiba" href="http://i2d.humboldt.org.co/ceiba/" target="_blank" rel="noopener"><i class="fas fa-seedling"></i> <div class="sideBarSpanNoActive">Ceiba</div></a>
+                            <a class="dropdown-item" title="lCatálogo Geonetwork" href="http://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/home" target="_blank" rel="noopener"><i class="fas fa-globe"></i> <div class="sideBarSpanNoActive">Geonetwork</div></a>
                         </div>
                     </li>
-                    <li class="centerLiIcons nonactive"> <a title="link a Guias" href="https://sites.google.com/humboldt.org.co/i2dwiki/inicio" target="_blank"><i class="fas fa-book"></i> <span class="sideBarSpanNoActive">Guias</span></a></li>
-                    <li class="centerLiIcons nonactive"> <a title="link a Contacto" href="mailto:i2d@humboldt.org.co" target="_blank"><i class="fas fa-address-book"></i> <span class="sideBarSpanNoActive">Contacto</span></a></li>
-                </ul>
-
-                <ul class="nav navbar-nav side-nav bottom">
-                    <li class="centerLiImg"> <a href="http://datos.humboldt.org.co/">
-                        <img src="./assets/img/logo-i2d.png" alt="logo_i2d" width="47" height="32"> 
-                        <span class="sideBarSpanNoActive"> 
-                            Infraestructura Institucional de Datos e Información <br> © 2021</span></a> 
+                    <li class="centerLiIcons nonactive"> <a title="Guias I2D" href="https://sites.google.com/humboldt.org.co/i2dwiki/inicio" target="_blank"><i class="far fa-list-alt"></i> <div class="sideBarSpanNoActive">Guias</div></a></li>
+                    <li class="centerLiIcons nonactive"> <a title="Contacto" href="mailto:i2d@humboldt.org.co" target="_blank"><i class="far fa-envelope"></i> <div class="sideBarSpanNoActive">Contacto</div></a></li>
+                                        <li class="centerLiImg sideBarSpanNoActive">
+                        <a class="lineup" title="Instituto Alexander von Humboldt" href="http://www.humboldt.org.co/es/">
+                            <img src="./assets/img/logo-humboldt.png" target="_blank" alt="logo_humboldt">
+                            <div class="humboldtTxt">Instituto de Investigación<br>de Recursos Biológicos<br>Alexander von Humboldt</div>
+                        </a>
                     </li>
+                    <p class="sideBarSpanNoActive mini">© 2021</p>
                 </ul>
-
             </nav>
             <!-- mapa y control de capas -->
             <section class="nonactive" id="mapSection">
@@ -69,9 +80,9 @@
                     <div class='map-dropdown' id='geodropdown'>
                         <div class="input-group-prepend" id='searchDiv'>
                             <div class="ol-control search-control">
-                                <button class="button" type="button" id="basic-search" name="basic-search" aria-label="basic-search"><i class="fas fa-search"></i></button>
+                                <button class="button btn-active" type="button" id="basic-search" name="basic-search" aria-label="basic-search"><i class="fas fa-search"></i></button>
                             </div>
-                            <input data-toggle='dropdown'  class='form-control search w-100 dropdown-toggle ml-5 mt-1' placeholder='Buscar Municipio' autofocus data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' id='search-input' style="display: block;">
+                            <input data-toggle='dropdown'  class='form-control search w-100 dropdown-toggle ml-5 mt-1' placeholder='Buscar municipio por nombre' autofocus data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' id='search-input'>
                             <div class='dropdown-menu w-100' id='dropdown-menu-mupio' aria-labelledby='dropdown-mupio'>
                                 <div class='menu-items-mupio' id='menu-items-mupio'>
                                     <span class='menuItemsTooltip' id='basic-mupio'>Escoja un municipio</span>
@@ -84,7 +95,7 @@
 
 
                     <a title="Control de capas" href="#">
-                        <i id="ControlCapas" name="ControlCapas" class="fas fa-layer-group fa-2x"></i>
+                        <i id="ControlCapas" name="ControlCapas" class="fas fa-layer-group"></i>
                     </a>
                     <!-- open control de capas -->
                     <div id="accordion" class="accordion d-none"></div>                
@@ -249,7 +260,7 @@
             <!-- toast -->
             <div class="toast fade" data-delay="3000">
                 <div class="toast-header">
-                    <strong class="mr-auto"><i class="fa fa-info-circle"></i> Advertencia</strong>
+                    <strong class="mr-auto"><i class="fa fa-info-circle"></i>Advertencia</strong>
                     <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
                 </div>
                 <div class="toast-body" id="toastBody"></div>
@@ -264,18 +275,17 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="row m-4">
-                            <h5 class="titleh5">Bienvenido al Visor Geográfico de la I2D</h5>
+                        <div class="row">
+                            <h5 class="titleh5">Bienvenido al <br>Visor Geográfico de la I2D</h5>
                         </div>
                         <div class="row m-3">
-                            <p class="justifyCenter">El visor geográfico I2D es un proyecto que permite interactuar con un visor de información geográfica que contiene información de registros biologicos.
+                            <p>El visor geográfico I2D es un proyecto que permite interactuar con un visor de información geográfica que contiene información de registros biologicos.
                                 Fue desarrollado por el Instituto Humboldt con el objetivo de disponer e integrar datos geográficos en una plataforma abierta y fácil de usar por ciudadanos y entidades. 
                                 Con esta iniciativa se busca mejorar la toma de decisiones en el ámbito nacional, regional, local y personal.</p>
-                            <p> 
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <p class="steptutorial">1 de 4 </p>
+                        <p class="steptutorial">1 de 4</p>
                         <button type="button" class="btn btn-terciary" id="goStep2">Siguiente</button>
                         <button type="button" class="btn btn-primary closeTutorial" data-dismiss="modal">Cerrar</button>
                         
@@ -287,9 +297,9 @@
             <div class="popover fade bs-popover-right hide tutorialleft" role="tooltip" id="tutorialstep2" >
                 <div class="arrow arrowLeft"></div>
                 <div class="popover-body">
-                    <p class="justifyCenter">Menu lateral con links a información relevante.</p>
+                    <p>Menu lateral con links a información relevante.</p>
                     <div class="row"> 
-                        <p class="steptutorial">2 de 4 </p>   
+                        <p class="steptutorial">2 de 4</p>   
                         <a href="#" class="btn btn-terciary mx-1" id="goStep3">Siguiente</a>
                         <a href="#" class="btn btn-primary mx-1 closeTutorial">Cerrar</a>
                     </div>
@@ -299,9 +309,9 @@
             <div class="popover fade bs-popover-right hide tutorialcenter" role="tooltip" id="tutorialstep3">
                 <div class="arrow arrowLeft"></div>
                 <div class="popover-body">
-                    <p class="justifyCenter">Selecciona un municipio para obtener las estadísticas o selecciona una capa para conocer sus atributos</p>
+                    <p>Selecciona un municipio para obtener las estadísticas o selecciona una capa para conocer sus atributos</p>
                     <div class="row"> 
-                        <p class="steptutorial">3 de 4 </p> 
+                        <p class="steptutorial">3 de 4</p> 
                         <a href="#" class="btn btn-terciary mx-1" id="goStep4">Siguiente</a>
                         <a href="#" class="btn btn-primary mx-1 closeTutorial">Cerrar</a>
                     </div>
@@ -312,9 +322,9 @@
             <div class="popover fade bs-popover-left hide" role="tooltip" id="tutorialstep4">
                 <div class="arrow arrowRight"></div>
                 <div class="popover-body">
-                    <p class="justifyCenter">Control de capas geográficas</p>
-                    <div class="row"> 
-                        <p class="steptutorial">4 de 4 </p> 
+                    <p>Control de capas geográficas</p>
+                    <div class="row flexsp"> 
+                        <p class="steptutorial">4 de 4</p> 
                         <a href="#" class="btn btn-primary closeTutorial">Cerrar</a>
                     </div>   
                 </div>

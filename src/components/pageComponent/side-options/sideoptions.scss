@@ -6,7 +6,6 @@
     right: 0;
     top: 0;
     height: 100vh;
-    padding: 10px 0px;
     background-color: white;
     &.nonactive{
         display: none;
@@ -22,10 +21,12 @@
 }
 
 #closeSideOptions{
-    z-index: 1000;
-    position: relative;
-    float: left;
-    padding: 0px 5px;
+    z-index: 100;
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    color: $color_terciary;
+    opacity: 0.9;
 }
 
 
@@ -54,7 +55,7 @@ a.nav-link.active{
 }
 
 a.card-link{
-    font-weight: bold;
+    font-weight: 400;
     color:$color_primary
 }
 
@@ -70,5 +71,15 @@ a.card-link{
 // }
 
 .nav-link {
-    padding: 0.5rem 0.6rem;
+    color: #fff !important;
+    border: none !important;
+    background-color: $color_primary_trans !important;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 0 !important;
+    &.active {
+        background-color: $color_primary !important;
+    }
 }
