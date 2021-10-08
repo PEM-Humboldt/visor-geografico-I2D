@@ -6,7 +6,7 @@ import {wmsGetProps} from '../../server/geoserver/wmsGetProps';
 import {openSideOptions} from '../../pageComponent/side-options/side-options'
 
 // chart tab
-import {hightlightRemove,hightlightMupioAdd,highlightMupioRemove} from '../layers'
+import {hightlightRemove,highlightStadisticsAdd,highlightStadisticsRemove} from '../layers'
 
 import {pythonGetRequest} from '../../server/pythonserver/pythonRequest'
 import {chartData,chartDangerData} from "../../pageComponent/side-options/tab-charts/chart"
@@ -27,11 +27,14 @@ export var layerSelection=(coordinate)=>{
         if (AllLayerss[i].values_.visible === true) {
             // get features data
             wmsGetProps(AllLayerss,i,coordinate,Selection);
-        }else if(AllLayerss[i].values_.visible === false && i==1){
+        }else if(AllLayerss[i].values_.visible === false){
             // mupios is not active
             $('#layers-data-tab').tab('show');
             $('#nav-layers').attr("style", "display:block"); 
-            highlightMupioRemove();
+            if(i==1 && i==2){
+                highlightStadisticsRemove();
+            }
+
             $('#nav-chart').attr("style", "display:none"); 
         }
     }
@@ -48,23 +51,6 @@ var Selection=(features,i)=>{
             // get data from python and create chart
             openMupioData(feature)
         }else{
-            // var payload =  '<wfs:GetFeature xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc" service="WFS" version="1.0.0"> <wfs:Query typeName="Capas_Base:dpto_politico"> <ogc:Filter> <ogc:Intersects> <ogc:PropertyName>geom</ogc:PropertyName> <gml:Polygon srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>-106.86953585585587,42.627785135135127 -107.47663975975976,38.803030540540533 -105.29106570570572,35.342538288288281 -99.280737057057067,36.01035258258257 -98.4307915915916,41.413577327327317 -106.86953585585587,42.627785135135127</gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon> </ogc:Intersects> </ogc:Filter></wfs:Query></wfs:GetFeature>';    
-            // $.ajax(GEOSERVER_URL+'ows', {
-            //         type: 'POST',
-            //         dataType: 'xml',
-            //         processData: false,
-            //         contentType: 'text/xml',
-            //         data: payload,
-            //         success: function (xml) {
-            //             console.log(xml)
-            //         },
-            //         error: function (xml) {
-            //             console.log('error');
-            //         }
-            //   }).done(function() {
-            //     console.log('done')
-            //   });
-
            // if layer different to mupio
             hightlightRemove();
         }
@@ -78,15 +64,68 @@ var Selection=(features,i)=>{
 
 var openMupioData=(feature)=>{
     // get species data from python
-    let existingSidebar = $('#titleResume');
 
-    set_title_dpto(feature.values_.dpto_nombre)
+    var selectedStadistics =$('#stadisticstype').children("option:selected").val()
+    let existingSidebar = $('#titleMpio');
+    let existingDptoDropdown = $('#titleDpto');
+    
+    let title_dpto =set_title_dpto(feature.values_.dpto_nombre)
     let title_mupio =set_title_mupio(feature.values_.nombre)
     let cod_mupio=set_cod_mupio(feature.values_.codigo)
+
+
+
+    $("#stadisticstype").on('change',function(){
+        selectedStadistics = $(this).children("option:selected").val();
+        changeDataChart(selectedStadistics,cod_mupio)
+    })
+
+    changeDataChart(selectedStadistics,cod_mupio)
+
+
+
+    function changeDataChart (selectedStadistics,cod_mupio){
+
+        // open chart div on click
+        for ( let i = 0; i < $('.collapseChart').length; i++ ){
+            if ( $($('.collapseChart')[i]).hasClass('show')==false ){
+                $($('.collapseChart')[i]).addClass('show');
+                $($('.tabChart')[i]).removeClass('collapsed');
+            }
+        }
+
+
+        var errorCallback=()=>{
+            $('#layers-data-tab').tab('show');
+            $('#nav-chart').hide();
+            $('#resumeData').hide();
+            
+            $('#loading-chart').attr("style", "display:none");
+        }
+
+        if(selectedStadistics=='mpio_politico'){
+            let urlMpioReq='mpio/charts/'+cod_mupio;
+            pythonGetRequest(chartData,urlMpioReq,'No fue posible cargar las estadisticas, intente nuevamente',errorCallback);
+    
+            let urlMpioDangReq='mpio/dangerCharts/'+cod_mupio;
+            pythonGetRequest(chartDangerData,urlMpioDangReq);
+        }else{
+            let urlMpioReq='dpto/charts/'+cod_mupio;
+            pythonGetRequest(chartData,urlMpioReq,'No fue posible cargar las estadisticas, intente nuevamente',errorCallback);
+    
+            let urlMpioDangReq='dpto/dangerCharts/'+cod_mupio;
+            pythonGetRequest(chartDangerData,urlMpioDangReq);
+        }
+    }
+
+ 
+
+
     // if mupio change
     if(existingSidebar[0].innerText!="Municipio " + title_mupio){
         // title mupio sidebar
         existingSidebar[0].innerText = "Municipio " + title_mupio;
+        existingDptoDropdown[0].innerText = "Departamento " + title_dpto;
 
         $('#resume-data-tab').tab('show');
 
@@ -97,29 +136,8 @@ var openMupioData=(feature)=>{
         }
         $('#loading-chart').attr("style", "display:block");
 
-        // open chart div on click
-        for ( let i = 0; i < $('.collapseChart').length; i++ ){
-            if ( $($('.collapseChart')[i]).hasClass('show')==false ){
-                $($('.collapseChart')[i]).addClass('show');
-                $($('.tabChart')[i]).removeClass('collapsed');
-            }
-        }
-        var errorCallback=()=>{
-            $('#layers-data-tab').tab('show');
-            $('#nav-chart').hide();
-            $('#resumeData').hide();
-            
-            $('#loading-chart').attr("style", "display:none");
-        }
-
-        let urlMpioReq='mpio/charts/'+cod_mupio;
-        pythonGetRequest(chartData,urlMpioReq,'No fue posible cargar las estadisticas, intente nuevamente',errorCallback);
-
-        let urlMpioDangReq='mpio/dangerCharts/'+cod_mupio;
-        pythonGetRequest(chartDangerData,urlMpioDangReq);
-
-        highlightMupioRemove();
-        hightlightMupioAdd(feature);
+        highlightStadisticsRemove();
+        highlightStadisticsAdd(feature);
         if($('#nav-chart').css('display') == 'none'){
             $('#nav-chart').attr("style", "display:block"); 
         }
@@ -127,8 +145,8 @@ var openMupioData=(feature)=>{
     }else if($('#nav-chart').css('display') == 'none'){
         $('#resume-data-tab').tab('show');
         $('#nav-chart').attr("style", "display:block");
-        highlightMupioRemove()
-        hightlightMupioAdd(feature);
+        highlightStadisticsRemove()
+        highlightStadisticsAdd(feature);
     }
 
 }

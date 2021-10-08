@@ -41,8 +41,10 @@ export var wmsGetProps=(AllLayers,i,coordinate,Selection)=>{
             var features = feat.getFeatures();
     
             if(features.length>0){
-                // zoom a mupios
-                if(i==1){
+                var selectedStadistics =$('#stadisticstype').children("option:selected").val()
+
+                // zoom a mupios o depto
+                if(selectedStadistics==layer){
                     var ext=feat.getExtent();
                     fitView(ext);
                 }

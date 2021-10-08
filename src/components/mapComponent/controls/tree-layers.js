@@ -1,5 +1,5 @@
 import $ from "jquery";
-import {hightlightRemove,highlightMupioRemove} from '../layers'
+import {hightlightRemove,highlightStadisticsRemove} from '../layers'
 import {closeTutorialOnStep4} from '../../tutorialComponent/tutorial'
 var AllLayers = [];
 var k = 0;
@@ -137,7 +137,7 @@ var cleanHighlights=(ev)=>{
         $('#nav-layers').attr("style", "display:block"); 
         
         hightlightRemove();
-        highlightMupioRemove();
+        highlightStadisticsRemove();
     }
 }
 

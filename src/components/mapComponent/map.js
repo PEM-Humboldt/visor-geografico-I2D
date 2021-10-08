@@ -5,7 +5,7 @@ import {Map, View} from 'ol';
 import {ScaleLine, ZoomToExtent,defaults as defaultControls} from 'ol/control';
 import {getCenter} from 'ol/extent';
 
-import {layer_base, division_base,historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, gobernanza, highlight, highlightPoint, highlightMupio} from './layers'
+import {layer_base, division_base,historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, gobernanza, highlight, highlightPoint, highlightStadistics} from './layers'
 
 var zoom = document.createElement('span');
 zoom.innerHTML = '<i class="fas fa-expand"></i>';
@@ -19,7 +19,7 @@ export const map = new Map({
     ]),
     target: document.getElementById('map'),
     renderer: 'canvas',
-    layers: [layer_base, division_base,historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad,gobernanza,highlightMupio, highlightPoint, highlight],
+    layers: [layer_base, division_base,historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad,gobernanza,highlightStadistics, highlightPoint, highlight],
     view: new View({
       center: [-8113332, 464737],
       zoom: 6

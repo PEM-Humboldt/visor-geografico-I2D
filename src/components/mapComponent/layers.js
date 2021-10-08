@@ -23,11 +23,11 @@ export var CartoDB_Positron = new TileLayer({title: 'CartoDB Positron', visible:
 export var highlight = new VectorLayer({style: styleHighlight,source: new VectorSource()});
 export var highlightPoint = new VectorLayer({style: styleHighlightPoint,source: new VectorSource()});
 
-var mpioStyle=styleMpio;
-export var highlightMupio = new VectorLayer({
+var highlightStyle=styleMpio;
+export var highlightStadistics = new VectorLayer({
     style: function (feature) {
-        mpioStyle.getText().setText(feature.values_.mpio_cnmbr);
-        return mpioStyle;
+        highlightStyle.getText().setText(feature.values_.mpio_cnmbr);
+        return highlightStyle;
     },
     source: new VectorSource()
 });
@@ -143,5 +143,5 @@ export const hightlightRemove=()=> {
     highlight.getSource().clear();
 }
 
-export const hightlightMupioAdd=(feature)=> {highlightMupio.getSource().addFeature(feature);}
-export const highlightMupioRemove=()=> {highlightMupio.getSource().clear();}
+export const highlightStadisticsAdd=(feature)=> {highlightStadistics.getSource().addFeature(feature);}
+export const highlightStadisticsRemove=()=> {highlightStadistics.getSource().clear();}

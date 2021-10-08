@@ -2,7 +2,7 @@ import $ from "jquery";
 import './sideoptions.scss';
 
 import {updateSize} from '../../mapComponent/map'
-import {hightlightRemove,highlightMupioRemove} from '../../mapComponent/layers'
+import {hightlightRemove,highlightStadisticsRemove} from '../../mapComponent/layers'
 import {exportData} from './tab-export/export'
 
 $('#closeSideOptions').on( "click", function() {
@@ -33,7 +33,7 @@ export const closeSideOptions=()=>{
     $('#tutorialstep4').removeClass('activeSide')
     updateSize();
     hightlightRemove();
-    highlightMupioRemove();
+    highlightStadisticsRemove();
 
     $('#chartdiv').html('');
     $('#titleResume').html('');
