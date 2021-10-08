@@ -82,9 +82,9 @@ export function buildLayerTree(layer) {
             fcheck.appendChild(lab);
             if (lay[j].values_.urldownload && lay[j].values_.urldownload!='') {
                 var down= document.createElement('div');
-                down.innerHTML='<i class="fas fa-info"></i>';
+                down.innerHTML='<i class="fas fa-link"></i>';
                 down.className = "card-link float-right";
-                close.setAttribute('style', 'position:absolute; right:8px; color: rgb(42, 71, 80)');
+                close.setAttribute('style', 'position:absolute; right:8px;');
                 down.setAttribute('onclick', 'window.open("' + lay[j].values_.urldownload + '")');
                 fcheck.appendChild(down);
             }

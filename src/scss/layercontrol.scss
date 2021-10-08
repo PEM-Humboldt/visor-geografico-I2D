@@ -1,19 +1,20 @@
 @import 'sizes';
 @import 'color';
-/*Contenedor de listado de capass*/
+/*Contenedor de listado de capas*/
 #ControlCapas{
     z-index: 2;
     position: absolute;
     color: $color_primary;
-    padding: 5px;
+    top:0.7rem;
+    font-size: 1.5rem;
     &:hover{
-        color:$color_secundary;
+        color:$color_four;
     }
     @include tablet{
-        right: 3vh;
+        right: 2vh;
     }
     @include desktop {
-        right: 2vh;
+        right: 1.2vh;
     }
 }
 
@@ -21,9 +22,11 @@
     position: absolute;
     z-index: 3;
     right: 0px;
-    height: 202px;
+    top: 5px;
+    height: auto;
+    // height: 202px;
     @include desktop {
-        width: 350px;
+        min-width: 350px;
     }
 }
 #capas{
@@ -38,7 +41,13 @@
 }
 .card-header {
     padding: 0rem ;
-    background-color: white;
+    background-color: #e3e3e3;
+    font-family: 'Montserrat', sans-serif;
+    text-align: left;
+}
+
+.card-body-layers {
+    font-weight: 300;
 }
 
 .btn-link {
@@ -88,13 +97,9 @@
     padding: 0.5em 1em;
 }
 
-.dropdown-item{
+.dropdown-item {
     padding: 0.25rem 0.5rem;
-    font-weight: 350;
-}
-
-.dropdown-menu{
-    width: 120%;
+    font-weight: 300;
 }
 
 #dropdown-menu-mupio{
@@ -105,10 +110,24 @@
     will-change: transform;
 }
 
-.form-control:focus {
-    color: #495057;
-    background-color: #fff;
-    border-color: #000;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgb(0 0 0 / 25%);
+.form-control {
+    border: none;
+    &:focus {
+        color: #495057;
+        background-color: #fff;
+        outline: 0;
+        box-shadow: none;
+    }
+}
+
+.fa-link {
+    cursor: pointer;
+    opacity: 0.4;
+    &:hover{
+        opacity: 1;
+    }
+}
+
+.fa-expand {
+    line-height: 1.4;
 }
