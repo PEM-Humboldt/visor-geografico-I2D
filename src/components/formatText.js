@@ -24,6 +24,5 @@ export var formatDate=(date)=>{
 
 // puntos de miles
 export var milesFormat=(x)=> {
-    console.log(x)
     return x.toLocaleString('de-DE');
 }

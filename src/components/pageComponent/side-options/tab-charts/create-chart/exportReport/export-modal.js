@@ -7,10 +7,18 @@ import{savePDF} from './export-pdf'
 import {pythonPostRequest} from '../../../../../server/pythonserver/pythonRequest'
 import {downloadData} from '../../../../../server/geoserver/geoserverRequest'
 
-import { cod_mupio } from "../../../../../globalVars";
+import { cod_mupio,cod_dpto } from "../../../../../globalVars";
 
 // modal form json
 var jsonModal=()=>{
+  // var selectedStadistics =$('#stadisticstype').children("option:selected").val()
+  // var downloadButton='';
+  // if(selectedStadistics=='mpio_politico'){
+  //   downloadButton= `<button type='submit' id="downloadCSV" value="downloadCSV" class='btn btn-primary btn-block'>Descargar Datos (CSV)</button>
+  //   <button type='submit' id="downloadAll" value="downloadAll" class='btn btn-primary btn-block'>Descargar Informe y datos</button>
+  // `
+  // }
+
     return{
         "title":"FORMULARIO DE DESCARGA",
         "body":[{
@@ -41,6 +49,7 @@ var jsonModal=()=>{
             <button type='submit' id="downloadPDF" value="downloadPDF" class='btn btn-primary btn-block'>Descargar Informe (PDF)</button>
             <button type='submit' id="downloadCSV" value="downloadCSV" class='btn btn-primary btn-block'>Descargar Datos (CSV)</button>
             <button type='submit' id="downloadAll" value="downloadAll" class='btn btn-primary btn-block'>Descargar Informe y datos</button>
+        
           `
       }]
     }     
@@ -62,7 +71,7 @@ $('#download-resume').on('click',function(){
 //  modal for export pdf
 $(document).on('submit','form#formSolicitante',function(e){
   let type=$(this).find("button[type=submit]:focus")[0].value
-  console.log(type)
+  // console.log(type)
   e.preventDefault();
 
   let json={
@@ -73,6 +82,14 @@ $(document).on('submit','form#formSolicitante',function(e){
   }
 
   var handleCallback=()=>{
+    var selectedStadistics =$('#stadisticstype').children("option:selected").val()
+    let codigo=''
+    if(selectedStadistics=='mpio_politico'){
+      codigo=`codigo_mpio=%27${cod_mupio}%27`
+    }else{
+      codigo=`codigo_dpto=%27${cod_dpto}%27`
+    }
+
     // alert('Su información fue almacenada')
     $('#userFormModal').remove();
 
@@ -82,10 +99,10 @@ $(document).on('submit','form#formSolicitante',function(e){
     }
     if(type=='downloadCSV' || type=='downloadAll'){
       // download csv gbif
-      let urlGbif=`gbif/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=gbif%3Aregistros_biologicos_consulta&outputFormat=csv&PropertyName=(gbifid,datasetkey,occurrenceid,kingdom,phylum,class,order_,family,genus,species,infraspecificepithet,taxonrank,scientificname,verbatimscientificname,verbatimscientificnameauthorship,countrycode,locality,stateprovince,occurrencestatus,individualcount,publishingorgkey,decimallatitude,decimallongitude,coordinateuncertaintyinmeters,coordinateprecision,elevation,elevationaccuracy,depth,depthaccuracy,eventdate,day,month,year,taxonkey,specieskey,basisofrecord,institutioncode,collectioncode,catalognumber,recordnumber,identifiedby,dateidentified,license,rightsholder,recordedby,typestatus,establishmentmeans,lastinterpreted,mediatype,issue)&CQL_FILTER=codigo_mpio=%27${cod_mupio}%27`
+      let urlGbif=`gbif/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=gbif%3Aregistros_biologicos_consulta&outputFormat=csv&PropertyName=(gbifid,datasetkey,occurrenceid,kingdom,phylum,class,order_,family,genus,species,infraspecificepithet,taxonrank,scientificname,verbatimscientificname,verbatimscientificnameauthorship,countrycode,locality,stateprovince,occurrencestatus,individualcount,publishingorgkey,decimallatitude,decimallongitude,coordinateuncertaintyinmeters,coordinateprecision,elevation,elevationaccuracy,depth,depthaccuracy,eventdate,day,month,year,taxonkey,specieskey,basisofrecord,institutioncode,collectioncode,catalognumber,recordnumber,identifiedby,dateidentified,license,rightsholder,recordedby,typestatus,establishmentmeans,lastinterpreted,mediatype,issue)&CQL_FILTER=${codigo}`
       downloadData(urlGbif)
 
-      let urlAmenazadas=`gbif/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=gbif%3Adescarga_amenaza&outputFormat=csv&CQL_FILTER=codigo=%27${cod_mupio}%27&PropertyName=(reino,filo,clase,orden,familia,genero,especies,endemicas,amenazadas,exoticas)`
+      let urlAmenazadas=`gbif/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=gbif%3Alista_especies_consulta&outputFormat=csv&CQL_FILTER=${codigo}&PropertyName=(reino,filo,clase,orden,familia,genero,especies,endemicas,amenazadas,exoticas)`
       downloadData(urlAmenazadas)
     }
   }

@@ -50,6 +50,8 @@ export var wmsGetProps=(AllLayers,i,coordinate,Selection)=>{
                 }
 
                 Selection(features,i);
+            }else{
+                console.log('sin features')
             }
 
             // console.log(sele,data,sel);

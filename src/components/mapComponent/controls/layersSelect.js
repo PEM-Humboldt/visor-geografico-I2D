@@ -12,68 +12,95 @@ import {pythonGetRequest} from '../../server/pythonserver/pythonRequest'
 import {chartData,chartDangerData} from "../../pageComponent/side-options/tab-charts/chart"
 import {gbifData} from "../../pageComponent/side-options/tab-charts/gbif-info"
 
-import { set_title_mupio,set_title_dpto,set_cod_mupio } from '../../globalVars';
-// import {GEOSERVER_URL} from '../../server/url'
-// =========================================================================
+import { set_title_mupio,set_title_dpto,set_cod_mupio,set_cod_dpto } from '../../globalVars';
 
+// =========================================================================
+let existingSidebar,dptoFeature
 // get wms layers if turn on
 export var layerSelection=(coordinate)=>{
     // select the wms layers
     $('#contenedorg').html('');
     $('#nav-layers').attr("style", "display:none");
-    // wms layers                
+    // wms layers          
+    
+    if (AllLayerss[1].values_.visible === true) {
+        // get mupio features data
+        wmsGetProps(AllLayerss,1,coordinate,Selection);
+        wmsGetProps(AllLayerss,0,coordinate,featDpto);
+        function featDpto(features,i) {
+            dptoFeature=features[0]
+        }    
+
+    } else if (AllLayerss[0].values_.visible === true) {
+        // get dpto features data
+        wmsGetProps(AllLayerss,0,coordinate,Selection);
+    }
+
     for (var i = 0; i < AllLayerss.length; i++) {
         // if turn on
-        if (AllLayerss[i].values_.visible === true) {
-            // get features data
-            wmsGetProps(AllLayerss,i,coordinate,Selection);
-        }else if(AllLayerss[i].values_.visible === false){
+        if(AllLayerss[i].values_.visible === false){
             // mupios is not active
             $('#layers-data-tab').tab('show');
             $('#nav-layers').attr("style", "display:block"); 
-            if(i==1 && i==2){
+            if(i==1 && i==0){
                 highlightStadisticsRemove();
+                $('#nav-chart').attr("style", "display:none"); 
             }
-
-            $('#nav-chart').attr("style", "display:none"); 
         }
     }
 }
 
 var Selection=(features,i)=>{
     var feature=features[0];
-    if(features.length>0){
-        openSideOptions();
-        $('#nav-layers').attr("style", "display:block"); 
+    let cod_dpto=''
+  
+    openSideOptions();
+    $('#nav-layers').attr("style", "display:block"); 
 
-        // municipios stadistics i=1
-        if(i==1){
-            // get data from python and create chart
-            openMupioData(feature)
-        }else{
-           // if layer different to mupio
-            hightlightRemove();
-        }
+    // if layer different to mupio and dpto
+    hightlightRemove();
 
-        // layers on click coordinate create group table
-        FeatSelect(features,i);
-    }else{
-        console.log('sin features')
+    // municipios stadistics i=1 // dpto stadistics i=0
+    if(i==1 || i==0){
+        if(i==0){dptoFeature=feature}
+        createDropdownStadistics(feature,i)
+        cod_dpto= set_cod_dpto(feature.values_.codigo.substring(0, 2))
+
+        // get data from python and create chart
+        openData(feature,cod_dpto)
+    }
+
+    // layers on click coordinate create group table
+    FeatSelect(features,i);
+}
+
+var createDropdownStadistics=(feature,id)=>{
+    $("#stadisticstype").empty(); //To reset dropdown
+    let title_dpto='';
+    // if mupio layer is on 
+    if(id==1){
+        title_dpto =set_title_dpto(feature.values_.dpto_nombre)
+        let title_mupio =set_title_mupio(feature.values_.nombre)
+
+        $("#stadisticstype").append("<option value='mpio_politico' selected id='titleMpio'> Municipio " + title_mupio + "</option>")
+        $("#stadisticstype").append("<option value='dpto_politico' id='titleDpto'>Departamento "+title_dpto+"</option>")
+    
+        existingSidebar = $('#titleMpio');
+    // if dpto layer is on 
+    }else if(id==0){
+        title_dpto =set_title_dpto(feature.values_.nombre)
+        $("#stadisticstype").append("<option value='dpto_politico' selected id='titleDpto'>Departamento "+title_dpto+"</option>")
+    
+        existingSidebar = $('#titleDpto');
     }
 }
 
-var openMupioData=(feature)=>{
+
+var openData=(feature,cod_depto)=>{
     // get species data from python
-
     var selectedStadistics =$('#stadisticstype').children("option:selected").val()
-    let existingSidebar = $('#titleMpio');
-    let existingDptoDropdown = $('#titleDpto');
     
-    let title_dpto =set_title_dpto(feature.values_.dpto_nombre)
-    let title_mupio =set_title_mupio(feature.values_.nombre)
     let cod_mupio=set_cod_mupio(feature.values_.codigo)
-
-
 
     $("#stadisticstype").on('change',function(){
         selectedStadistics = $(this).children("option:selected").val();
@@ -103,29 +130,33 @@ var openMupioData=(feature)=>{
             $('#loading-chart').attr("style", "display:none");
         }
 
+        highlightStadisticsRemove();
+       
+
         if(selectedStadistics=='mpio_politico'){
+            highlightStadisticsAdd(feature);
+
             let urlMpioReq='mpio/charts/'+cod_mupio;
             pythonGetRequest(chartData,urlMpioReq,'No fue posible cargar las estadisticas, intente nuevamente',errorCallback);
     
             let urlMpioDangReq='mpio/dangerCharts/'+cod_mupio;
             pythonGetRequest(chartDangerData,urlMpioDangReq);
-        }else{
-            let urlMpioReq='dpto/charts/'+cod_mupio;
-            pythonGetRequest(chartData,urlMpioReq,'No fue posible cargar las estadisticas, intente nuevamente',errorCallback);
+
+        }else if(selectedStadistics=='dpto_politico'){
+            highlightStadisticsAdd(dptoFeature);
+            
+            let urlDptoReq='dpto/charts/'+cod_depto;
+            pythonGetRequest(chartData,urlDptoReq,'No fue posible cargar las estadisticas, intente nuevamente',errorCallback);
     
-            let urlMpioDangReq='dpto/dangerCharts/'+cod_mupio;
-            pythonGetRequest(chartDangerData,urlMpioDangReq);
+            let urlDptoDangReq='dpto/dangerCharts/'+cod_depto;
+            pythonGetRequest(chartDangerData,urlDptoDangReq);
+
         }
     }
 
- 
 
-
-    // if mupio change
-    if(existingSidebar[0].innerText!="Municipio " + title_mupio){
-        // title mupio sidebar
-        existingSidebar[0].innerText = "Municipio " + title_mupio;
-        existingDptoDropdown[0].innerText = "Departamento " + title_dpto;
+    // if mupio or depto changes
+    if((selectedStadistics=='mpio_politico' && existingSidebar[0].innerText!="Municipio " + feature.values_.nombre) || (selectedStadistics=='dpto_politico' && existingSidebar[0].innerText!="Departamento " + feature.values_.nombre)){
 
         $('#resume-data-tab').tab('show');
 
@@ -136,8 +167,6 @@ var openMupioData=(feature)=>{
         }
         $('#loading-chart').attr("style", "display:block");
 
-        highlightStadisticsRemove();
-        highlightStadisticsAdd(feature);
         if($('#nav-chart').css('display') == 'none'){
             $('#nav-chart').attr("style", "display:block"); 
         }
@@ -145,8 +174,6 @@ var openMupioData=(feature)=>{
     }else if($('#nav-chart').css('display') == 'none'){
         $('#resume-data-tab').tab('show');
         $('#nav-chart').attr("style", "display:block");
-        highlightStadisticsRemove()
-        highlightStadisticsAdd(feature);
     }
 
 }

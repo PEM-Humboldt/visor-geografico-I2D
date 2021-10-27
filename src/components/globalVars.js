@@ -5,6 +5,7 @@ export var doi_gbif_data;
 
 export var title_mupio;
 export var cod_mupio;
+export var cod_dpto;
 
 export var title_depto;
 
@@ -27,5 +28,6 @@ export var todayDate = formatDate(new Date());
 // nombre del municipio seleccionado
 export var set_title_mupio=(name)=> title_mupio=capitalizeFirstLetter(name)
 export var set_cod_mupio=(cod)=> cod_mupio=cod
+export var set_cod_dpto=(cod)=> cod_dpto=cod
 
 export var set_title_dpto=(name)=> title_depto=capitalizeFirstLetter(name)

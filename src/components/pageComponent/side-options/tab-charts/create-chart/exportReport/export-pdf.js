@@ -68,7 +68,7 @@ export function savePDF() {
                 footerpdf: 'http://i2d.humboldt.org.co/visor-I2D/'+footeri2d,
 
                 // i2d: 'http://localhost:1234/'+logoi2d,
-                // // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
+                // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
                 // footerpdf: 'http://localhost:1234/'+footeri2d,
             },
             pageBreakBefore: function(currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {

@@ -3,13 +3,17 @@ import {milesFormat} from '../../../../../../formatText'
 
 import{table} from './table-export'
 
+import $ from "jquery";
+
 // gbifText
 export var textGbif =(res)=>{
+    var selectedStadistics =$('#stadisticstype').children("option:selected").val()
+
     // first table
     let str = res.split("data:application/json;charset=utf-8,")[1]      
     str= JSON.parse(decodeURIComponent(str))
     let title= {tipo: "Grupo biológico", registers: 'Número de registros', species:'Número de especies', exoticas: 'Especies exóticas', endemicas: 'Especies endémicas'}
-    console.log(str)
+    // console.log(str)
     let totalRegisters = milesFormat(str.reduce((sum, value) => ( sum + value.registers ), 0));
     let totalEndemicas = milesFormat(str.reduce((sum, value) => ( sum + value.endemicas ), 0));
     let totalExoticas = milesFormat(str.reduce((sum, value) => ( sum + value.exoticas ), 0));
@@ -32,19 +36,25 @@ export var textGbif =(res)=>{
     milesstr.push(totalData);
 
     let json={}
+    let infoInteres=''
+    if(selectedStadistics=='mpio_politico'){
+        infoInteres='municipio de '+title_mupio+', '+title_depto
+    }else{
+        infoInteres='departamento de '+title_depto
+    }
 
     json={
         stack: [
             {
                 text: [
                     {text: 'Asunto: ', bold: true},
-                    {text: 'Información acerca de las especies presentes en el municipio de '+title_mupio+', '+title_depto+'\n \n \n'},
+                    {text: 'Información acerca de las especies presentes en el '+infoInteres+'.\n \n \n'},
                 ],
                 style: 'parrafo'
             },
             {
                 text: [
-                    'A partir de la capa geoespacial correspondiente al municipio de '+title_mupio+', '+title_depto+', se extrajeron los registros de presencia de especies biológicas que han reportado para la zona de interés. La base de datos utilizada para extraer los registros de presencia es la publicada por la Infraestructura Mundial de Información en Biodiversidad (GBIF), dicha base de datos es la fuente disponible más completa en este momento y contiene todos los registros de presencia publicados por el Instituto Humboldt, los publicados por otras instituciones colombianas e integrados en el Sistema de Información sobre Biodiversidad de Colombia (SiB Colombia, https:// www.sibcolombia.net/ ) y todos aquellos registros de especies en el territorio Colombiano publicados por instituciones y organizaciones desde el exterior. Desde el Instituto Humboldt garantizamos la calidad de nuestra información, no obstante, la información de otras instituciones debe ser evaluada con precaución. Cabe aclarar que los registros de presencia de especies publicados en GBIF son solamente una aproximación a la riqueza y abundancia de especies que se presentan en el territorio nacional. \n \n', 
+                    'A partir de la capa geoespacial correspondiente al '+infoInteres+', se extrajeron los registros de presencia de especies biológicas que han reportado para la zona de interés. La base de datos utilizada para extraer los registros de presencia es la publicada por la Infraestructura Mundial de Información en Biodiversidad (GBIF), dicha base de datos es la fuente disponible más completa en este momento y contiene todos los registros de presencia publicados por el Instituto Humboldt, los publicados por otras instituciones colombianas e integrados en el Sistema de Información sobre Biodiversidad de Colombia (SiB Colombia, https:// www.sibcolombia.net/ ) y todos aquellos registros de especies en el territorio Colombiano publicados por instituciones y organizaciones desde el exterior. Desde el Instituto Humboldt garantizamos la calidad de nuestra información, no obstante, la información de otras instituciones debe ser evaluada con precaución. Cabe aclarar que los registros de presencia de especies publicados en GBIF son solamente una aproximación a la riqueza y abundancia de especies que se presentan en el territorio nacional. \n \n', 
                     'En total se reportaron ', totalRegisters,' registros de presencia de especies que representan ',
                     totalAnimals , ' especies de animales y ',
                     totalPlants , ' de plantas (Tabla 1, Anexo 1) en la zona de interés, de estas cifras se puede resaltar la presencia de ',
@@ -109,6 +119,15 @@ export var textDanger =(res)=>{
 
     // references info
 export var textReferences =()=>{
+    var selectedStadistics =$('#stadisticstype').children("option:selected").val()
+
+    let infoRef=''
+    if(selectedStadistics=='mpio_politico'){
+        infoRef='DANE. «MGN2020_MPIO_POLITICO» [Shapefile]. 1:25.000. «Marco Geoestadístico Nacional Vigencia 2020. Nivel Geográfico Municipio». Vigencia 2020.\n https://geoportal.dane.gov.co/geonetwork/srv/eng/catalog.search#/metadata/b54cdcbc-e6d9-47dd-afee-1265687c8c2b. (2021).'
+    }else{
+        infoRef='DANE. «MGN2020_DPTO_POLITICO» [Shapefile]. 1:25.000. «Marco Geoestadístico Nacional Vigencia 2020. Nivel Geográfico Departamento. Vigencia 2020.\n https://geoportal.dane.gov.co/geonetwork/srv/eng/catalog.search#/metadata/b9b83698-50b1-4865-bb1e-2cbe1ca2ae41. (2021).'
+    }
+
     let json={}
 
     json={
@@ -123,7 +142,7 @@ export var textReferences =()=>{
                 style: 'underlineBlack'
             },
             {
-                text: ['DANE. «MGN2020_MPIO_POLITICO» [Shapefile]. 1:25.000. «Marco Geoestadístico Nacional Vigencia 2020. Nivel Geográfico Municipio». Vigencia 2020.\n https://geoportal.dane.gov.co/geonetwork/srv/eng/catalog.search#/metadata/b54cdcbc-e6d9-47dd-afee-1265687c8c2b. (2021). \n \n'],
+                text: [infoRef+' \n \n'],
                 style: 'parrafo'
             },
             {

@@ -2,6 +2,7 @@ import $ from "jquery";
 import {layerSelection} from './layersSelect'
 
 import {fromLonLat} from 'ol/proj';
+import { fitCenter } from "../map";
 // create dropdown with search
 export function createDropdown(title,name,data){
     // create dropdown
@@ -36,5 +37,7 @@ $('#menu-items-mupio').find('.dropdown-items').on('click', function(e) {
   coordinate = JSON.parse(coordinate);
   
   let coo1=fromLonLat(coordinate,'EPSG:3857')
+  fitCenter(coo1)
+  
   layerSelection(coo1);
 })

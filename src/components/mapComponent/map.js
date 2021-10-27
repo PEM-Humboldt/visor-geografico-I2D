@@ -33,6 +33,13 @@ export const fitView=(ext)=>{
   map.getView().animate({center: getCenter(ext), zoom: zoom})
   
 }
+
+export const fitCenter=(ext)=>{
+  let zoom=getZoom()>8?getZoom:8;
+  map.getView().animate({center: ext, zoom: zoom})
+  
+}
+
 export const addLayer=(layer)=>{map.addLayer(layer);}
 export const removeLayer=(layer)=>{map.removeLayer(layer);}
 // export const addInteraction=(selection)=>{map.addInteraction(selection)}
