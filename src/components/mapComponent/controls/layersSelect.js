@@ -23,22 +23,20 @@ export var layerSelection=(coordinate)=>{
     $('#nav-layers').attr("style", "display:none");
     // wms layers          
     
-    if (AllLayerss[1].values_.visible === true) {
-        // get mupio features data
-        wmsGetProps(AllLayerss,1,coordinate,Selection);
-        wmsGetProps(AllLayerss,0,coordinate,featDpto);
-        function featDpto(features,i) {
-            dptoFeature=features[0]
-        }    
-
-    } else if (AllLayerss[0].values_.visible === true) {
-        // get dpto features data
-        wmsGetProps(AllLayerss,0,coordinate,Selection);
-    }
-
     for (var i = 0; i < AllLayerss.length; i++) {
         // if turn on
-        if(AllLayerss[i].values_.visible === false){
+        if (i==1 && AllLayerss[i].values_.visible === true) {
+            // get mupio features data
+            wmsGetProps(AllLayerss,1,coordinate,Selection);
+            wmsGetProps(AllLayerss,0,coordinate,featDpto);
+            function featDpto(features,i) {
+                dptoFeature=features[0]
+            }    
+    
+        }else if (AllLayerss[i].values_.visible === true) {
+            // get dpto features data
+            wmsGetProps(AllLayerss,i,coordinate,Selection);
+        }else if(AllLayerss[i].values_.visible === false){
             // mupios is not active
             $('#layers-data-tab').tab('show');
             $('#nav-layers').attr("style", "display:block"); 
