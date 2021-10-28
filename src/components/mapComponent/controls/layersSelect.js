@@ -15,26 +15,30 @@ import {gbifData} from "../../pageComponent/side-options/tab-charts/gbif-info"
 import { set_title_mupio,set_title_dpto,set_cod_mupio,set_cod_dpto } from '../../globalVars';
 
 // =========================================================================
-let existingSidebar,dptoFeature
+let existingSidebar,dptoFeature,mpioFeature
 // get wms layers if turn on
 export var layerSelection=(coordinate)=>{
     // select the wms layers
     $('#contenedorg').html('');
     $('#nav-layers').attr("style", "display:none");
     // wms layers          
-    
-    for (var i = 0; i < AllLayerss.length; i++) {
+    let varMpio=null;
+
+    for (var i = 1; i < AllLayerss.length; i++) {
         // if turn on
         if (i==1 && AllLayerss[i].values_.visible === true) {
+            varMpio=true
             // get mupio features data
             wmsGetProps(AllLayerss,1,coordinate,Selection);
             wmsGetProps(AllLayerss,0,coordinate,featDpto);
-            function featDpto(features,i) {
-                dptoFeature=features[0]
-            }    
+            function featDpto(features,i) {dptoFeature=features[0];SelectionLayers(features,i) }    
     
-        }else if (AllLayerss[i].values_.visible === true) {
+        }else if (i==1 && !varMpio && AllLayerss[i].values_.visible === false) {
             // get dpto features data
+            wmsGetProps(AllLayerss,0,coordinate,Selection);
+            
+        }else if ( AllLayerss[i].values_.visible === true) {
+            // get features data
             wmsGetProps(AllLayerss,i,coordinate,Selection);
         }else if(AllLayerss[i].values_.visible === false){
             // mupios is not active
@@ -60,7 +64,11 @@ var Selection=(features,i)=>{
 
     // municipios stadistics i=1 // dpto stadistics i=0
     if(i==1 || i==0){
-        if(i==0){dptoFeature=feature}
+        if(i==0){
+            dptoFeature=feature
+        }else if(i==1){
+            mpioFeature=feature
+        }
         createDropdownStadistics(feature,i)
         cod_dpto= set_cod_dpto(feature.values_.codigo.substring(0, 2))
 
@@ -70,6 +78,11 @@ var Selection=(features,i)=>{
 
     // layers on click coordinate create group table
     FeatSelect(features,i);
+}
+
+var SelectionLayers=(features,i)=>{
+       // layers on click coordinate create group table
+       FeatSelect(features,i);
 }
 
 var createDropdownStadistics=(feature,id)=>{
@@ -132,7 +145,7 @@ var openData=(feature,cod_depto)=>{
        
 
         if(selectedStadistics=='mpio_politico'){
-            highlightStadisticsAdd(feature);
+            highlightStadisticsAdd(mpioFeature);
 
             let urlMpioReq='mpio/charts/'+cod_mupio;
             pythonGetRequest(chartData,urlMpioReq,'No fue posible cargar las estadisticas, intente nuevamente',errorCallback);
