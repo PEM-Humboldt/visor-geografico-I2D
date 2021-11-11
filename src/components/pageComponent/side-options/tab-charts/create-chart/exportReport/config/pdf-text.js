@@ -5,15 +5,25 @@ import{table} from './table-export'
 
 import $ from "jquery";
 
+// texts on pdf document
+
 // gbifText
 export var textGbif =(res)=>{
-    var selectedStadistics =$('#stadisticstype').children("option:selected").val()
+    // depends on the dropdown selection, it changes the text on the document
+    let selectedStadistics =$('#stadisticstype').children("option:selected").val(), infoInteres=''
 
-    // first table
+    if(selectedStadistics=='mpio_politico'){
+        infoInteres='municipio de '+title_mupio+', '+title_depto
+    }else{
+        infoInteres='departamento de '+title_depto
+    }
+
+    // first table on document 
     let str = res.split("data:application/json;charset=utf-8,")[1]      
     str= JSON.parse(decodeURIComponent(str))
     let title= {tipo: "Grupo biológico", registers: 'Número de registros', species:'Número de especies', exoticas: 'Especies exóticas', endemicas: 'Especies endémicas'}
-    // console.log(str)
+    
+    // decimal points format and get the total data categories
     let totalRegisters = milesFormat(str.reduce((sum, value) => ( sum + value.registers ), 0));
     let totalEndemicas = milesFormat(str.reduce((sum, value) => ( sum + value.endemicas ), 0));
     let totalExoticas = milesFormat(str.reduce((sum, value) => ( sum + value.exoticas ), 0));
@@ -35,14 +45,8 @@ export var textGbif =(res)=>{
     var totalData = {tipo: "TOTAL", registers: totalRegisters, species: totalSpecies, exoticas: totalExoticas, endemicas: totalEndemicas};
     milesstr.push(totalData);
 
+    // final json constructor
     let json={}
-    let infoInteres=''
-    if(selectedStadistics=='mpio_politico'){
-        infoInteres='municipio de '+title_mupio+', '+title_depto
-    }else{
-        infoInteres='departamento de '+title_depto
-    }
-
     json={
         stack: [
             {
@@ -74,14 +78,16 @@ export var textGbif =(res)=>{
     return json
 }
 
+// danger species text
 export var dangerString=0
-    // if have danger species info
 export var textDanger =(res)=>{
-    // second table
+    // second table on document 
     let strDangerSp = res.split("data:application/json;charset=utf-8,")[1]      
     strDangerSp= JSON.parse(decodeURIComponent(strDangerSp))
     dangerString=strDangerSp.length
+
     let json={}
+    // if have danger species 
     if(dangerString>0){
         let titleDangerSp= {tipo: "Categoria*", amenazadas: 'Resolución MADS \n No.1912 de 2017'}
         // add total to table
@@ -90,6 +96,7 @@ export var textDanger =(res)=>{
         totalDanger=milesFormat(totalDanger)
         strDangerSp.push({tipo: "TOTAL", amenazadas: totalDanger});
 
+        // final json constructor
         json={
             stack: [
                 {
@@ -117,19 +124,19 @@ export var textDanger =(res)=>{
 }
 
 
-    // references info
+// references document text
 export var textReferences =()=>{
-    var selectedStadistics =$('#stadisticstype').children("option:selected").val()
 
-    let infoRef=''
+    // depends on the dropdown selection, it changes the reference text on the document
+    var selectedStadistics =$('#stadisticstype').children("option:selected").val(), infoRef=''
     if(selectedStadistics=='mpio_politico'){
         infoRef='DANE. «MGN2020_MPIO_POLITICO» [Shapefile]. 1:25.000. «Marco Geoestadístico Nacional Vigencia 2020. Nivel Geográfico Municipio». Vigencia 2020.\n https://geoportal.dane.gov.co/geonetwork/srv/eng/catalog.search#/metadata/b54cdcbc-e6d9-47dd-afee-1265687c8c2b. (2021).'
     }else{
         infoRef='DANE. «MGN2020_DPTO_POLITICO» [Shapefile]. 1:25.000. «Marco Geoestadístico Nacional Vigencia 2020. Nivel Geográfico Departamento. Vigencia 2020.\n https://geoportal.dane.gov.co/geonetwork/srv/eng/catalog.search#/metadata/b9b83698-50b1-4865-bb1e-2cbe1ca2ae41. (2021).'
     }
 
+    // final json constructor
     let json={}
-
     json={
         stack: [
             {

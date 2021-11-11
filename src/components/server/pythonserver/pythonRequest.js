@@ -1,7 +1,10 @@
 import $ from "jquery";
 
 import {PYTHONSERVER} from '../url'
+// python request 
+// connects with ajax the django backend with the frontend
 
+// get request
 export const pythonGetRequest=(handleData,param,error,errorCallback)=>{
     $.ajax({
         url: PYTHONSERVER+param,
@@ -17,7 +20,7 @@ export const pythonGetRequest=(handleData,param,error,errorCallback)=>{
         }
     });
 }
-
+// post request
 export var pythonPostRequest=(param,dataJson,handleData,handleError)=>{
     $.ajax({
         type: "POST",

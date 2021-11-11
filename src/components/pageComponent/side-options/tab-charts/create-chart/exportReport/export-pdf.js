@@ -1,9 +1,9 @@
-import logoi2d from '../../../../../../assets/img/logo-humboldt.png'
+import logoi2d from '../../../../../../assets/img/logo-humboldt-v2.png'
 import footeri2d from '../../../../../../assets/img/footer.png'
 
 import pdfMake from "pdfmake/build/pdfmake.min";
-import pdfFonts from "pdfmake/build/vfs_fonts";
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+// import pdfFonts from "pdfmake/build/vfs_fonts";
+// pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 import {todayDate} from '../../../../../globalVars'
 
@@ -41,7 +41,7 @@ export function savePDF() {
                 return [
                     {
                         image: 'footerpdf',
-                        width: 400,
+                        width: 410,
                         height: 80,
                         alignment: 'center',
                         opacity:0.5,
@@ -68,7 +68,7 @@ export function savePDF() {
                 footerpdf: 'http://i2d.humboldt.org.co/visor-I2D/'+footeri2d,
 
                 // i2d: 'http://localhost:1234/'+logoi2d,
-                // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
+                // // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
                 // footerpdf: 'http://localhost:1234/'+footeri2d,
             },
             pageBreakBefore: function(currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {

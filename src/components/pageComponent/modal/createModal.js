@@ -1,7 +1,10 @@
-import './modal.scss'
-
 import $ from "jquery";
 // create dynamic modal with the basic structure see how drawcontrol works
+// id: string with the id of the new modal
+// jsonModal: json with the modal info like title, content
+// saveEvent: function that will execute when you click the confirm button
+// cancelEvent: function that will execute when you click the cancel button
+
 export var createModal=(id,jsonModal,saveEvent,cancelEvent)=>{
     let content=$('#content')
 

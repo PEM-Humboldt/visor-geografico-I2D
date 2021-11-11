@@ -1,5 +1,5 @@
 import {Stroke, Fill, Style,Text} from 'ol/style';
-
+// geojson polygon style
 export var polygonStyle=(style)=>{
     return new Style({
         stroke: new Stroke({

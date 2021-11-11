@@ -3,7 +3,8 @@ import './sideoptions.scss';
 
 import {updateSize} from '../../mapComponent/map'
 import {hightlightRemove,highlightStadisticsRemove} from '../../mapComponent/layers'
-import {exportData} from './tab-export/export'
+
+// is the right panel, interactions are showing here
 
 $('#closeSideOptions').on( "click", function() {
     closeSideOptions()
@@ -20,7 +21,6 @@ export const openSideOptions=()=>{
 
         $('#tutorialstep4').addClass('activeSide');
 
-        exportData()
     }
 
 }

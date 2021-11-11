@@ -1,6 +1,7 @@
 @import 'sizes';
 @import 'color';
 /*Contenedor de listado de capas*/
+// layers control inside map
 #ControlCapas{
     z-index: 2;
     position: absolute;

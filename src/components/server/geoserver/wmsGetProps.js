@@ -2,7 +2,7 @@ import $ from "jquery";
 import {GEOSERVER_URL} from '../url'
 
 import WFS from 'ol/format/WFS';
-import {TileWMS} from 'ol/source';
+import TileWMS from 'ol/source/TileWMS';
 
 var featureNS = 'http://humboldt.co';
 var infoFormat = 'application/json';
@@ -28,6 +28,7 @@ export var wmsGetProps=(AllLayers,i,coordinate,Selection)=>{
         },
         serverType: 'geoserver'
     });
+    // if is a point or if not 
     let resolution=layer=='procesos_gobernanza'?getResolution(): 1;
     var url = wmsSource[i].getFeatureInfoUrl(
         coordinate, resolution, getProjection(),

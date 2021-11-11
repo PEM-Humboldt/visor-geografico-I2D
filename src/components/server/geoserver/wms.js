@@ -1,8 +1,7 @@
-import 'ol/ol.css';
 import {Tile as TileLayer} from 'ol/layer';
-import {TileWMS} from 'ol/source';
+import TileWMS from 'ol/source/TileWMS';
 import {GEOSERVER_URL,GEONETWORK_URL} from '../url'
-//FUNCION WMS LOAD LAYER
+// wms geoserver- load layer function
 export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,idGeoNetwork){
     var geonetwork=(idGeoNetwork=!'' && idGeoNetwork)?GEONETWORK_URL+idGeoNetwork:'';
     var wms = new TileLayer({

@@ -1,5 +1,5 @@
 import {Circle as CircleStyle,Stroke, Fill, Style} from 'ol/style';
-
+// geojson point style
 export var pointStyle =(style)=> {
     return new Style({
       image: new CircleStyle({

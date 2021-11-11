@@ -3,7 +3,7 @@ import {layerSelection} from './layersSelect'
 
 import {fromLonLat} from 'ol/proj';
 import { fitCenter } from "../map";
-// create dropdown with search
+// create dropdown searching
 export function createDropdown(title,name,data){
     // create dropdown
     let menuItems = $('#dropdown-items');
@@ -22,6 +22,7 @@ export function createDropdown(title,name,data){
         menuItems.append(dropdownItems);
       }
     }else{
+      // no coincidence
       let dropdownFail = document.createElement('div');
       dropdownFail.setAttribute('class','dropdown-header dropdown_empty');
       dropdownFail.innerHTML ='No hay ninguna coincidencia'
@@ -35,7 +36,7 @@ $('#menu-items-mupio').find('.dropdown-items').on('click', function(e) {
   
   let coordinate = e.target.value.replace(/'/g, '"');
   coordinate = JSON.parse(coordinate);
-  
+  // zoom to the center coordinate
   let coo1=fromLonLat(coordinate,'EPSG:3857')
   fitCenter(coo1)
   

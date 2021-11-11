@@ -1,6 +1,6 @@
 /* Imports */
 import * as am4core from "@amcharts/amcharts4/core";
-import * as am4charts from "@amcharts/amcharts4/charts";
+import {PieChart,PieSeries,Legend} from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
 import {isAllDataZero} from './pie-options/noData'
@@ -9,6 +9,7 @@ import {table} from './exportReport/config/table-export'
 
 import $ from "jquery";
 
+// use this function for creating pie chart, it contains data, id, name of var and color
 export var charCreate=(dataChart,idChart,count,ccolor)=>{
     var chart= undefined;
 
@@ -21,9 +22,9 @@ export var charCreate=(dataChart,idChart,count,ccolor)=>{
             // Themes end
             
             // Create chart instance
-            chart = am4core.create(idChart, am4charts.PieChart);
+            chart = am4core.create(idChart, PieChart);
 
-            chart.legend = new am4charts.Legend();
+            chart.legend = new Legend();
             chart.legend.position = "right";
             chart.legend.valueLabels.template.text = "{value.value}";
             chart.legend.valueLabels.template.align = "right"
@@ -33,7 +34,7 @@ export var charCreate=(dataChart,idChart,count,ccolor)=>{
             chart.responsive.enabled = true;
             // chart.legend.width = 200;
             // Add and configure Series
-            var pieSeries = chart.series.push(new am4charts.PieSeries());
+            var pieSeries = chart.series.push(new PieSeries());
             pieSeries.dataFields.value = count;
             pieSeries.dataFields.category = "tipo";
 
@@ -53,7 +54,7 @@ export var charCreate=(dataChart,idChart,count,ccolor)=>{
             pieSeries.tooltip.background.fill = am4core.color("#000");
             pieSeries.tooltip.label.color = am4core.color("#fff");
             
-            /* Create a heat rule */
+            /* Create a heat rule on especies amenazadas */
 
             if(ccolor=='danger'){
                 pieSeries.slices.template.adapter.add('fill', (value, target, key) => {
@@ -70,6 +71,7 @@ export var charCreate=(dataChart,idChart,count,ccolor)=>{
 
             let isAllZero=isAllDataZero(dataChart,count);
 
+            // define titles names depend on the chart type 
             let name;
             if(count=='registers'){name='Registros'}
             else if(count=='species'){name='Especies'}
@@ -77,6 +79,7 @@ export var charCreate=(dataChart,idChart,count,ccolor)=>{
             else if(count=='exoticas'){name='Especies Exóticas'} 
             else if(count=='amenazadas'){name='Especies Amenazadas'} 
 
+            // if is not getting data 
             if(isAllZero){
                 
                 // add label to let users know the chart is empty

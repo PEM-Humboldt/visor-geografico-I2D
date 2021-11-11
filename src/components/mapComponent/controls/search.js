@@ -3,6 +3,7 @@ import {pythonGetRequest} from '../../server/pythonserver/pythonRequest'
 
 import {createDropdown} from './dropdown'
 
+// search toggle the input
 $('#basic-search').on('click',()=>{
     if(!$('#search-input').is(':visible') && !$('#dropdown-menu-mupio').is(':visible')){
         $('#dropdown-menu-mupio').slideToggle('fast', function () {
@@ -19,7 +20,7 @@ $('#basic-search').on('click',()=>{
 })
 
 let timeout = null;
-
+// search on typing
 $('#search-input').on('input',(e)=>{
     clearTimeout(timeout);
     timeout = setTimeout(()=> {

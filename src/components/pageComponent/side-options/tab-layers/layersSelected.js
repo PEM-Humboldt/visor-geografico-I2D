@@ -1,7 +1,7 @@
 import $ from "jquery";
 
 import {hightlightAdd,hightlightRemove} from '../../../mapComponent/layers'
-// create dynamic selection
+// create dynamic click selection, it shows the list of click layers
 export function FeatSelect(features,i) {
     var feature=features[0];
 

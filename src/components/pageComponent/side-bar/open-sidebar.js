@@ -1,6 +1,8 @@
 import $ from "jquery";
 import {updateSize} from '../../mapComponent/map'
 import {closeDropdown} from './close-sidebar'
+
+// open side bar events
 export var openSideBar=()=>{
     $('#sideBar').removeClass('nonactive');
     $('#sideBar').addClass('active');
@@ -13,6 +15,7 @@ export var openSideBar=()=>{
     setTimeout(function(){ updateSize()}, 100);
 }
 
+// open side bar dropdown items
 const sideBarDropdown=(div)=>{
     if ($(div).hasClass('active')) {
       closeDropdown(div)

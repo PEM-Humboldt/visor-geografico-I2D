@@ -1,5 +1,6 @@
-// Capitalize the first letter of each word in a string
+// this file contains the functions than format the text
 
+// Capitalize the first letter of each word in a string
 export var capitalizeFirstLetter=(str)=>{
     const arr = str.toLowerCase().split(" ");
 
@@ -16,7 +17,6 @@ export var capitalizeFirstLetter=(str)=>{
 
 
 // Format dates
-
 export var formatDate=(date)=>{
     let options = { year: 'numeric', month: 'long', day: 'numeric' };
     return date.toLocaleDateString("es-ES", options);

@@ -15,7 +15,7 @@ var closeTutorial =()=>{
     $('#tutorialstep4').hide();
     localStorage.setItem("tutorial", "no");
 }
-
+// changing tutorial with actions
 export var tutorialChangeStep3=()=>{
     if($('#tutorialstep3').hasClass('show')){
         $('#tutorialstep3').hide();
@@ -28,7 +28,7 @@ export var closeTutorialOnStep4=()=>{
         closeTutorial()
     }
 }
-
+// changing steps with next step button
 $('.closeTutorial').on( "click", function() {
     closeTutorial();
 })

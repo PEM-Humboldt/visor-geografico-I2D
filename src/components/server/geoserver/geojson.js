@@ -1,4 +1,3 @@
-import 'ol/ol.css';
 import {GeoJSON} from 'ol/format';
 import VectorSource from 'ol/source/Vector';
 
@@ -6,6 +5,7 @@ import {Vector as VectorLayer} from 'ol/layer';
 import {GEOSERVER_URL} from '../url'
 // import {bbox as bboxStrategy} from 'ol/loadingstrategy';
 
+// geoserver geojson
 export var geojsonLayer = (store,layer,color,params)=>{
   var vector;
   try {

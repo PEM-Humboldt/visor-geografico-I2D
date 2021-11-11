@@ -1,7 +1,7 @@
 // variables:
 $tablet-width: 768px;
 $desktop-width: 1024px;
-
+// responsive in two sizes: tablet and desktop
 @mixin tablet {
   @media (max-width: #{$tablet-width - 1px}) {
     @content;

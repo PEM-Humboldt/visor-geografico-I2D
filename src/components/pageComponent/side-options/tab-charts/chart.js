@@ -7,6 +7,8 @@ import './create-chart/exportReport/export-modal'
 
 export var chartReg,chartSp,chartEndemicSp,chartExoticSp,chartDangerSp;
 
+// this is the main chart, where is creating all the charts
+// the data comes from an api
 export const chartData =(data)=>{
     try{
         // create chart and replace data
@@ -20,7 +22,7 @@ export const chartData =(data)=>{
     }
 }
 
-
+// the data comes from an api
 export const chartDangerData =(data)=>{
     try{
         chartDangerSp= charCreate(data,'chartdivDangerSp','amenazadas','danger');    

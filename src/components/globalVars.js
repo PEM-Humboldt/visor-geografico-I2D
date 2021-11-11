@@ -1,3 +1,4 @@
+// this file contains the vars that init in a folder and are using in another one
 import {formatDate,capitalizeFirstLetter} from './formatText'
 
 export var date_gbif_data;

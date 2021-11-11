@@ -6,7 +6,7 @@ var changeBasemap=(currentbm,newbm)=>{
     currentbm.setVisible(false);
     newbm.setVisible(true);
 }
-
+// changes the base map 
 var zoomChangeBasemap=()=>{
     if(getZoom() > 10){
         if($('input#StreetMap').is(':checked')==true){

@@ -1,12 +1,13 @@
 /* Imports */
 import * as am4core from "@amcharts/amcharts4/core";
-import * as am4charts from "@amcharts/amcharts4/charts";
+import {XYChart,CategoryAxis,ValueAxis,ColumnSeries,XYCursor} from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
+// use this function for creating bar chart  -------at the moment is not getting using
 export var charCreate=(dataChart)=>{
-    // eliminar el chart anterior
+
     try{
-        
+        // eliminar el chart anterior
         am4core.disposeAllCharts();   
      
         am4core.ready(function() {
@@ -16,13 +17,13 @@ export var charCreate=(dataChart)=>{
             // Themes end
             
             // Create chart instance
-            var chart = am4core.create("chartdiv", am4charts.XYChart);
+            var chart = am4core.create("chartdiv", XYChart);
             chart.scrollbarX = new am4core.Scrollbar();
 
             chart.padding(20, 20, 20, 20);
 
             // Create axes
-            var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+            var categoryAxis = chart.xAxes.push(new CategoryAxis());
             categoryAxis.renderer.grid.template.location = 0;
             categoryAxis.dataFields.category = "tipo";
             categoryAxis.renderer.minGridDistance = 30;
@@ -32,12 +33,12 @@ export var charCreate=(dataChart)=>{
             categoryAxis.tooltip.disabled = true;
             categoryAxis.renderer.minHeight = 110;
 
-            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+            var valueAxis = chart.yAxes.push(new ValueAxis());
             valueAxis.min = 0;
             valueAxis.max = valueAxis.maxZoomed;
             // valueAxis.title.text = 'CANTIDAD DE REGISTROS';
             // Create series
-            var series = chart.series.push(new am4charts.ColumnSeries());
+            var series = chart.series.push(new ColumnSeries());
             series.dataFields.categoryX = "tipo";
             series.dataFields.valueY = "count";
             series.tooltipText = "{categoryX} : [{categoryX}: bold]{valueY}[/]";
@@ -72,7 +73,7 @@ export var charCreate=(dataChart)=>{
             });
 
             // Cursor
-            chart.cursor = new am4charts.XYCursor();
+            chart.cursor = new XYCursor();
 
             chart.data = dataChart;      
             

@@ -1,4 +1,4 @@
-
+// function that verify if the data is all zero
 export function isAllDataZero(dataChart,count){
     let isAllZero=true;
     for (let i = 0; i < dataChart.length; i++) {

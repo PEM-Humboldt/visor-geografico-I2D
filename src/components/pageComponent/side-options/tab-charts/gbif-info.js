@@ -2,6 +2,7 @@ import $ from "jquery";
 
 import {date_format,set_doi_gbif_data} from '../../../globalVars'
 
+// change the main gbif text: the doi and the date
 export const gbifData =(data)=>{
     $('.gbifInfo').each(function(i, obj) {
         let date_gbif,doi_gbif_data

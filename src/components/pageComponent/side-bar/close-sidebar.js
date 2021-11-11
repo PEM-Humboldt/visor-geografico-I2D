@@ -1,6 +1,7 @@
 import $ from "jquery";
 import {updateSize} from '../../mapComponent/map'
 
+// close side bar events 
 export function closeSideBar(){
     $('#sideBar').removeClass('active');
     $('#sideBar').addClass('nonactive');
@@ -9,10 +10,10 @@ export function closeSideBar(){
     $('.sideBarSpanActive').addClass('sideBarSpanNoActive').removeClass('sideBarSpanActive');
     $('#dropdown-catalogs').removeClass('active').addClass('nonactive')
     $('#tutorialstep2').removeClass('active');
-    // document.getElementById("closebtn").style.display = "none"; 
+
     setTimeout(function(){updateSize()}, 100);
   }
-
+// close side bar dropdown items
 export const closeDropdown=(div)=>{
   $(div).removeClass('active');
   $(div).addClass('nonactive');

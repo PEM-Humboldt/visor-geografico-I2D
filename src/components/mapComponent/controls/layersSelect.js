@@ -62,6 +62,7 @@ var Selection=(features,i)=>{
     // if layer different to mupio and dpto
     hightlightRemove();
 
+    // selection 
     // municipios stadistics i=1 // dpto stadistics i=0
     if(i==1 || i==0){
         if(i==0){

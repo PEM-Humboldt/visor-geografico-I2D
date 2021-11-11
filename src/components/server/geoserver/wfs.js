@@ -1,5 +1,5 @@
 import $ from "jquery";
-import {GEOSERVER_URL,GEOSERVER_URL_AMAZON} from '../url'
+import {GEOSERVER_URL} from '../url'
 //Funcion de consulta
 // retorna el wfs en geojson
 export var wfsLayer =(param, request, request1, request2, request3) =>{

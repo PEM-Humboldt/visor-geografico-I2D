@@ -37,6 +37,7 @@ export function buildLayerTree(layer) {
 
         var cardlink = document.createElement('a');
         cardlink.className = "btn btn-link";
+        cardlink.setAttribute('href', '#');
         cardlink.setAttribute('data-toggle', 'collapse');
         cardlink.setAttribute('aria-expanded', 'true');
         cardlink.setAttribute('data-target', '#collapse' + i);
