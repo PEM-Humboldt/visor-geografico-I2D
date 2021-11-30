@@ -52,6 +52,16 @@ Para el caso de apache-tomcat:
 /DIRECTORIO-APACHE-TOMCAT/bin/startup.sh
 ```
 
+### 2.3. Precondición
+
+- Es necesario tener funcional tanto el [backend](https://github.com/PEM-Humboldt/visor-geografico-I2D-backend) para las funcionalidades, como el [geoserver](http://34.231.25.67:8080/geoserver/web/) en el servicio de capas. 
+
+Para la correcta ejecución de las funcionalidades del frontend, la siguiente ruta contiene dichas conexiones externas
+```
+ src/components/server/url
+```
+
+
 ## Autores
 
 * **Julián David Torres Caicedo** - *Creación del sitio* - [juliant8805](https://github.com/juliant8805)
