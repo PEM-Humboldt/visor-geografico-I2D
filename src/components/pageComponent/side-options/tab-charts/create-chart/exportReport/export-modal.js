@@ -99,11 +99,11 @@ $(document).on('submit','form#formSolicitante',function(e){
     }
     if(type=='downloadCSV' || type=='downloadAll'){
       // download csv gbif
-      let urlGbif=`gbif/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=gbif%3Aregistros_biologicos_consulta&outputFormat=csv&PropertyName=(gbifid,datasetkey,occurrenceid,kingdom,phylum,class,order_,family,genus,species,infraspecificepithet,taxonrank,scientificname,verbatimscientificname,verbatimscientificnameauthorship,countrycode,locality,stateprovince,occurrencestatus,individualcount,publishingorgkey,decimallatitude,decimallongitude,coordinateuncertaintyinmeters,coordinateprecision,elevation,elevationaccuracy,depth,depthaccuracy,eventdate,day,month,year,taxonkey,specieskey,basisofrecord,institutioncode,collectioncode,catalognumber,recordnumber,identifiedby,dateidentified,license,rightsholder,recordedby,typestatus,establishmentmeans,lastinterpreted,mediatype,issue)&CQL_FILTER=${codigo}`
-      downloadData(urlGbif)
-
       let urlAmenazadas=`gbif/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=gbif%3Alista_especies_consulta&outputFormat=csv&CQL_FILTER=${codigo}&PropertyName=(reino,filo,clase,orden,familia,genero,especies,endemicas,amenazadas,exoticas)`
       downloadData(urlAmenazadas)
+
+      let urlGbif=`gbif/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=gbif%3Aregistros_biologicos_consulta&outputFormat=csv&PropertyName=(gbifid,datasetkey,occurrenceid,kingdom,phylum,class,order_,family,genus,species,infraspecificepithet,taxonrank,scientificname,verbatimscientificname,verbatimscientificnameauthorship,countrycode,locality,stateprovince,occurrencestatus,individualcount,publishingorgkey,decimallatitude,decimallongitude,coordinateuncertaintyinmeters,coordinateprecision,elevation,elevationaccuracy,depth,depthaccuracy,eventdate,day,month,year,taxonkey,specieskey,basisofrecord,institutioncode,collectioncode,catalognumber,recordnumber,identifiedby,dateidentified,license,rightsholder,recordedby,typestatus,establishmentmeans,lastinterpreted,mediatype,issue)&CQL_FILTER=${codigo}`
+      downloadData(urlGbif)
     }
   }
 

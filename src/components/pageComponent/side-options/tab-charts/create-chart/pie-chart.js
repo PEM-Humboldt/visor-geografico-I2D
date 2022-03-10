@@ -154,11 +154,11 @@ export var charCreate=(dataChart,idChart,count,ccolor)=>{
             }
         });
 
-    }catch{
-        console.log('no se pudo crear las estadisticas')
+    }catch(err){
+        console.log('no se pudo crear las estadisticas');
     }
-    return chart
-}
+    return chart;
+};
 export function toggleSlice(item) {
     var slice = pieSeries.dataItems.getIndex(item);
     if (slice.visible) {slice.hide();}

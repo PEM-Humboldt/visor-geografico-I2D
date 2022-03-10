@@ -3,7 +3,7 @@ import {GEOSERVER_URL} from '../url'
 //Funcion de consulta
 // retorna el wfs en geojson
 export var wfsLayer =(param, request, request1, request2, request3) =>{
-    var temp = null
+    var temp = null;
     try{
         if (request === undefined && request1 === undefined && request2 === undefined && request3 === undefined) {
             var viewParamsStr = viewparamsToStr({});
@@ -60,13 +60,13 @@ export var wfsLayer =(param, request, request1, request2, request3) =>{
                 //console.log(msg);
             }
         });
-    }catch{
-        alert('No cargó la información requerida')
+    }catch(err){
+        alert('No cargó la información requerida');
     }
 
 
     return temp;
-}
+};
 
 // retorna el wfs en array
 export var wfsSearchArray=(param, request, request1, request2)=>{
@@ -82,11 +82,11 @@ export var wfsSearchArray=(param, request, request1, request2)=>{
             }
         }
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
     // console.log('wfsSearchArray',arr);
     return arr;
-}
+};
 
 //formatear texto para ser entendido por geoserver
 var viewparamsToStr=(obj) =>{
@@ -96,4 +96,4 @@ var viewparamsToStr=(obj) =>{
         str += k + ':' + v;
     });
     return str;
-}
+};
