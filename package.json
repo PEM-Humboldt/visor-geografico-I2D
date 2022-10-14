@@ -3,6 +3,10 @@
     "version": "1.0.0",
     "description": "",
     "main": "index.html",
+    "repository": {
+    "type": "git",
+    "url": "https://github.com/PEM-Humboldt/visor-geografico-I2D.git"
+    },
     "browserslist": [
         ">0.2%",
         "last 1 chrome version",
