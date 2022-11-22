@@ -61,6 +61,16 @@ Para la correcta ejecución de las funcionalidades del frontend, la siguiente ru
  src/components/server/url
 ```
 
+## Despliegue usando docker
+
+Alternativamente puede desplegar usando contenedores de docker. Primero construya la imagen:
+
+`docker build -t visor:latest .`
+
+Después levante el contenedor:
+
+`docker run --name visor -p 80:80 -d visor:latest`
+
 
 ## Autores
 
