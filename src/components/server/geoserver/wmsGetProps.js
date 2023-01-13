@@ -29,12 +29,12 @@ export var wmsGetProps=(AllLayers,i,coordinate,Selection)=>{
         serverType: 'geoserver'
     });
     // if is a point or if not 
-    let resolution=layer=='procesos_gobernanza'?getResolution(): 1;
+    //let resolution=layer=='procesos_gobernanza'?getResolution(): 1;
+    let resolution=layer==layer?getResolution(): 1;
     var url = wmsSource[i].getFeatureInfoUrl(
         coordinate, resolution, getProjection(),
         {'INFO_FORMAT': infoFormat}
     );
-
     $.ajax({
         url: url,
         success: function (data) {

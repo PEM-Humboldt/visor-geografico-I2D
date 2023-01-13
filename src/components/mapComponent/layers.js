@@ -7,7 +7,7 @@ import {wmsLayer} from '../server/geoserver/wms'
 import {styleMpio,styleHighlight,styleHighlightPoint} from './layer-style/layers-style'
 
 //Capa base
-export var streetmap = new TileLayer({title: 'Streetmap',visible: true,source: new OSM({crossOrigin: null}),maxZoom: 10,minResolution: 2,name: 'Street Map'});
+export var streetmap = new TileLayer({title: 'Streetmap',visible: true,source: new OSM({crossOrigin: null}),maxZoom: 20,minResolution: 2,name: 'Street Map'});
 var otm = new TileLayer({ title: 'OTM', visible: false,source: new XYZ({url: "https://tile.opentopomap.org/{z}/{x}/{y}.png", attributions:' © OpenStreetMap contributors'}), name: 'OTM'});
 var bw = new TileLayer({title: 'B & W', visible: false,source: new XYZ({url: "http://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png", attributions:' © OpenStreetMap contributors'}), name: 'BW'});
 var terrain = new TileLayer({title: 'Terrain',visible: false,source: new XYZ({url: "http://a.tile.stamen.com/terrain/{z}/{x}/{y}.png", attributions:' © OpenStreetMap contributors'}), name: 'Terrain'});
@@ -60,7 +60,9 @@ var meta_conservacion = wmsLayer('Proyecto_PACBAO_Ecopetrol','meta_conservacion'
 var unicidad = wmsLayer('Proyecto_PACBAO_Ecopetrol','unicidad','Unicidad',false,'9c0dc2c7-6919-400d-998e-265624c7e781'); 
 var unidades_analisis = wmsLayer('Proyecto_PACBAO_Ecopetrol','unidades_analisis','Unidades de Análisis',false,'f6f304bd-a5f0-450c-a836-d30b12acbaff'); 
 
-var procesos_gobernanza_multiescalar = wmsLayer('Gobernanza','procesos_gobernanza','Posibles procesos de gobernanza',false,'a6fcfe1b-11e8-4383-a38e-a7f0035dece5'); 
+var procesos_gobernanza_multiescalar = wmsLayer('Gobernanza','procesos_gobernanza','Posibles procesos de gobernanza',false,'a6fcfe1b-11e8-4383-a38e-a7f0035dece5');
+
+var red_de_viveros = wmsLayer('visor','red_viveros','Red Viveros',true,'');
 
 //Grupos de capas
 export var layer_base = new GroupLayer({
@@ -107,7 +109,12 @@ export var gobernanza = new GroupLayer({
     layers: [procesos_gobernanza_multiescalar],
     name: 'Gobernanza'
 });
-
+export var viveros = new GroupLayer({
+    fold:'close',
+    title: 'Red viveros de Colombia',
+    layers: [red_de_viveros],
+    name: 'Red viveros de Colombia'
+});
 
 export var feats=(data)=>{
     return new VectorSource({
