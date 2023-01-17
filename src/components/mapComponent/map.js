@@ -7,7 +7,7 @@ import View from 'ol/View'
 import {ScaleLine, ZoomToExtent,defaults as defaultControls} from 'ol/control';
 import {getCenter} from 'ol/extent';
 
-import {layer_base, division_base,historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, gobernanza, viveros, highlight, highlightPoint, highlightStadistics} from './layers'
+import {layer_base, division_base,historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, gobernanza, targetmill, viveros, highlight, highlightPoint, highlightStadistics} from './layers'
 
 import {onClickMap} from './controls/map-click'
 
@@ -27,7 +27,7 @@ export const map = new Map({
     ]),
     target: document.getElementById('map'),
     renderer: 'canvas',
-    layers: [layer_base, division_base,historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad,gobernanza,viveros,highlightStadistics, highlightPoint, highlight],
+    layers: [layer_base, division_base,historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad,gobernanza,targetmill, viveros, highlightStadistics, highlightPoint, highlight],
     view: new View({
       center: [-8113332, 464737],
       zoom: 6

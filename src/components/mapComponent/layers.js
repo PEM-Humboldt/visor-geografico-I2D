@@ -64,6 +64,10 @@ var procesos_gobernanza_multiescalar = wmsLayer('Gobernanza','procesos_gobernanz
 
 var red_de_viveros = wmsLayer('visor','red_viveros','Red Viveros',true,'');
 
+var mincost_target4 = wmsLayer('weplan','mincost_target4','mincost target 4',false,'1d6b06b6-8a57-4c87-97ef-e156cb40dc46'); 
+var target1_1millon_ce = wmsLayer('weplan','target1_1millon_ce','target1 1 millon ce',false,'1d6b06b6-8a57-4c87-97ef-e156cb40dc46');
+var target4_6millon_ce = wmsLayer('weplan','target4_6millon_ce','target4 6 millon ce',false,'1d6b06b6-8a57-4c87-97ef-e156cb40dc46');
+
 //Grupos de capas
 export var layer_base = new GroupLayer({
     fold:'close',
@@ -115,7 +119,12 @@ export var viveros = new GroupLayer({
     layers: [red_de_viveros],
     name: 'Red viveros de Colombia'
 });
-
+export var targetmill = new GroupLayer({
+    fold:'close',
+    title: 'We Plan',
+    layers: [mincost_target4, target1_1millon_ce, target4_6millon_ce],
+    name: 'We Plan'
+});
 export var feats=(data)=>{
     return new VectorSource({
         features: (new GeoJSON()).readFeatures(data)
