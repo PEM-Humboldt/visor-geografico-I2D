@@ -1,13 +1,13 @@
 import $ from "jquery";
-
+import './export-modal.scss'
 import { createModal } from '../../../../modal/createModal'
 import './export-pdf'
 
 import { savePDF } from './export-pdf'
 import { pythonPostRequest } from '../../../../../server/pythonserver/pythonRequest'
-import { downloadData } from '../../../../../server/geoserver/geoserverRequest'
+//import { downloadData } from '../../../../../server/geoserver/geoserverRequest'
 
-import { cod_mupio, cod_dpto, title_mupio } from "../../../../../globalVars";
+import { cod_mupio, cod_dpto, title_mupio, title_depto} from "../../../../../globalVars";
 
 import JSZip from "jszip";
 
@@ -85,12 +85,21 @@ $(document).on('submit', 'form#formSolicitante', function (e) {
   }
 
   var handleCallback = () => {
-    var selectedStadistics = $('#stadisticstype').children("option:selected").val()
-    let codigo = ''
+    var selectedStadistics = $('#stadisticstype').children("option:selected").val();
+    let codigo = '';
+    var nomdownload = '';
+    var cod = '';
+    var textmundep ='';
     if (selectedStadistics == 'mpio_politico') {
       codigo = `codigo_mpio=%27${cod_mupio}%27`
+      cod = `${codigo}`.replace(/%27/g, "'");
+      nomdownload = `${title_mupio}`;
+      textmundep = ' municipio ';
     } else {
       codigo = `codigo_dpto=%27${cod_dpto}%27`
+      cod = `${codigo}`.replace(/%27/g, "'");
+      nomdownload = `${title_depto}`;
+      textmundep = ' departamento ';
     }
 
     // alert('Su información fue almacenada')
@@ -102,67 +111,35 @@ $(document).on('submit', 'form#formSolicitante', function (e) {
     }
     if (type == 'downloadCSV' || type == 'downloadAll') {
       // download csv gbif
-     
-      // estilo y posicionamiento del recuadro de descarga
-      function idescarga (){
-      $('#descarga').show()
-                    .prepend(`Descargando los datos para el municipio de ${title_mupio}`)
-                    .css('position', 'fixed')
-                    .css('width','auto')
-                    .css('height','30px')
-                    .css('background', '#EAEAEA')
-                    .css('opacity', 0.8)
-                    .css('z-index',60000)
-                    .css('bottom','0px')
-                    .css('font-size','12px')
-                    .css('left','55px')
-      };           
-      idescarga();
+      //posicionamiento del recuadro de descarga
+      $('#download-resume').hide();
+      $('#download-status').show()
+        .prepend('Descargando los datos para el' + textmundep + 'de '+nomdownload+' . . .');
+
+      /*var cod = `${codigo}`.replace(/%27/g, "'");
+      console.log(cod);
+      console.log(codigo);*/
+
+
+
       
+      // se asigna una petición get al geoserver para la lista de especies y para los registros biologicos respectivamente
+      var promise = $.get(`http://44.195.233.148:8080/geoserver/gbif/ows`, { service: 'WFS', version: '1.0.0', request: 'GetFeature', typeName: 'gbif:lista_especies_consulta', outputFormat: 'csv', CQL_FILTER: cod, PropertyName: '(reino,filo,clase,orden,familia,genero,especies,endemicas,amenazadas,exoticas)' });
+      var promise2 = $.get(`http://44.195.233.148:8080/geoserver/gbif/ows`, { service: 'WFS', version: '1.0.0', request: 'GetFeature', typeName: 'gbif:registros_biologicos_consulta', outputFormat: 'csv', PropertyName: '(gbifid,datasetkey,occurrenceid,kingdom,phylum,class,order_,family,genus,species,infraspecificepithet,taxonrank,scientificname,verbatimscientificname,verbatimscientificnameauthorship,countrycode,locality,stateprovince,occurrencestatus,individualcount,publishingorgkey,decimallatitude,decimallongitude,coordinateuncertaintyinmeters,coordinateprecision,elevation,elevationaccuracy,depth,depthaccuracy,eventdate,day,month,year,taxonkey,specieskey,basisofrecord,institutioncode,collectioncode,catalognumber,recordnumber,identifiedby,dateidentified,license,rightsholder,recordedby,typestatus,establishmentmeans,lastinterpreted,mediatype,issue)', CQL_FILTER: cod }, function () { $('#download-status').hide(); $('#download-resume').show(); });
       
-     // se asigna una petición get al geoserver para la lista de especies y para los registros biologicos respectivamente
-      var promise = $.get(`http://44.195.233.148:8080/geoserver/gbif/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=gbif%3Alista_especies_consulta&outputFormat=csv&CQL_FILTER=${codigo}&PropertyName=(reino,filo,clase,orden,familia,genero,especies,endemicas,amenazadas,exoticas)`);
-
-      var promise2 = $.get(`http://44.195.233.148:8080/geoserver/gbif/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=gbif%3Aregistros_biologicos_consulta&outputFormat=csv&PropertyName=(gbifid,datasetkey,occurrenceid,kingdom,phylum,class,order_,family,genus,species,infraspecificepithet,taxonrank,scientificname,verbatimscientificname,verbatimscientificnameauthorship,countrycode,locality,stateprovince,occurrencestatus,individualcount,publishingorgkey,decimallatitude,decimallongitude,coordinateuncertaintyinmeters,coordinateprecision,elevation,elevationaccuracy,depth,depthaccuracy,eventdate,day,month,year,taxonkey,specieskey,basisofrecord,institutioncode,collectioncode,catalognumber,recordnumber,identifiedby,dateidentified,license,rightsholder,recordedby,typestatus,establishmentmeans,lastinterpreted,mediatype,issue)&CQL_FILTER=${codigo}`, function () {
-        $('#descarga').hide()
-      });
-
-      /*
-      setTimeout(function () {
-        // window.alert("Loading Files\nEsto Tardara algún tiempo")   
-            
-      }, 1000)*/
-
-      // se comprimen los archivos de las peticiones anteriores, el archivo de registros biologicos primero se guarda dentro de una carpeta
-      //y luego se comprime la carpeta
-      var zip = new JSZip();
-      zip.file(`lista_especies_${title_mupio}.csv`, promise)
-      var rb = zip.folder("registros_biológicos")
-      rb.file(`registros_${title_mupio}.csv`, promise2)
+      // se comprimen los archivos de las peticiones anteriores
+            var zip = new JSZip();
+      zip.file('lista_especies_'+nomdownload+'.csv', promise);
+      var rb = new Blob([promise2], {type: "text/plain;charset=utf-8"});
+      zip.file('registros_'+nomdownload+'.csv', promise2);
       zip.generateAsync({ type: "blob" }).then(function (blob) {
-        saveAs(blob, `${title_mupio}.zip`)
+        saveAs(blob, nomdownload+'.zip');
       });
-
-
-      
-
-      //asi se hacia anteriormente, se abria una nueva ventana y luego se le asignaba la url de la petición al geoserver
-      /*
-      let urlAmenazadas=`gbif/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=gbif%3Alista_especies_consulta&outputFormat=csv&CQL_FILTER=${codigo}&PropertyName=(reino,filo,clase,orden,familia,genero,especies,endemicas,amenazadas,exoticas)`
-      downloadData(urlAmenazadas)*/
-
-      /*
-      let urlGbif=`gbif/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=gbif%3Aregistros_biologicos_consulta&outputFormat=csv&PropertyName=(gbifid,datasetkey,occurrenceid,kingdom,phylum,class,order_,family,genus,species,infraspecificepithet,taxonrank,scientificname,verbatimscientificname,verbatimscientificnameauthorship,countrycode,locality,stateprovince,occurrencestatus,individualcount,publishingorgkey,decimallatitude,decimallongitude,coordinateuncertaintyinmeters,coordinateprecision,elevation,elevationaccuracy,depth,depthaccuracy,eventdate,day,month,year,taxonkey,specieskey,basisofrecord,institutioncode,collectioncode,catalognumber,recordnumber,identifiedby,dateidentified,license,rightsholder,recordedby,typestatus,establishmentmeans,lastinterpreted,mediatype,issue)&CQL_FILTER=${codigo}`
-      downloadData(urlGbif)
-      */
-
     }
   }
 
   var handleError = () => {
     alert('No fue posible almacenar su información')
   }
-
   pythonPostRequest('requestcreate/', json, handleCallback, handleError)
-
 });
