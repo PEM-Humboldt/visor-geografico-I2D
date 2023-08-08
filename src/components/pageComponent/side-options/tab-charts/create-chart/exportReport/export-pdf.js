@@ -11,6 +11,8 @@ import {chartReg,chartDangerSp} from '../../chart'
 
 import {textGbif,textDanger,textReferences,dangerString} from './config/pdf-text'
 import { title_mupio } from "../../../../../globalVars";
+import {nomdownload} from "./export-modal"
+
 // /** Function that exports PDF*/
 
 export function savePDF() {
@@ -126,7 +128,7 @@ export function savePDF() {
         };
 
       
-        pdfMake.createPdf(doc).download(`Reporte de Biodiversidad ${title_mupio}.pdf`);
+        pdfMake.createPdf(doc).download(`Reporte de Biodiversidad ${nomdownload}.pdf`);
       
     });
 }
