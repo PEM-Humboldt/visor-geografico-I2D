@@ -10,8 +10,8 @@ import {todayDate} from '../../../../../globalVars'
 import {chartReg,chartDangerSp} from '../../chart'
 
 import {textGbif,textDanger,textReferences,dangerString} from './config/pdf-text'
-import { title_mupio } from "../../../../../globalVars";
-import {nomdownload} from "./export-modal"
+import { title_mupio, title_depto, cod_mupio, cod_dpto } from "../../../../../globalVars";
+//import {nomdownload} from "./export-modal"
 
 // /** Function that exports PDF*/
 
@@ -71,7 +71,7 @@ export function savePDF() {
                 footerpdf: 'http://i2d.humboldt.org.co/visor-I2D/'+footeri2d,
 
                 // i2d: 'http://localhost:1234/'+logoi2d,
-                // // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
+                // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
                 // footerpdf: 'http://localhost:1234/'+footeri2d,
             },
             pageBreakBefore: function(currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {
@@ -126,10 +126,14 @@ export function savePDF() {
             }
             
         };
-
-      
+        let selectedStadistics = document.getElementById("stadisticstype").value;
+        let nomdownload = '';
+        if (selectedStadistics == 'mpio_politico') {
+            nomdownload = `${title_mupio}`;
+          } else {
+            nomdownload = `${title_depto}`;
+          }
         pdfMake.createPdf(doc).download(`Reporte de Biodiversidad ${nomdownload}.pdf`);
-      
     });
 }
   
