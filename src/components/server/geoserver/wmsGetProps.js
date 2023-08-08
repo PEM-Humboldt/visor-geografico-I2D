@@ -31,6 +31,9 @@ export var wmsGetProps=(AllLayers,i,coordinate,Selection)=>{
     // if is a point or if not 
     //let resolution=layer=='procesos_gobernanza'?getResolution(): 1;
     let resolution=layer==layer?getResolution(): 1;
+    if (resolution > 200){
+        resolution=200;
+    }
     var url = wmsSource[i].getFeatureInfoUrl(
         coordinate, resolution, getProjection(),
         {'INFO_FORMAT': infoFormat}
@@ -40,7 +43,6 @@ export var wmsGetProps=(AllLayers,i,coordinate,Selection)=>{
         success: function (data) {
             var feat = feats(data);
             var features = feat.getFeatures();
-    
             if(features.length>0){
                 var selectedStadistics =$('#stadisticstype').children("option:selected").val()
 

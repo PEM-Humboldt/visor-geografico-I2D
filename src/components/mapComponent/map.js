@@ -47,7 +47,7 @@ export const fitView=(ext)=>{
 }
 // zoom to layer with center
 export const fitCenter=(ext)=>{
-  let zoom=getZoom()>8?getZoom:8;
+  let zoom=getZoom()>8.5?getZoom:8.5;
   map.getView().animate({center: ext, zoom: zoom})
   
 }
