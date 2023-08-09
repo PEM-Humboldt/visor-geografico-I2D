@@ -2,7 +2,7 @@ import logoi2d from '../../../../../../assets/img/logo-humboldt-v2.png'
 import footeri2d from '../../../../../../assets/img/footer.png'
 
 import pdfMake from "pdfmake/build/pdfmake.min";
-// import pdfFonts from "pdfmake/build/vfs_fonts";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 // pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 import {todayDate} from '../../../../../globalVars'
@@ -17,12 +17,12 @@ import { title_mupio, title_depto, cod_mupio, cod_dpto } from "../../../../../gl
 
 export function savePDF() {
     Promise.all([
-        chartReg.exporting.pdfmake,
+        //chartReg.exporting.pdfmake,
         chartReg.exporting.getJSON("json"),
         chartDangerSp.exporting.getJSON("json")
         // chartSp.exporting.getImage("png"),
     ]).then(function(res) { 
-        var pdfMake = res[0];   
+        //var pdfMake = res[0];   
 
         // Create document template
         var doc = {
@@ -35,8 +35,8 @@ export function savePDF() {
                     text: ['Bogotá, D.C. ',todayDate],
                     style: 'ubicacion'
                 },
-                textGbif(res[1]),
-                textDanger(res[2]),
+                textGbif(res[0]),
+                textDanger(res[1]),
                 textReferences()
                 
             ],
@@ -66,13 +66,13 @@ export function savePDF() {
             },
             // TODO: change the static url if change the domain
             images: {
-                i2d: 'http://i2d.humboldt.org.co/visor-I2D/'+logoi2d,
+                //i2d: 'http://i2d.humboldt.org.co/visor-I2D/'+logoi2d,
                 // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
-                footerpdf: 'http://i2d.humboldt.org.co/visor-I2D/'+footeri2d,
+                //footerpdf: 'http://i2d.humboldt.org.co/visor-I2D/'+footeri2d,
 
-                // i2d: 'http://localhost:1234/'+logoi2d,
+                 i2d: 'http://localhost:1234/'+logoi2d,
                 // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
-                // footerpdf: 'http://localhost:1234/'+footeri2d,
+                 footerpdf: 'http://localhost:1234/'+footeri2d,
             },
             pageBreakBefore: function(currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {
                 //check if signature part is completely on the last page, add pagebreak if not
@@ -128,14 +128,17 @@ export function savePDF() {
         };
         //let selectedStadistics = document.getElementById("stadisticstype").value;
         //let nomdownload = '';
+        let pdfprint = pdfMake.createPdf(doc);
+        pdfprint.vfs = pdfFonts.pdfMake.vfs;
         if (document.getElementById("stadisticstype").value == 'mpio_politico') {
             //nomdownload = `${title_mupio}`;
-            pdfMake.createPdf(doc).download(`Reporte de Biodiversidad ${title_mupio}.pdf`);
+            pdfprint.download(`Reporte de Biodiversidad ${title_mupio}.pdf`);
+            //pdfMake.createPdf(doc).download(`Reporte de Biodiversidad ${title_mupio}.pdf`);
           } else {
             //nomdownload = `${title_depto}`;
-            pdfMake.createPdf(doc).download(`Reporte de Biodiversidad ${title_depto}.pdf`);
+            pdfprint.download(`Reporte de Biodiversidad ${title_depto}.pdf`);
+            //pdfMake.createPdf(doc).download(`Reporte de Biodiversidad ${title_depto}.pdf`);
           }
-        //pdfMake.createPdf(doc).download(`Reporte de Biodiversidad ${nomdownload}.pdf`);
     });
 }
   
