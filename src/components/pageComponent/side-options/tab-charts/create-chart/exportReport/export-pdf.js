@@ -66,13 +66,13 @@ export function savePDF() {
             },
             // TODO: change the static url if change the domain
             images: {
-                //i2d: 'http://i2d.humboldt.org.co/visor-I2D/'+logoi2d,
+                i2d: 'http://i2d.humboldt.org.co/visor-I2D/'+logoi2d,
                 // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
-                //footerpdf: 'http://i2d.humboldt.org.co/visor-I2D/'+footeri2d,
+                footerpdf: 'http://i2d.humboldt.org.co/visor-I2D/'+footeri2d,
 
-                 i2d: 'http://localhost:1234/'+logoi2d,
+                // i2d: 'http://localhost:1234/'+logoi2d,
                 // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
-                 footerpdf: 'http://localhost:1234/'+footeri2d,
+                // footerpdf: 'http://localhost:1234/'+footeri2d,
             },
             pageBreakBefore: function(currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {
                 //check if signature part is completely on the last page, add pagebreak if not
