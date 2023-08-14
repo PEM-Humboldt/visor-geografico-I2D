@@ -7,7 +7,7 @@ import { savePDF } from './export-pdf'
 import { pythonPostRequest } from '../../../../../server/pythonserver/pythonRequest'
 //import { downloadData } from '../../../../../server/geoserver/geoserverRequest'
 
-import { cod_mupio, cod_dpto, title_mupio, title_depto} from "../../../../../globalVars";
+import { cod_mupio, cod_dpto, title_mupio, title_depto } from "../../../../../globalVars";
 
 import JSZip from "jszip";
 
@@ -87,9 +87,9 @@ $(document).on('submit', 'form#formSolicitante', function (e) {
   var handleCallback = () => {
     var selectedStadistics = $('#stadisticstype').children("option:selected").val();
     let codigo = '';
-    var nomdownload = '';
-    var cod = '';
-    var textmundep ='';
+    let nomdownload = '';
+    let cod = '';
+    let textmundep = '';
     if (selectedStadistics == 'mpio_politico') {
       codigo = `codigo_mpio=%27${cod_mupio}%27`
       cod = `${codigo}`.replace(/%27/g, "'");
@@ -113,27 +113,99 @@ $(document).on('submit', 'form#formSolicitante', function (e) {
       // download csv gbif
       //posicionamiento del recuadro de descarga
       $('#download-resume').hide();
-      $('#download-status').show()
-      .prepend('<span class="textoagr">Descargando los datos para el' + textmundep + 'de ' + nomdownload + ' . . .<\span>');
+      //$('#download-status').show().prepend('<span class="textoagr">Descargando los datos para el' + textmundep + 'de ' + nomdownload + ' . . .<\span>');
+      $('#download-status').show().prepend('<span class="textoagr">¡Prepárate para un viaje de datos por el hermoso ' + textmundep + ' de ' + nomdownload + '!<br>Por favor, ten un poco de paciencia mientras reunimos la información. 🌄✨🔍<\span>');
+      let pageSize = 800000; // Tamaño de página
+      let pageNum = 1;     // Número de página inicial
+      let zip = new JSZip();
+      //console.log(zip);
+      // Función para hacer una solicitud paginada y agregar resultados al archivo ZIP
+      function fetchAndAddToZip() {
+        var promise2 = fetchPagePromise(pageNum); // Comenzamos en la página 1
+        function fetchPagePromise(pageNumber) {
+          return $.get(`http://44.195.233.148:8080/geoserver/gbif/ows`, {
+            service: 'WFS',
+            version: '1.0.0',
+            request: 'GetFeature',
+            typeName: 'gbif:registros_biologicos_consulta',
+            outputFormat: 'csv',
+            PropertyName: '(datasetkey,occurrenceid,kingdom,phylum,class,order_,family,genus,species,infraspecificepithet,taxonrank,scientificname,verbatimscientificname,verbatimscientificnameauthorship,countrycode,locality,stateprovince,occurrencestatus,individualcount,publishingorgkey,decimallatitude,decimallongitude,coordinateuncertaintyinmeters,coordinateprecision,elevation,elevationaccuracy,depth,depthaccuracy,eventdate,day,month,year,taxonkey,specieskey,basisofrecord,institutioncode,collectioncode,catalognumber,recordnumber,identifiedby,dateidentified,license,rightsholder,recordedby,typestatus,establishmentmeans,lastinterpreted,mediatype,issue)',
+            CQL_FILTER: cod,
+            startIndex: (pageNumber - 1) * pageSize, // Calcular el índice de inicio de la página
+            maxFeatures: pageSize // Tamaño de la página
+          });
+        }
+        return promise2.then(function (data2) {
+          zip.file('registros_' + nomdownload + '_' + pageNum + '.csv', data2);
+          // Dividir el contenido en líneas
+          let lines = data2.split('\n');
+          // Si hay más resultados, sigue paginando
+          if (lines.length === 800002) {
+            $("#alertText").text("Estamos recopilando datos para ti. Mantén la ventana abierta y deja que la descarga te sorprenda en unos minutos. ✨📁");
+            $("#alert").removeClass("d-none");
+            pageNum++;
+            return fetchAndAddToZip();
+          }
+        });
+      }
 
-      /*var cod = `${codigo}`.replace(/%27/g, "'");
-      console.log(cod);
-      console.log(codigo);*/
+      let promise1 = $.get(`http://44.195.233.148:8080/geoserver/gbif/ows`,
+        {
+          service: 'WFS',
+          version: '1.0.0',
+          request: 'GetFeature',
+          typeName: 'gbif:lista_especies_consulta',
+          outputFormat: 'csv',
+          CQL_FILTER: cod,
+          PropertyName: '(reino,filo,clase,orden,familia,genero,especies,endemicas,amenazadas,exoticas)'
+        });
 
+      let species_unique = new Blob();
+      promise1.then(function (data1) {
+        let processedSpecies = {}; // Objeto para realizar un seguimiento de las especies procesadas
+        // Filtrar y procesar registros
+        var filteredRecords = data1
+          .split('\n') // Dividir por líneas
+          .filter(function (line, index) {
+            if (index === 0) return true; // Mantener el encabezado
+            let species = line.split(',')[7]; // Obtener el valor del campo 'especies'
+            if (!processedSpecies[species]) {
+              processedSpecies[species] = true; // Marcar la especie como procesada
+              return true; // Mantener el registro
+            }
+            return false; // Filtrar duplicados
+          })
+          .join('\n'); // Unir nuevamente las líneas
+        // Ahora 'filteredRecords' contiene los registros filtrados
+        //console.log(filteredRecords);
+        // Aquí puedes guardar 'filteredRecords' en un nuevo archivo CSV
+        species_unique = new Blob([filteredRecords], { type: 'text/csv;charset=utf-8;' });
+        //var link = document.createElement("a");
+      });
 
-
-      
-      // se asigna una petición get al geoserver para la lista de especies y para los registros biologicos respectivamente
-      var promise = $.get(`http://44.195.233.148:8080/geoserver/gbif/ows`, { service: 'WFS', version: '1.0.0', request: 'GetFeature', typeName: 'gbif:lista_especies_consulta', outputFormat: 'csv', CQL_FILTER: cod, PropertyName: '(reino,filo,clase,orden,familia,genero,especies,endemicas,amenazadas,exoticas)' });
-      var promise2 = $.get(`http://44.195.233.148:8080/geoserver/gbif/ows`, { service: 'WFS', version: '1.0.0', request: 'GetFeature', typeName: 'gbif:registros_biologicos_consulta', outputFormat: 'csv', PropertyName: '(datasetkey,occurrenceid,kingdom,phylum,class,order_,family,genus,species,infraspecificepithet,taxonrank,scientificname,verbatimscientificname,verbatimscientificnameauthorship,countrycode,locality,stateprovince,occurrencestatus,individualcount,publishingorgkey,decimallatitude,decimallongitude,coordinateuncertaintyinmeters,coordinateprecision,elevation,elevationaccuracy,depth,depthaccuracy,eventdate,day,month,year,taxonkey,specieskey,basisofrecord,institutioncode,collectioncode,catalognumber,recordnumber,identifiedby,dateidentified,license,rightsholder,recordedby,typestatus,establishmentmeans,lastinterpreted,mediatype,issue)', CQL_FILTER: cod }, function () { $('#download-status').hide().find('.textoagr').remove(); $('#download-resume').show(); });
-      
-      // se comprimen los archivos de las peticiones anteriores
-            var zip = new JSZip();
-      zip.file('lista_especies_'+nomdownload+'.csv', promise);
-      var rb = new Blob([promise2], {type: "text/plain;charset=utf-8"});
-      zip.file('registros_'+nomdownload+'.csv', promise2);
-      zip.generateAsync({ type: "blob" }).then(function (blob) {
-        saveAs(blob, nomdownload+'.zip');
+      $.when(promise1, fetchAndAddToZip()).done(function (/*data1*/) {
+        zip.file('lista_especies_' + nomdownload + '.csv', species_unique);
+        //console.log(zip);
+        zip.generateAsync({
+          type: "blob",
+          compression: "DEFLATE",
+          compressionOptions: {
+            level: 9
+          }
+        }, function updateCallback(metadata) {
+          //console.log("progreso: " + metadata.percent.toFixed(2) + " %");
+          $('#download-status').find('.textoagr').remove();
+          $('#download-status').prepend('<span class="textoagr"> ... ¡' + metadata.percent.toFixed(2) + '% completado!' + '<\span>');
+          if (metadata.currentFile) {
+            //console.log("current file = " + metadata.currentFile);
+            $('#download-status').prepend('<span class="textoagr"> Empacando los datos ' + metadata.currentFile + '<\span>');
+          }
+        }).then(function (blob) {
+          //console.log("vamos a comprimir");
+          saveAs(blob, nomdownload + '.zip');
+          $('#download-status').hide().find('.textoagr').remove();
+          $('#download-resume').show();
+        });
       });
     }
   }

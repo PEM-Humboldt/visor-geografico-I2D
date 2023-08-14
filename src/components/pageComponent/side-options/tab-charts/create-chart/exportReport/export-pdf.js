@@ -5,13 +5,12 @@ import pdfMake from "pdfmake/build/pdfmake.min";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 // pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-import {todayDate} from '../../../../../globalVars'
+import { todayDate } from '../../../../../globalVars'
 
-import {chartReg,chartDangerSp} from '../../chart'
+import { chartReg, chartDangerSp } from '../../chart'
 
-import {textGbif,textDanger,textReferences,dangerString} from './config/pdf-text'
-import { title_mupio, title_depto, cod_mupio, cod_dpto } from "../../../../../globalVars";
-//import {nomdownload} from "./export-modal"
+import { textGbif, textDanger, textReferences, dangerString } from './config/pdf-text'
+import { title_mupio, title_depto } from "../../../../../globalVars";
 
 // /** Function that exports PDF*/
 
@@ -21,7 +20,7 @@ export function savePDF() {
         chartReg.exporting.getJSON("json"),
         chartDangerSp.exporting.getJSON("json")
         // chartSp.exporting.getImage("png"),
-    ]).then(function(res) { 
+    ]).then(function (res) {
         //var pdfMake = res[0];   
 
         // Create document template
@@ -32,52 +31,52 @@ export function savePDF() {
             verticalRatio: 0.4,
             content: [
                 {
-                    text: ['Bogotá, D.C. ',todayDate],
+                    text: ['Bogotá, D.C. ', todayDate],
                     style: 'ubicacion'
                 },
                 textGbif(res[0]),
                 textDanger(res[1]),
                 textReferences()
-                
+
             ],
-            footer: function(currentPage, pageCount) { 
+            footer: function (currentPage, pageCount) {
                 return [
                     {
                         image: 'footerpdf',
                         width: 410,
                         height: 80,
                         alignment: 'center',
-                        opacity:0.5,
+                        opacity: 0.5,
                         margin: [0, 0, 0, 0]
                     }
-                  ]
+                ]
             },
-            header: function(currentPage, pageCount, pageSize) {
+            header: function (currentPage, pageCount, pageSize) {
                 return [
-                    { 
+                    {
                         image: 'i2d',
                         width: 100,
                         height: 100,
                         alignment: 'right',
-                        opacity:0.5,
+                        opacity: 0.5,
                         margin: [0, 0, 35, 0]
                     }
                 ]
             },
             // TODO: change the static url if change the domain
             images: {
-                i2d: 'http://i2d.humboldt.org.co/visor-I2D/'+logoi2d,
+                i2d: 'http://i2d.humboldt.org.co/visor-I2D/' + logoi2d,
                 // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
-                footerpdf: 'http://i2d.humboldt.org.co/visor-I2D/'+footeri2d,
+                footerpdf: 'http://i2d.humboldt.org.co/visor-I2D/' + footeri2d,
 
                 // i2d: 'http://localhost:1234/'+logoi2d,
                 // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
                 // footerpdf: 'http://localhost:1234/'+footeri2d,
             },
-            pageBreakBefore: function(currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {
+            pageBreakBefore: function (currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {
                 //check if signature part is completely on the last page, add pagebreak if not
-                if (currentNode.id === 'dangerData' && dangerString > 0 ) {
-                  return true;
+                if (currentNode.id === 'dangerData' && dangerString > 0) {
+                    return true;
                 }
                 return false;
             },
@@ -111,34 +110,28 @@ export function savePDF() {
                     alignment: 'left',
                     margin: [40, 0, 40, 0]
                 },
-                underline:{
-                    decoration: 'underline', 
-                    decorationColor: 'blue', 
-                    color:'blue'
+                underline: {
+                    decoration: 'underline',
+                    decorationColor: 'blue',
+                    color: 'blue'
                 },
-                underlineBlack:{
+                underlineBlack: {
                     alignment: 'left',
-                    decoration: 'underline', 
-                    decorationColor: 'black', 
-                    color:'black',
+                    decoration: 'underline',
+                    decorationColor: 'black',
+                    color: 'black',
                     margin: [40, 0, 40, 0]
                 }
             }
-            
+
         };
-        //let selectedStadistics = document.getElementById("stadisticstype").value;
-        //let nomdownload = '';
+
         let pdfprint = pdfMake.createPdf(doc);
         pdfprint.vfs = pdfFonts.pdfMake.vfs;
         if (document.getElementById("stadisticstype").value == 'mpio_politico') {
-            //nomdownload = `${title_mupio}`;
             pdfprint.download(`Reporte de Biodiversidad ${title_mupio}.pdf`);
-            //pdfMake.createPdf(doc).download(`Reporte de Biodiversidad ${title_mupio}.pdf`);
-          } else {
-            //nomdownload = `${title_depto}`;
+        } else {
             pdfprint.download(`Reporte de Biodiversidad ${title_depto}.pdf`);
-            //pdfMake.createPdf(doc).download(`Reporte de Biodiversidad ${title_depto}.pdf`);
-          }
+        }
     });
 }
-  
