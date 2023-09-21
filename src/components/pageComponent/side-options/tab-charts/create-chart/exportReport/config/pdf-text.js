@@ -58,7 +58,7 @@ export var textGbif =(res)=>{
             },
             {
                 text: [
-                    'A partir de la capa geoespacial correspondiente al '+infoInteres+', se extrajeron los registros de presencia de especies biológicas que han reportado para la zona de interés. La base de datos utilizada para extraer los registros de presencia es la publicada por la Infraestructura Mundial de Información en Biodiversidad (GBIF), dicha base de datos es la fuente disponible más completa en este momento y contiene todos los registros de presencia publicados por el Instituto Humboldt, los publicados por otras instituciones colombianas e integrados en el Sistema de Información sobre Biodiversidad de Colombia (SiB Colombia, https:// www.sibcolombia.net/ ) y todos aquellos registros de especies en el territorio Colombiano publicados por instituciones y organizaciones desde el exterior. Desde el Instituto Humboldt garantizamos la calidad de nuestra información, no obstante, la información de otras instituciones debe ser evaluada con precaución. Cabe aclarar que los registros de presencia de especies publicados en GBIF son solamente una aproximación a la riqueza y abundancia de especies que se presentan en el territorio nacional. \n \n', 
+                    'A partir de la capa geoespacial correspondiente al '+infoInteres+', se extrajeron los registros biológicos que han reportado para la zona de interés. La base de datos utilizada para extraer los registros de presencia es la publicada por la Infraestructura Mundial de Información en Biodiversidad (GBIF), dicha base de datos es la fuente disponible más completa en este momento y contiene todos los registros de presencia publicados por el Instituto Humboldt, los publicados por otras instituciones colombianas e integrados en el Sistema de Información sobre Biodiversidad de Colombia (SiB Colombia, https:// www.sibcolombia.net/ ) y todos aquellos registros de especies en el territorio Colombiano publicados por instituciones y organizaciones desde el exterior. Desde el Instituto Humboldt garantizamos la calidad de nuestra información, no obstante, la información de otras instituciones debe ser evaluada con precaución. Cabe aclarar que los registros publicados en GBIF son solamente una aproximación a la riqueza y abundancia de especies que se presentan en el territorio nacional. \n \n', 
                     'En total se reportaron ', totalRegisters,' registros de presencia de especies que representan ',
                     totalAnimals , ' especies de animales y ',
                     totalPlants , ' de plantas (Tabla 1, Anexo 1) en la zona de interés, de estas cifras se puede resaltar la presencia de ',
@@ -67,7 +67,7 @@ export var textGbif =(res)=>{
                 style: 'parrafo'
             },
             {
-                text: 'Tabla 1. Registros de presencia de especies en la zona de interés.\n\n',
+                text: 'Tabla 1. Registros de especies en la zona de interés.\n\n',
                 style: 'italic'
             },
             table(milesstr, Object.keys(title),title),
