@@ -30,19 +30,19 @@ export var highlightStadistics = new VectorLayer({
 
 // Captura la URL actual
 var urlActual = window.location.href;
-
+let proyectos;
 if (urlActual.includes("proyecto=ecoreservas")) {
-    var proyecto = 'ecoreservas';
+    proyectos = 'ecoreservas';
 } else {
-    var proyecto = 'general';
+    proyectos = 'general';
 }
-export var proyecto;
+export var proyecto = proyectos;
 //Capas control layer
 //Capas Basica
 export var mpios = wmsLayer('Capas_Base', 'mpio_politico', 'Municipios', true, '');
 export var deptos = wmsLayer('Capas_Base', 'dpto_politico', 'Departamentos', true, '');
 
-if (proyecto === 'general') {
+if (proyectos === 'general') {
     var aicas = wmsLayer('Historicos', 'aicas', 'AICAS', false, '09ee583d-d397-4eb8-99df-92bb6f0d0c4c');
     var bosque_seco_tropical = wmsLayer('Historicos', 'bosque_seco_tropical', 'Bosque Seco Tropical 2014', false, 'eca845f9-dea1-4e86-b562-27338b79ef29');
     var bosque_seco_tropical_2018 = wmsLayer('Historicos', 'BST2018', 'Bosque Seco Tropical 2018', false, '6ccd867c-5114-489f-9266-3e5cf657a375');
@@ -77,7 +77,7 @@ if (proyecto === 'general') {
     var mincost_target4 = wmsLayer('weplan', 'mincost_target4', 'mincost target 4', false, '1d6b06b6-8a57-4c87-97ef-e156cb40dc46');
     var target1_1millon_ce = wmsLayer('weplan', 'target1_1millon_ce', 'target1 1 millon ce', false, '1d6b06b6-8a57-4c87-97ef-e156cb40dc46');
     var target4_6millon_ce = wmsLayer('weplan', 'target4_6millon_ce', 'target4 6 millon ce', false, '1d6b06b6-8a57-4c87-97ef-e156cb40dc46');
-} else if (proyecto === 'ecoreservas') {
+} else if (proyectos === 'ecoreservas') {
     var p_best_comp = wmsLayer('ecoreservas', 'p_best_comp', 'p best comp', true, '');
     var p_best_comp1 = wmsLayer('ecoreservas', 'p_best_comp1', 'p best comp.', false, '');
     var p_best_vol = wmsLayer('ecoreservas', 'p_best_vol', 'p best vol', false, '');
@@ -114,7 +114,7 @@ export var division_base = new GroupLayer({
 });
 let historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, gobernanza, viveros, targetmill, comp_preservacion, comp_restauracion, comp_uso_sostenible, inv1_preservacion, inv1_restauracion, inv1_uso_sostenible, invv_preservacion, invv_restauracion, invv_uso_sostenible
 
-if (proyecto === 'general') {
+if (proyectos === 'general') {
     historicos = new GroupLayer({
         fold: 'close',
         title: 'Historicos',
@@ -157,7 +157,7 @@ if (proyecto === 'general') {
         layers: [mincost_target4, target1_1millon_ce, target4_6millon_ce],
         name: 'We Plan'
     });
-} else if (proyecto === 'ecoreservas') {
+} else if (proyectos === 'ecoreservas') {
     comp_preservacion = new GroupLayer({
         fold: 'close',
         title: 'Preservación',
