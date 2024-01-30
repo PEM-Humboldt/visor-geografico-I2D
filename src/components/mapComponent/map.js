@@ -69,7 +69,6 @@ if (proyecto === 'general') {
   selectedLayers = {
     layer_base: allLayers.layer_base,
     division_base: allLayers.division_base,
-    //historicos: allLayers.historicos,
     comp_preservacion: allLayers.comp_preservacion,
     comp_restauracion: allLayers.comp_restauracion,
     comp_uso_sostenible: allLayers.comp_uso_sostenible,
@@ -82,7 +81,6 @@ if (proyecto === 'general') {
     highlightStadistics: allLayers.highlightStadistics,
     highlightPoint: allLayers.highlightPoint,
     highlight: allLayers.highlight
-    // Agrega otras capas específicas de 'ecoreservas' si es necesario
   };
 }
 
