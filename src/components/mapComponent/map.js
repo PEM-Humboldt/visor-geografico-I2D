@@ -9,7 +9,7 @@ import { getCenter } from 'ol/extent';
 
 // Importa todas las capas por defecto
 import * as layers from './layers';
-import { proyecto } from './layers';
+//import { proyecto } from './layers';
 
 import { onClickMap } from './controls/map-click'
 import { buildLayerTree, findBy } from './controls/tree-layers';
@@ -46,7 +46,8 @@ const allLayers = {
 let selectedLayers;
 let nzoom;
 let ncenter;
-if (proyecto === 'general') {
+console.log(layers.proyecto);
+if (layers.proyecto === 'general') {
   nzoom = 6;
   ncenter = [-8113332, 464737];
   selectedLayers = {
@@ -63,7 +64,7 @@ if (proyecto === 'general') {
     highlightPoint: allLayers.highlightPoint,
     highlight: allLayers.highlight
   };
-} else if (proyecto === 'ecoreservas') {
+} else if (layers.proyecto === 'ecoreservas') {
   nzoom = 9.2;
   ncenter = [-8249332, 544737];
   selectedLayers = {
