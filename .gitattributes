@@ -1,0 +1,6 @@
+# Archivos que deben tener saltos de línea LF en todos los sistemas
+*.css text eol=lf
+*.js text eol=lf
+# Otros archivos binarios que no deben ser modificados por Git
+*.jpg binary
+*.png binary
