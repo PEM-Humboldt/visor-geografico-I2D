@@ -6,14 +6,31 @@ import { GeoJSON } from 'ol/format'
 import { wmsLayer } from '../server/geoserver/wms'
 import { styleMpio, styleHighlight, styleHighlightPoint } from './layer-style/layers-style'
 
+// Captura la URL actual
+var urlActual = window.location.href;
+let proyectos;
+let streetma;
+let CartoDB_Positro;
+
+if (urlActual.includes("proyecto=ecoreservas")) {
+    proyectos = 'ecoreservas';
+    streetma = new TileLayer({ title: 'Streetmap', visible: false, source: new OSM({ crossOrigin: null }), maxZoom: 20, minResolution: 2, name: 'Street Map' });
+    CartoDB_Positro = new TileLayer({ title: 'CartoDB Positron', visible: true, source: new XYZ({ url: 'http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png' }), attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" rel="noopener">CARTO</a>', subdomains: 'abcd', maxZoom: 19, name: 'CartoDB Positron' });
+} else {
+    proyectos = 'general';
+    streetma = new TileLayer({ title: 'Streetmap', visible: true, source: new OSM({ crossOrigin: null }), maxZoom: 20, minResolution: 2, name: 'Street Map' });
+    CartoDB_Positro = new TileLayer({ title: 'CartoDB Positron', visible: false, source: new XYZ({ url: 'http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png' }), attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" rel="noopener">CARTO</a>', subdomains: 'abcd', maxZoom: 19, name: 'CartoDB Positron' });
+}
+export var proyecto = proyectos;
+
 //Capa base
-export var streetmap = new TileLayer({ title: 'Streetmap', visible: true, source: new OSM({ crossOrigin: null }), maxZoom: 20, minResolution: 2, name: 'Street Map' });
+export  var streetmap = streetma;// = new TileLayer({ title: 'Streetmap', visible: true, source: new OSM({ crossOrigin: null }), maxZoom: 20, minResolution: 2, name: 'Street Map' });
 var otm = new TileLayer({ title: 'OTM', visible: false, source: new XYZ({ url: "https://tile.opentopomap.org/{z}/{x}/{y}.png", attributions: ' © OpenStreetMap contributors' }), name: 'OTM' });
 var bw = new TileLayer({ title: 'B & W', visible: false, source: new XYZ({ url: "http://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png", attributions: ' © OpenStreetMap contributors' }), name: 'BW' });
 var terrain = new TileLayer({ title: 'Terrain', visible: false, source: new XYZ({ url: "http://a.tile.stamen.com/terrain/{z}/{x}/{y}.png", attributions: ' © OpenStreetMap contributors' }), name: 'Terrain' });
 var Esri_WorldPhysical = new TileLayer({ title: 'Esri WorldPhysical', visible: false, attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service', source: new XYZ({ url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}' }), maxZoom: 8, name: 'Esri WorldPhysical' });
 var Esri_WorldImagery = new TileLayer({ title: 'Esri WorldImagery', visible: false, source: new XYZ({ url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}' }), attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community', name: 'Esri WorldImagery' });
-export var CartoDB_Positron = new TileLayer({ title: 'CartoDB Positron', visible: false, source: new XYZ({ url: 'http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png' }), attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" rel="noopener">CARTO</a>', subdomains: 'abcd', maxZoom: 19, name: 'CartoDB Positron' });
+export var CartoDB_Positron =CartoDB_Positro;// = new TileLayer({ title: 'CartoDB Positron', visible: false, source: new XYZ({ url: 'http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png' }), attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" rel="noopener">CARTO</a>', subdomains: 'abcd', maxZoom: 19, name: 'CartoDB Positron' });
 
 //capa para seleccion
 export var highlight = new VectorLayer({ style: styleHighlight, source: new VectorSource() });
@@ -27,7 +44,7 @@ export var highlightStadistics = new VectorLayer({
     },
     source: new VectorSource()
 });
-
+/*
 // Captura la URL actual
 var urlActual = window.location.href;
 let proyectos;
@@ -36,7 +53,7 @@ if (urlActual.includes("proyecto=ecoreservas")) {
 } else {
     proyectos = 'general';
 }
-export var proyecto = proyectos;
+export var proyecto = proyectos;*/
 //Capas control layer
 //Capas Basica
 export var mpios = wmsLayer('Capas_Base', 'mpio_politico', 'Municipios', true, '');
@@ -78,25 +95,44 @@ if (proyectos === 'general') {
     var target1_1millon_ce = wmsLayer('weplan', 'target1_1millon_ce', 'target1 1 millon ce', false, '1d6b06b6-8a57-4c87-97ef-e156cb40dc46');
     var target4_6millon_ce = wmsLayer('weplan', 'target4_6millon_ce', 'target4 6 millon ce', false, '1d6b06b6-8a57-4c87-97ef-e156cb40dc46');
 } else if (proyectos === 'ecoreservas') {
-    var p_best_comp = wmsLayer('ecoreservas', 'p_best_comp', 'p best comp', true, '');
-    var p_best_comp1 = wmsLayer('ecoreservas', 'p_best_comp1', 'p best comp.', false, '');
-    var p_best_vol = wmsLayer('ecoreservas', 'p_best_vol', 'p best vol', false, '');
-    var p_renta_comp = wmsLayer('ecoreservas', 'p_renta_comp', 'p renta comp', false, '');
-    var p_renta_vol = wmsLayer('ecoreservas', 'p_renta_vol', 'p renta vol', false, '');
-    var p_res_comp = wmsLayer('ecoreservas', 'p_res_comp', 'p res comp', false, '');
-    var p_res_vol = wmsLayer('ecoreservas', 'p_res_vol', 'p res vol', false, '');
-    var r_best_comp = wmsLayer('ecoreservas', 'r_best_comp', 'r best comp', false, '');
-    var r_best_vol = wmsLayer('ecoreservas', 'r_best_vol', 'r best vol', false, '');
-    var r_renta_comp = wmsLayer('ecoreservas', 'r_renta_comp', 'r renta comp', false, '');
-    var r_renta_vol = wmsLayer('ecoreservas', 'r_renta_vol', 'r renta vol', false, '');
-    var r_res_comp = wmsLayer('ecoreservas', 'r_res_comp', 'r res comp', false, '');
-    var r_res_vol = wmsLayer('ecoreservas', 'r_res_vol', 'r res vol', false, '');
-    var us_best_comp = wmsLayer('ecoreservas', 'us_best_comp', 'us best comp', false, '');
-    var us_best_vol = wmsLayer('ecoreservas', 'us_best_vol', 'us best vol', false, '');
-    var us_renta_comp = wmsLayer('ecoreservas', 'us_renta_comp', 'us renta comp', false, '');
-    var us_renta_vol = wmsLayer('ecoreservas', 'us_renta_vol', 'us renta vol', false, '');
-    var us_res_comp = wmsLayer('ecoreservas', 'us_res_comp', 'us res comp', false, '');
-    var us_res_vol = wmsLayer('ecoreservas', 'us_res_vol', 'us res vol', false, '');
+    var p_best_comp = wmsLayer('ecoreservas', 'Preservación_priorizando_todos_los_enfoques_Compensación', 'Todos los enfoques de costos-Inversión en compensación', true, '');
+    var p_best_comp1 = wmsLayer('ecoreservas', 'Preservación_priorizando_todos_los_enfoques_Compensación.', 'Todos los enfoques de costos-Inversión en compensación.', false, '');
+    var p_best_vol = wmsLayer('ecoreservas', 'Preservación_priorizando_todos_los_enfoques_Inversión_Voluntaria', 'Todos los enfoques de costos-Inversiones voluntarias', false, '');
+    var p_renta_comp = wmsLayer('ecoreservas', 'Preservación_priorizando_Costos_de_Oportunidad_Compensación', 'Costos de oportunidad-Inversión en compensación', false, '');
+    var p_renta_vol = wmsLayer('ecoreservas', 'Preservación_riorizando_Costos_de_Oportunidad_Inversión_Voluntaria', 'Costos de oportunidad-Inversiones voluntarias', false, '');
+    var p_res_comp = wmsLayer('ecoreservas', 'Preservación_priorizando_Costos_Abióticos_Compensación', 'Costos ecológicos-Inversión en compensación', false, '');
+    var p_res_vol = wmsLayer('ecoreservas', 'Preservación_priorizando_Costos_Abióticos_Inversión_Voluntaria', 'Costos ecológicos-Inversiones voluntarias', false, '');
+    var r_best_comp = wmsLayer('ecoreservas', 'Restauración_priorizando_todos_los_enfoques_Compensación', 'Todos los enfoques de costos-Inversión en compensación', false, '');
+    var r_best_vol = wmsLayer('ecoreservas', 'Restauración_priorizando_todos_los_enfoques_Inversión_Voluntaria', 'Todos los enfoques de costos-Inversiones voluntarias', false, '');
+    var r_renta_comp = wmsLayer('ecoreservas', 'Restauración_priorizando_Costos_de_Oportunidad_Compensación', 'Costos de oportunidad-Inversión en compensación', false, '');
+    var r_renta_vol = wmsLayer('ecoreservas', 'Restauración_Costos_de_Oportunidad_Inversión_Voluntaria', 'Costos de oportunidad-Inversiones voluntarias', false, '');
+    var r_res_comp = wmsLayer('ecoreservas', 'Restauración_priorizando_Costos_Abióticos_Compensación', 'Costos ecológicos-Inversión en compensación', false, '');
+    var r_res_vol = wmsLayer('ecoreservas', 'Restauración_priorizando_Costos_Abióticos_Inversión_Voluntaria', 'Costos ecológicos-Inversiones voluntarias', false, '');
+    var us_best_comp = wmsLayer('ecoreservas', 'Uso_Sostenible_priorizando_todos_los_enfoques_Compensación', 'Todos los enfoques de costos-Inversión en compensación', false, '');
+    var us_best_vol = wmsLayer('ecoreservas', 'Uso_Sostenible_priorizando_todos_los_enfoques_Inversión_Voluntaria', 'Todos los enfoques de costos-Inversiones voluntarias', false, '');
+    var us_renta_comp = wmsLayer('ecoreservas', 'Uso_Sostenible_priorizando_Costos_de_Oportunidad_Compensación', 'Costos de oportunidad-Inversión en compensación', false, '');
+    var us_renta_vol = wmsLayer('ecoreservas', 'Uso_Sostenible_Costos_de_Oportunidad_Inversión_Voluntaria', 'Costos de oportunidad-Inversiones voluntarias', false, '');
+    var us_res_comp = wmsLayer('ecoreservas', 'Uso_Sostenible_priorizando_Costos_Abióticos_Compensación', 'Costos ecológicos-Inversión en compensación', false, '');
+    var us_res_vol = wmsLayer('ecoreservas', 'Uso_Sostenible_priorizando_Costos_Abióticos_Inversión_Voluntaria', 'Costos ecológicos-Inversiones voluntarias', false, '');
+
+    var p_best_unopor_s = wmsLayer('ecoreservas', 'Preservación_priorizando_todos_los_enfoques_Inversión_no_menos_1_', 'Todos los enfoques de costos-Inversión no menos 1_', true, '');
+    var p_best_vol_s = wmsLayer('ecoreservas', 'Preservación_priorizando_todos_los_enfoques_Inversión_Voluntaria_', 'Todos los enfoques de costos-Inversiones voluntarias_', false, '');
+    var p_renta_unopor_s = wmsLayer('ecoreservas', 'Preservación_priorizando_Costos_de_Oportunidad_Inversión_no_menos_1_', 'Costos de oportunidad-Inversión no menos 1_', false, '');
+    var p_renta_vol_s = wmsLayer('ecoreservas', 'Preservación_riorizando_Costos_de_Oportunidad_Inversión_Voluntaria_', 'Costos de oportunidad-Inversión Voluntaria_', false, '');
+    var p_rest_unopor_s = wmsLayer('ecoreservas', 'Preservación_priorizando_Costos_Abióticos_Inversión_no_menos_1_', 'Costos ecológicos-Inversión no menos 1_', false, '');
+    var p_rest_vol_s = wmsLayer('ecoreservas', 'Preservación_priorizando_Costos_Abióticos_Inversión_Voluntaria_', 'Costos ecológicos-Inversiones voluntarias_', false, '');
+    var r_best_unpor_s = wmsLayer('ecoreservas', 'Restauración_priorizando_todos_los_enfoques_Inversión_no_menos_1_', 'Todos los enfoques de costos-Inversión no menos 1_', false, '');
+    var r_best_vol_s = wmsLayer('ecoreservas', 'Restauración_priorizando_todos_los_enfoques_Inversión_Voluntaria_', 'Todos los enfoques de costos-Inversiones voluntarias_', false, '');
+    var r_renta_unopor_s = wmsLayer('ecoreservas', 'Restauración_Costos_de_Oportunidad_Inversión_no_menos_1_', 'Costos de oportunidad-Inversión no menos 1_', false, '');
+    var r_renta_vol_s = wmsLayer('ecoreservas', 'Restauración_Costos_de_Oportunidad_Inversión_Voluntaria_', 'Costos de oportunidad-Inversiones voluntarias_', false, '');
+    var r_rest_unopor_s = wmsLayer('ecoreservas', 'Restauración_priorizando_Costos_Abióticos_Inversión_no_menos_1_', 'Costos ecológicos-Inversión no menos 1_', false, '');
+    var r_rest_vol_s = wmsLayer('ecoreservas', 'Restauración_priorizando_Costos_Abióticos_Inversión_Voluntaria_', 'Costos ecológicos-Inversiones voluntarias_', false, '');
+    var us_best_unopor_s = wmsLayer('ecoreservas', 'Uso_Sostenible_priorizando_todos_los_enfoques_Inversión_no_menos_1_', 'Todos los enfoques de costos-Inversión no menos 1_', false, '');
+    var us_best_vol_s = wmsLayer('ecoreservas','Uso_Sostenible_priorizando_todos_los_enfoques_Inversión_Voluntaria_', 'Todos los enfoques de costos-Inversiones voluntarias_', false, '');
+    var us_renta_unopor_s = wmsLayer('ecoreservas','Uso_Sostenible_priorizando_Costos_de_Oportunidad_Inversión_no_menos_1_', 'Costos de oportunidad-Inversión no menos 1_', false, '');
+    var us_renta_vol_s = wmsLayer('ecoreservas', 'Uso_Sostenible_Costos_de_Oportunidad_Inversión_Voluntaria_', 'Costos de oportunidad-Inversiones voluntarias_', false, '');
+    var us_rest_unopor_s = wmsLayer('ecoreservas', 'Uso_Sostenible_priorizando_Costos_Abióticos_Inversión_no_menos_1_', 'Costos ecológicos-Inversión no menos 1_', false, '');
+    var us_rest_vol_s = wmsLayer('ecoreservas', 'Uso_Sostenible_priorizando_Costos_Abióticos_Inversión_Voluntaria_', 'Costos ecológicos-Inversiones voluntarias_', false, '');
 }
 //Grupos de capas
 export var layer_base = new GroupLayer({
@@ -112,7 +148,7 @@ export var division_base = new GroupLayer({
     layers: [deptos, mpios],
     name: 'División político-administrativa'
 });
-let historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, gobernanza, viveros, targetmill, comp_preservacion, comp_restauracion, comp_uso_sostenible, inv1_preservacion, inv1_restauracion, inv1_uso_sostenible, invv_preservacion, invv_restauracion, invv_uso_sostenible
+let historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, gobernanza, viveros, targetmill, comp_preservacion, comp_restauracion, comp_uso_sostenible, inv1_preservacion, inv1_restauracion, inv1_uso_sostenible, invv_preservacion, invv_restauracion, invv_uso_sostenible, san_antero4, san_antero5, san_antero6, san_antero7, san_antero8, san_antero9
 
 if (proyectos === 'general') {
     historicos = new GroupLayer({
@@ -212,9 +248,48 @@ if (proyectos === 'general') {
         layers: [us_best_vol, us_renta_vol, us_res_vol],
         name: 'Uso Sostenible'
     });
+
+    //san antero
+    san_antero4 = new GroupLayer({
+        fold: 'close',
+        title: 'Preservación',
+        layers: [p_best_unopor_s, p_renta_unopor_s, p_rest_unopor_s],
+        name: 'Preservación'
+    });
+    san_antero5 = new GroupLayer({
+        fold: 'close',
+        title: 'Restauracion',
+        layers: [r_best_unpor_s, r_renta_unopor_s, r_rest_unopor_s],
+        name: 'Restauracion'
+    });
+    san_antero6 = new GroupLayer({
+        fold: 'close',
+        title: 'Uso Sostenible',
+        layers: [us_best_unopor_s, us_renta_unopor_s, us_rest_unopor_s],
+        name: 'Uso Sostenible'
+    });
+    san_antero7 = new GroupLayer({
+        fold: 'close',
+        title: 'Preservación',
+        layers: [p_best_vol_s, p_renta_vol_s, p_rest_vol_s],
+        name: 'Preservación'
+    });
+    san_antero8 = new GroupLayer({
+        fold: 'close',
+        title: 'Restauracion',
+        layers: [r_best_vol_s, r_renta_vol_s, r_rest_vol_s],
+        name: 'Restauracion'
+    });
+    san_antero9 = new GroupLayer({
+        fold: 'close',
+        title: 'Uso Sostenible',
+        layers: [us_best_vol_s, us_renta_vol_s, us_rest_vol_s],
+        name: 'Uso Sostenible'
+    });
+
 };
 
-export { historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, gobernanza, viveros, targetmill, comp_preservacion, comp_restauracion, comp_uso_sostenible, inv1_preservacion, inv1_restauracion, inv1_uso_sostenible, invv_preservacion, invv_restauracion, invv_uso_sostenible };
+export { historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, gobernanza, viveros, targetmill, comp_preservacion, comp_restauracion, comp_uso_sostenible, inv1_preservacion, inv1_restauracion, inv1_uso_sostenible, invv_preservacion, invv_restauracion, invv_uso_sostenible, san_antero4, san_antero5, san_antero6, san_antero7, san_antero8, san_antero9 };
 
 export var feats = (data) => {
     return new VectorSource({

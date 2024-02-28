@@ -37,6 +37,14 @@ const allLayers = {
   invv_preservacion: layers.invv_preservacion,
   invv_restauracion: layers.invv_restauracion,
   invv_uso_sostenible: layers.invv_uso_sostenible,
+
+  san_antero4: layers.san_antero4,
+  san_antero5: layers.san_antero5,
+  san_antero6: layers.san_antero6,
+  san_antero7: layers.san_antero7,
+  san_antero8: layers.san_antero8,
+  san_antero9: layers.san_antero9,
+
   highlightStadistics: layers.highlightStadistics,
   highlightPoint: layers.highlightPoint,
   highlight: layers.highlight
@@ -46,7 +54,7 @@ const allLayers = {
 let selectedLayers;
 let nzoom;
 let ncenter;
-console.log(layers.proyecto);
+
 if (layers.proyecto === 'general') {
   nzoom = 6;
   ncenter = [-8113332, 464737];
@@ -79,6 +87,14 @@ if (layers.proyecto === 'general') {
     invv_preservacion: allLayers.invv_preservacion,
     invv_restauracion: allLayers.invv_restauracion,
     invv_uso_sostenible: allLayers.invv_uso_sostenible,
+
+    san_antero4: allLayers.san_antero4,
+    san_antero5: allLayers.san_antero5,
+    san_antero6: allLayers.san_antero6,
+    san_antero7: allLayers.san_antero7,
+    san_antero8: allLayers.san_antero8,
+    san_antero9: allLayers.san_antero9,
+
     highlightStadistics: allLayers.highlightStadistics,
     highlightPoint: allLayers.highlightPoint,
     highlight: allLayers.highlight
@@ -142,7 +158,7 @@ map.on('singleclick', function (evt) {
 
 // build control layer
 document.addEventListener("DOMContentLoaded", function () {
-  let layerGroup = getLayerGroup()
+  let layerGroup = getLayerGroup();
   buildLayerTree(layerGroup);
   //Prender o apagar capas
   $('.layers-input').on('click', function () {
@@ -150,4 +166,11 @@ document.addEventListener("DOMContentLoaded", function () {
     var layer = findBy(layerGroup, 'name', layername);
     layer.setVisible(!layer.getVisible());
   });
+  //zoom project
+  $('#combinedCapas_Cundi').on('click', function () {
+    fitCenter(ncenter);
+  });
+  $('#combinedCapas_San').on('click', function () {
+    fitCenter([-8449332, 1030737]);
+  })
 });
