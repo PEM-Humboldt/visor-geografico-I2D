@@ -202,9 +202,9 @@ if (proyectos === 'general') {
     });
     comp_restauracion = new GroupLayer({
         fold: 'close',
-        title: 'Restauracion',
+        title: 'Restauración',
         layers: [r_best_comp, r_renta_comp, r_res_comp],
-        name: 'Restauracion'
+        name: 'Restauración'
     });
     comp_uso_sostenible = new GroupLayer({
         fold: 'close',
@@ -220,9 +220,9 @@ if (proyectos === 'general') {
     });
     inv1_restauracion = new GroupLayer({
         fold: 'close',
-        title: 'Restauracion',
+        title: 'Restauración',
         layers: [r_best_comp, r_renta_comp, r_res_comp],
-        name: 'Restauracion'
+        name: 'Restauración'
     });
     inv1_uso_sostenible = new GroupLayer({
         fold: 'close',
@@ -238,9 +238,9 @@ if (proyectos === 'general') {
     });
     invv_restauracion = new GroupLayer({
         fold: 'close',
-        title: 'Restauracion',
+        title: 'Restauración',
         layers: [r_best_vol, r_renta_vol, r_res_vol],
-        name: 'Restauracion'
+        name: 'Restauración'
     });
     invv_uso_sostenible = new GroupLayer({
         fold: 'close',
@@ -258,9 +258,9 @@ if (proyectos === 'general') {
     });
     san_antero5 = new GroupLayer({
         fold: 'close',
-        title: 'Restauracion',
+        title: 'Restauración',
         layers: [r_best_unpor_s, r_renta_unopor_s, r_rest_unopor_s],
-        name: 'Restauracion'
+        name: 'Restauración'
     });
     san_antero6 = new GroupLayer({
         fold: 'close',
@@ -276,9 +276,9 @@ if (proyectos === 'general') {
     });
     san_antero8 = new GroupLayer({
         fold: 'close',
-        title: 'Restauracion',
+        title: 'Restauración',
         layers: [r_best_vol_s, r_renta_vol_s, r_rest_vol_s],
-        name: 'Restauracion'
+        name: 'Restauración'
     });
     san_antero9 = new GroupLayer({
         fold: 'close',

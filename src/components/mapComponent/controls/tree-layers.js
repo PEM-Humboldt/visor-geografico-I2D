@@ -67,10 +67,10 @@ export function buildLayerTree(layer) {
         accordion.className = 'd-block';
 
         // Create an element for Cundinamarca
-        var combinedCardsCundi = createCombinedCards('Cundinamarca', 'combinedCapas_Cundi', 'bg-info');
+        var combinedCardsCundi = createCombinedCards('Ecoregión relacionada a las Ecoreservas Mancilla y Tocancipá', 'combinedCapas_Cundi', 'bg-info');
         var combinedCollapsesCundi = combinedCardsCundi;
         // Create an element for San Antero
-        var combinedCardsSan = createCombinedCards('San Antero', 'combinedCapas_San', 'bg-warning');
+        var combinedCardsSan = createCombinedCards('Ecoregión relacionada a la Ecoreserva San Antero', 'combinedCapas_San', 'bg-warning');
         var combinedCollapsesSan = combinedCardsSan;
         // Extract the last three groups
         var lastThreeGroups = layers.slice(2, 14);
