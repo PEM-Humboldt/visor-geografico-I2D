@@ -1,9 +1,15 @@
 import {Tile as TileLayer} from 'ol/layer';
 import TileWMS from 'ol/source/TileWMS';
-import {GEOSERVER_URL,GEONETWORK_URL} from '../url'
+import {GEOSERVER_URL,GEONETWORK_URL,DATAVERSE_URL} from '../url'
 // wms geoserver- load layer function
 export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,idGeoNetwork){
-    var geonetwork=(idGeoNetwork=!'' && idGeoNetwork)?GEONETWORK_URL+idGeoNetwork:'';
+    let repositorio;
+    if (geoserverStore== 'visor'){
+        repositorio = DATAVERSE_URL;
+    }else{
+        repositorio = GEONETWORK_URL;
+    }
+    var geonetwork=(idGeoNetwork=!'' && idGeoNetwork)?repositorio+idGeoNetwork:'';
     var wms = new TileLayer({
         visible: visibility,
         title: geoserverName,

@@ -89,7 +89,7 @@ if (proyectos === 'general') {
 
     var procesos_gobernanza_multiescalar = wmsLayer('Gobernanza', 'procesos_gobernanza', 'Posibles procesos de gobernanza', false, 'a6fcfe1b-11e8-4383-a38e-a7f0035dece5');
 
-    var red_de_viveros = wmsLayer('visor', 'red_viveros', 'Red Viveros', false, '');
+    var red_de_viveros = wmsLayer('visor', 'red_viveros', 'Red Viveros', false, '7UAZDX');
 
     var mincost_target4 = wmsLayer('weplan', 'mincost_target4', 'mincost target 4', false, '1d6b06b6-8a57-4c87-97ef-e156cb40dc46');
     var target1_1millon_ce = wmsLayer('weplan', 'target1_1millon_ce', 'target1 1 millon ce', false, '1d6b06b6-8a57-4c87-97ef-e156cb40dc46');
