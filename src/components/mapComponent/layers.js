@@ -91,10 +91,6 @@ if (proyectos === 'general') {
 
     var red_de_viveros = wmsLayer('visor', 'red_viveros', 'Red Viveros', false, '7UAZDX');
 
-    //var mincost_target4 = wmsLayer('weplan', 'mincost_target4', 'mincost target 4', false, '1d6b06b6-8a57-4c87-97ef-e156cb40dc46');
-    //var target1_1millon_ce = wmsLayer('weplan', 'target1_1millon_ce', 'target1 1 millon ce', false, '1d6b06b6-8a57-4c87-97ef-e156cb40dc46');
-    //var target4_6millon_ce = wmsLayer('weplan', 'target4_6millon_ce', 'target4 6 millon ce', false, '1d6b06b6-8a57-4c87-97ef-e156cb40dc46');
-
     var scen_mincost_target1= wmsLayer('weplan', 'scen_mincost_target1', 'Escenario mínimo costo target 1', false, '1d6b06b6-8a57-4c87-97ef-e156cb40dc46');
     var scen_mincost_target2= wmsLayer('weplan', 'scen_mincost_target2', 'Escenario mínimo costo target 2', false, '1d6b06b6-8a57-4c87-97ef-e156cb40dc46');
     var scen_mincost_target3= wmsLayer('weplan', 'scen_mincost_target3', 'Escenario mínimo costo target 3', false, '1d6b06b6-8a57-4c87-97ef-e156cb40dc46');
@@ -146,7 +142,7 @@ if (proyectos === 'general') {
 export var layer_base = new GroupLayer({
     fold: 'close',
     title: 'Capas Base',
-    layers: [CartoDB_Positron, streetmap, Esri_WorldPhysical, Esri_WorldImagery, otm, bw, terrain /*, Deptos, Mpios*/],
+    layers: [CartoDB_Positron, streetmap, Esri_WorldPhysical, Esri_WorldImagery, otm, bw, terrain],
     name: 'Capas Base'
 });
 
@@ -156,7 +152,7 @@ export var division_base = new GroupLayer({
     layers: [deptos, mpios],
     name: 'División político-administrativa'
 });
-let historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, gobernanza, /*viveros,*/ restauracion, comp_preservacion, comp_restauracion, comp_uso_sostenible, inv1_preservacion, inv1_restauracion, inv1_uso_sostenible, invv_preservacion, invv_restauracion, invv_uso_sostenible, san_antero4, san_antero5, san_antero6, san_antero7, san_antero8, san_antero9
+let historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, gobernanza, restauracion, comp_preservacion, comp_restauracion, comp_uso_sostenible, inv1_preservacion, inv1_restauracion, inv1_uso_sostenible, invv_preservacion, invv_restauracion, invv_uso_sostenible, san_antero4, san_antero5, san_antero6, san_antero7, san_antero8, san_antero9
 
 if (proyectos === 'general') {
     historicos = new GroupLayer({
@@ -189,16 +185,9 @@ if (proyectos === 'general') {
         layers: [procesos_gobernanza_multiescalar],
         name: 'Gobernanza'
     });
-    /*viveros = new GroupLayer({
-        fold: 'close',
-        title: 'Red viveros de Colombia',
-        layers: [red_de_viveros],
-        name: 'Red viveros de Colombia'
-    });*/
     restauracion = new GroupLayer({
         fold: 'close',
         title: 'Restauración',
-        //layers: [mincost_target4, target1_1millon_ce, target4_6millon_ce],
         layers: [integridad, red_de_viveros, scen_mincost_target1, scen_mincost_target2, scen_mincost_target3, scen_mincost_target4],
         name: 'Restauración'
     });
