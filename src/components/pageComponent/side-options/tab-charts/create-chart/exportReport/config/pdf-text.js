@@ -130,9 +130,9 @@ export var textReferences =()=>{
     // depends on the dropdown selection, it changes the reference text on the document
     var selectedStadistics =$('#stadisticstype').children("option:selected").val(), infoRef=''
     if(selectedStadistics=='mpio_politico'){
-        infoRef='DANE. «MGN2020_MPIO_POLITICO» [Shapefile]. 1:25.000. «Marco Geoestadístico Nacional Vigencia 2020. Nivel Geográfico Municipio». Vigencia 2020.\n https://geoportal.dane.gov.co/geonetwork/srv/eng/catalog.search#/metadata/b54cdcbc-e6d9-47dd-afee-1265687c8c2b. (2021).'
+        infoRef='DANE. «MGN2023_MPIO_POLITICO» [Shapefile]. 1:25.000. «Marco Geoestadístico Nacional Vigencia 2023. Nivel Geográfico Municipio». Vigencia 2023.\n https://geoportal.dane.gov.co/descargas/mgn_2023/MGN2023_ManualDeUso.pdf. (2023).'
     }else{
-        infoRef='DANE. «MGN2020_DPTO_POLITICO» [Shapefile]. 1:25.000. «Marco Geoestadístico Nacional Vigencia 2020. Nivel Geográfico Departamento. Vigencia 2020.\n https://geoportal.dane.gov.co/geonetwork/srv/eng/catalog.search#/metadata/b9b83698-50b1-4865-bb1e-2cbe1ca2ae41. (2021).'
+        infoRef='DANE. «MGN2023_DPTO_POLITICO» [Shapefile]. 1:25.000. «Marco Geoestadístico Nacional Vigencia 2023. Nivel Geográfico Departamento. Vigencia 2023.\n https://geoportal.dane.gov.co/descargas/mgn_2023/MGN2023_ManualDeUso.pdf. (2023).'
     }
 
     // final json constructor
