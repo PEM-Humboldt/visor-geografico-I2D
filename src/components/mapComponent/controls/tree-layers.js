@@ -31,6 +31,9 @@ export function buildLayerTree(layer) {
 
             var check = document.createElement('input');
             check.className = "form-check-input layers-input";
+            if( j == 0 && subname == "dpto_politico"){
+                check.disabled = true; // Desactiva el checkbox
+            }
             check.setAttribute('type', 'checkbox');
             check.id = subname;
             check.onclick = function (ev) {
@@ -271,14 +274,6 @@ function createGroupLayersContent(groupLayers, parentElement) {
         lab.innerHTML = groupLayers[j].values_.title;
         fcheck.appendChild(lab);
 
-        var down = document.createElement('div');
-        // Crear elemento de imagen
-        var image = document.createElement('img');
-        image.src = logoi2d; // Establecer la ruta de la imagen
-        // Agregar la imagen al elemento div
-        down.appendChild(image);
-        fcheck.appendChild(down);
-
         if (groupLayers[j].values_.urldownload && groupLayers[j].values_.urldownload !== '') {
             var down = document.createElement('div');
             down.innerHTML = '<i class="fas fa-link"></i>';
@@ -288,6 +283,14 @@ function createGroupLayersContent(groupLayers, parentElement) {
         }
         AllLayers[k] = groupLayers[j];
         k = k + 1;
+
+        var down = document.createElement('div');
+        // Crear elemento de imagen
+        var image = document.createElement('img');
+        image.src = logoi2d; // Establecer la ruta de la imagen
+        // Agregar la imagen al elemento div
+        down.appendChild(image);
+        fcheck.appendChild(down);
     }
 }
 
