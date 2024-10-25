@@ -40,6 +40,15 @@ if (urlActual.includes("proyecto=ecoreservas")) {
     proyectos = 'ecoreservas';
     streetma = new TileLayer({ title: 'Streetmap', visible: false, source: new OSM({ crossOrigin: null }), maxZoom: 20, minResolution: 2, name: 'Street Map' });
     CartoDB_Positro = new TileLayer({ title: 'CartoDB Positron', visible: true, source: new XYZ({ url: 'http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png' }), attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" rel="noopener">CARTO</a>', subdomains: 'abcd', maxZoom: 19, name: 'CartoDB Positron' });
+    
+    // Seleccionar los elementos por su ID
+    const logoEcoP = document.getElementById("logo_eco_p");
+    const logoEcoG = document.getElementById("logo_eco_g");
+
+    // Cambiar el estilo 'display' de 'none' a 'block'
+    logoEcoP.style.display = "inline-block";
+    logoEcoG.style.display = "inline-block";
+
 } else {
     proyectos = 'general';
     streetma = new TileLayer({ title: 'Streetmap', visible: true, source: new OSM({ crossOrigin: null }), maxZoom: 20, minResolution: 2, name: 'Street Map' });
