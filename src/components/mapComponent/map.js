@@ -27,6 +27,7 @@ const allLayers = {
   conservacion_biodiversidad: layers.conservacion_biodiversidad,
   gobernanza: layers.gobernanza,
   restauracion: layers.restauracion,
+  gefparamos: layers.gefpar,
   comp_preservacion: layers.comp_preservacion,
   comp_restauracion: layers.comp_restauracion,
   comp_uso_sostenible: layers.comp_uso_sostenible,
@@ -66,6 +67,7 @@ if (layers.proyecto === 'general') {
     conservacion_biodiversidad: allLayers.conservacion_biodiversidad,
     gobernanza: allLayers.gobernanza,
     restauracion: allLayers.restauracion,
+    gefparamos: allLayers.gefparamos,
     highlightStadistics: allLayers.highlightStadistics,
     highlightPoint: allLayers.highlightPoint,
     highlight: allLayers.highlight

@@ -22,6 +22,7 @@ let v_g_transformacion_humedal = false;
 let v_clasificacion_humedal = false
 let v_humedal_continental = false;
 let v_21_paramos = false;
+let v_24_paramos = false;
 let v_cobertura_bo = false;
 let v_biomas = false;
 let v_colapso_terrestre = false;
@@ -35,6 +36,8 @@ let v_gobernanza = false;
 let v_integridad = false;
 let v_viveros = false;
 let v_weplan = false;
+let v_gefmun = false;
+let v_gefpar = false;
 
 if (urlActual.includes("proyecto=ecoreservas")) {
     proyectos = 'ecoreservas';
@@ -83,6 +86,9 @@ if (urlActual.includes("proyecto=ecoreservas")) {
     if (urlActual.includes("capa=paramo21")) {
         v_21_paramos = true;
     }
+    if (urlActual.includes("capa=paramo24")) {
+        v_24_paramos = true;
+    }
     if (urlActual.includes("capa=coberturabosque")) {
         v_cobertura_bo = true;
     }
@@ -121,6 +127,12 @@ if (urlActual.includes("proyecto=ecoreservas")) {
     }
     if (urlActual.includes("capa=weplan")) {
         v_weplan = true;
+    }
+    if (urlActual.includes("capa=gefparamos")) {
+        v_gefmun = true;
+    }
+    if (urlActual.includes("capa=gefparamos")) {
+        v_gefpar = true;
     }
 }
 export var proyecto = proyectos;
@@ -175,13 +187,13 @@ if (proyectos === 'general') {
     var humedales = wmsLayer('Proyecto_fondo_adaptacion', 'Humedales', 'Clasificación de humedales 2015', v_clasificacion_humedal, '7ff0663a-129c-43e9-a024-7718dbe59d60');
     var humedales_continentales_insulares_2015 = wmsLayer('Proyecto_fondo_adaptacion', 'Humedales_Continentales_Insulares_2015_Vector', 'Humedales Continentales Insulares', v_humedal_continental, 'd68f4329-0385-47a2-8319-8b56c772b4c0');
     var limites21paramos_25K_2015 = wmsLayer('Proyecto_fondo_adaptacion', 'Limites21Paramos_25K_2015', 'Límite 21 Complejos Páramo 2015', v_21_paramos, '5dbddd78-3e51-45e6-b754-ab4c8f74f1b5');
-    var limites24paramos_25K_2016 = wmsLayer('Proyecto_fondo_adaptacion', 'Limites24Paramos_25K_2016', 'Límite 24 Complejos Páramo 2016', false, '');
+    var limites24paramos_25K_2016 = wmsLayer('Proyecto_fondo_adaptacion', 'Limites24Paramos_25K_2016', 'Límite 24 Complejos Páramo 2016', v_24_paramos, '36139b13-b15e-445e-b44d-dd7a5dbe8185');
 
     var coberturas_bo_2009_2010 = wmsLayer('Proyecto_oleoducto_bicentenario', 'coberturas_bo_2009_2010', 'Cobertura Bo', v_cobertura_bo, '008150a7-4ee9-488a-9ac0-354d678b4b8e');
     var biomas = wmsLayer('Proyecto_PACBAO_Ecopetrol', 'biomas', 'Biomas', v_biomas, '4ea0ecd2-678d-423b-a940-ee2667d6d4a2');
-    var colapso_acuatico = wmsLayer('Proyecto_PACBAO_Ecopetrol', 'colapso_acuatico', 'Colapso Acuático', false, '');
+    var colapso_acuatico = wmsLayer('Proyecto_PACBAO_Ecopetrol', 'colapso_acuatico', 'Colapso Acuático', false, '11d7eb22-f60e-446f-b953-cb88817a4ca5');
     var colapso_terrestre = wmsLayer('Proyecto_PACBAO_Ecopetrol', 'colapso_terrestre', 'Colapso Terrestre', v_colapso_terrestre, '11d7eb22-f60e-446f-b953-cb88817a4ca5');
-    var colapso_total = wmsLayer('Proyecto_PACBAO_Ecopetrol', 'colapso_total', 'Colapso Total', false, '');
+    var colapso_total = wmsLayer('Proyecto_PACBAO_Ecopetrol', 'colapso_total', 'Colapso Total', false, '11d7eb22-f60e-446f-b953-cb88817a4ca5');
     var distritos_biogeograficos = wmsLayer('Proyecto_PACBAO_Ecopetrol', 'distritos_biogeograficos', 'Distritos Biogeográficos', v_distrito_biogeo, '2dec7ad8-6677-4ee2-912c-bd39af420952');
     var hidrobiologia = wmsLayer('Proyecto_PACBAO_Ecopetrol', 'hidrobiologia', 'Hidrobiología', v_hidrobiologia, 'ca8b1ba9-3dea-4791-bf01-48df68d0fd41');
     var lineamientos = wmsLayer('Proyecto_PACBAO_Ecopetrol', 'lineamientos', 'Lineamientos', v_lineamientos, '7963d97d-ba67-4c09-8f28-2807f43f9419');
@@ -199,6 +211,9 @@ if (proyectos === 'general') {
     var scen_mincost_target4 = wmsLayer('weplan', 'scen_mincost_target4', 'Escenario mínimo costo target 4', false, '1d6b06b6-8a57-4c87-97ef-e156cb40dc46');
 
     var integridad = wmsLayer('restauracion', 'integr_total4326', 'Integridad', v_integridad, '55d29ef5-e419-489f-a450-3299e4bcc4d4');
+
+    var gefparamo = wmsLayer('gefparamos', 'paramo', 'Paramos', v_gefpar, 'LPM4RE');
+    var gefmunicipio = wmsLayer('gefparamos', 'municipio', 'Municipios', v_gefmun, 'LPM4RE');
 
 } else if (proyectos === 'ecoreservas') {
     var p_best_comp = wmsLayer('ecoreservas', 'Preservación_priorizando_todos_los_enfoques_Compensación', 'Todos los enfoques de costos-Inversión en compensación', true, '4eca511b-d4db-49bc-8efa-a1f20e7c45ac');
@@ -254,7 +269,7 @@ export var division_base = new GroupLayer({
     layers: [deptos, mpios],
     name: 'División político-administrativa'
 });
-let historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, gobernanza, restauracion, comp_preservacion, comp_restauracion, comp_uso_sostenible, inv1_preservacion, inv1_restauracion, inv1_uso_sostenible, invv_preservacion, invv_restauracion, invv_uso_sostenible, san_antero4, san_antero5, san_antero6, san_antero7, san_antero8, san_antero9
+let historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, gobernanza, restauracion, gefpar, comp_preservacion, comp_restauracion, comp_uso_sostenible, inv1_preservacion, inv1_restauracion, inv1_uso_sostenible, invv_preservacion, invv_restauracion, invv_uso_sostenible, san_antero4, san_antero5, san_antero6, san_antero7, san_antero8, san_antero9
 
 if (proyectos === 'general') {
     historicos = new GroupLayer({
@@ -292,6 +307,12 @@ if (proyectos === 'general') {
         title: 'Restauración',
         layers: [integridad, red_de_viveros, scen_mincost_target1, scen_mincost_target2, scen_mincost_target3, scen_mincost_target4],
         name: 'Restauración'
+    });
+    gefpar = new GroupLayer({
+        fold: 'close',
+        title: 'GEF Páramos',
+        layers: [gefparamo, gefmunicipio],
+        name: 'GEF Páramos'
     });
 } else if (proyectos === 'ecoreservas') {
     comp_preservacion = new GroupLayer({
@@ -389,7 +410,7 @@ if (proyectos === 'general') {
 
 };
 
-export { historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, gobernanza, restauracion, comp_preservacion, comp_restauracion, comp_uso_sostenible, inv1_preservacion, inv1_restauracion, inv1_uso_sostenible, invv_preservacion, invv_restauracion, invv_uso_sostenible, san_antero4, san_antero5, san_antero6, san_antero7, san_antero8, san_antero9 };
+export { historicos, fondo_adaptacion, proyecto_oleoducto_bicentenario, conservacion_biodiversidad, gobernanza, restauracion, gefpar, comp_preservacion, comp_restauracion, comp_uso_sostenible, inv1_preservacion, inv1_restauracion, inv1_uso_sostenible, invv_preservacion, invv_restauracion, invv_uso_sostenible, san_antero4, san_antero5, san_antero6, san_antero7, san_antero8, san_antero9 };
 
 export var feats = (data) => {
     return new VectorSource({

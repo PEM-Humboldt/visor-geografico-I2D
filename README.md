@@ -7,6 +7,8 @@ Esta es una version preliminar para actualizar el actual visor de la I2D.
 
 Se implementarán nuevas funcionalidades y capas.
 
+---
+
 ## Configuración inicial
 
 ### Instalación y ejecución
@@ -31,6 +33,7 @@ Ejecute la siguiente instrucción:
 
 La instrucción iniciará el proyecto en su entorno local y se abrirá en el navegador.
 
+---
 
 ## Despliegue
 
@@ -61,6 +64,8 @@ Para la correcta ejecución de las funcionalidades del frontend, la siguiente ru
  src/components/server/url
 ```
 
+---
+
 ## Despliegue usando docker
 
 Alternativamente puede desplegar usando contenedores de docker. Primero construya la imagen:
@@ -79,6 +84,55 @@ Después levante el contenedor:
 
 `docker run --name=visor_i2d --network=i2d.net -d visor-i2d:1.0.0`
 
+---
+
+## Configuración de variables y entorno
+
+- Las URLs de los servicios externos (backend, geoserver, etc.) se configuran en el archivo:
+  ```
+  src/components/server/url.js
+  ```
+- Para desarrollo local, puedes cambiar la variable `PYTHONSERVER` a la URL de tu backend local (por ejemplo, `http://localhost:8000/api/`).
+- En producción, usa la URL pública del backend.
+
+---
+
+## Endpoints principales del backend
+
+El visor consume los siguientes endpoints del backend:
+
+- **Descarga masiva de datos en ZIP:**  
+  `GET /api/gbif/descargar-zip/?codigo_mpio=<codigo>&nombre=<nombre>`  
+  `GET /api/gbif/descargar-zip/?codigo_dpto=<codigo>&nombre=<nombre>`  
+  Devuelve un archivo ZIP con los registros y el listado de especies filtrados por municipio o departamento.
+
+- **Consulta de información GBIF:**  
+  `GET /api/gbif/gbifinfo`  
+  Devuelve información general de registros biológicos.
+
+Para más detalles sobre los endpoints y parámetros, consulta la documentación del backend:  
+[visor-geografico-I2D-backend](https://github.com/PEM-Humboldt/visor-geografico-I2D-backend)
+
+---
+
+## Buenas prácticas implementadas
+
+- Separación de lógica entre frontend y backend.
+- El backend genera los archivos ZIP y el frontend solo los solicita.
+- Nombres de archivos personalizados en las descargas.
+- Uso de variables de entorno/configuración para URLs.
+- Validación básica de parámetros en el backend.
+- Código limpio y dependencias innecesarias eliminadas.
+
+---
+
+## Recomendaciones de seguridad
+
+- No subas archivos sensibles (contraseñas, claves, .env) al repositorio.
+- Usa `.gitignore` para excluir carpetas como `node_modules`, archivos temporales y configuraciones locales.
+- Revisa y documenta los endpoints expuestos por el backend.
+
+---
 
 ## Autores
 
@@ -86,6 +140,8 @@ Después levante el contenedor:
 * **Liceth Barandica Diaz** - *Creación del sitio* - [licethbarandicadiaz](https://github.com/licethbarandicadiaz)
 
 Ingeniería de Datos y Desarrollo, Programa de Evaluación y Monitoreo de la Biodiversidad, Instituto Alexander von Humboldt Colombia
+
+---
 
 ## Licencia
 
