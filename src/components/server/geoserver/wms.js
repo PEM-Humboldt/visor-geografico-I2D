@@ -4,7 +4,7 @@ import {GEOSERVER_URL,GEONETWORK_URL,DATAVERSE_URL} from '../url'
 // wms geoserver- load layer function
 export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,idGeoNetwork){
     let repositorio;
-    if (geoserverStore== 'visor'){
+    if (geoserverStore == 'visor' || geoserverStore == 'gefparamos') {
         repositorio = DATAVERSE_URL;
     }else{
         repositorio = GEONETWORK_URL;

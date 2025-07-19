@@ -127,7 +127,7 @@ export function savePDF() {
         };
 
         let pdfprint = pdfMake.createPdf(doc);
-        pdfprint.vfs = pdfFonts.pdfMake.vfs;
+        //pdfprint.vfs = pdfFonts.pdfMake.vfs;
         if (document.getElementById("stadisticstype").value == 'mpio_politico') {
             pdfprint.download(`Reporte de Biodiversidad ${title_mupio}.pdf`);
         } else {

@@ -129,7 +129,7 @@ $(document).on('submit', 'form#formSolicitante', function (e) {
       params += `&nombre=${encodeURIComponent(nomdownload)}`;
 
       // Cambia la URL al endpoint de tu backend
-      let url = PYTHONSERVER + 'gbif/descargar-zip/?' + params;
+      let url = PYTHONSERVER + 'gbif/descargarz?' + params;
       window.open(url);
 
       $('#download-status').hide().find('.textoagr').remove();
