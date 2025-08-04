@@ -79,8 +79,8 @@ export var charCreate=(dataChart)=>{
             
         });
         
-    }catch{
-        console.log('no se pudo crear las estadisticas')
+    }catch(err){
+        console.log('no se pudo crear las estadisticas');
     }
-}
+};
 

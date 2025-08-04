@@ -12,5 +12,9 @@ $('#sideBar').on( "mouseenter touchstart", function() {
 $('#closebtn').on( "click", function() {
   closeSideBar();
 });
+// close the side bar
+$('#sideBar').on( "mouseleave", function() {
+  closeSideBar();
+})
 
 document.addEventListener("touchstart", function() {}, true);

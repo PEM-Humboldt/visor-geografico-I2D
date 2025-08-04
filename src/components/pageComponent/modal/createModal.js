@@ -6,6 +6,11 @@ import $ from "jquery";
 // cancelEvent: function that will execute when you click the cancel button
 
 export var createModal=(id,jsonModal,saveEvent,cancelEvent)=>{
+
+    $("#cerrar-alert").click(function() {
+        $("#alert").addClass("d-none");
+    });
+
     let content=$('#content')
 
     let modal=document.createElement("div");  

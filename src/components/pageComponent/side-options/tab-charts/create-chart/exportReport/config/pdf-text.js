@@ -52,14 +52,14 @@ export var textGbif =(res)=>{
             {
                 text: [
                     {text: 'Asunto: ', bold: true},
-                    {text: 'Información acerca de las especies presentes en el '+infoInteres+'.\n \n \n'},
+                    {text: 'Información acerca de las especies presentes en el '+infoInteres+'.\n \n'},
                 ],
                 style: 'parrafo'
             },
             {
                 text: [
-                    'A partir de la capa geoespacial correspondiente al '+infoInteres+', se extrajeron los registros de presencia de especies biológicas que han reportado para la zona de interés. La base de datos utilizada para extraer los registros de presencia es la publicada por la Infraestructura Mundial de Información en Biodiversidad (GBIF), dicha base de datos es la fuente disponible más completa en este momento y contiene todos los registros de presencia publicados por el Instituto Humboldt, los publicados por otras instituciones colombianas e integrados en el Sistema de Información sobre Biodiversidad de Colombia (SiB Colombia, https:// www.sibcolombia.net/ ) y todos aquellos registros de especies en el territorio Colombiano publicados por instituciones y organizaciones desde el exterior. Desde el Instituto Humboldt garantizamos la calidad de nuestra información, no obstante, la información de otras instituciones debe ser evaluada con precaución. Cabe aclarar que los registros de presencia de especies publicados en GBIF son solamente una aproximación a la riqueza y abundancia de especies que se presentan en el territorio nacional. \n \n', 
-                    'En total se reportaron ', totalRegisters,' registros de presencia de especies que representan ',
+                    'A partir de la capa geoespacial correspondiente al '+infoInteres+', se extrajeron los registros de especies biológicas que han reportado para la zona de interés. La base de datos utilizada para extraer los registros es la publicada por la Infraestructura Mundial de Información en Biodiversidad (GBIF), dicha base de datos es la fuente disponible más completa en este momento y contiene todos los registros publicados por el Instituto Humboldt, los publicados por otras instituciones colombianas e integrados en el Sistema de Información sobre Biodiversidad de Colombia (SiB Colombia, https:// www.sibcolombia.net/ ) y todos aquellos registros de especies en el territorio Colombiano publicados por instituciones y organizaciones desde el exterior. Desde el Instituto Humboldt garantizamos la calidad de nuestra información, no obstante, la información de otras instituciones debe ser evaluada con precaución. Cabe aclarar que los registros publicados en GBIF son solamente una aproximación a la riqueza y abundancia de especies que se presentan en el territorio nacional. \n \n', 
+                    'En total se reportaron ', totalRegisters,' registros de especies que representan ',
                     totalAnimals , ' especies de animales y ',
                     totalPlants , ' de plantas (Tabla 1, Anexo 1) en la zona de interés, de estas cifras se puede resaltar la presencia de ',
                     {text: totalEndemicas +' especies endémicas y '+totalExoticas +' especies exóticas. \n\n'}
@@ -67,7 +67,7 @@ export var textGbif =(res)=>{
                 style: 'parrafo'
             },
             {
-                text: 'Tabla 1. Registros de presencia de especies en la zona de interés.\n\n',
+                text: 'Tabla 1. Registros de especies en la zona de interés.\n\n',
                 style: 'italic'
             },
             table(milesstr, Object.keys(title),title),
@@ -130,9 +130,9 @@ export var textReferences =()=>{
     // depends on the dropdown selection, it changes the reference text on the document
     var selectedStadistics =$('#stadisticstype').children("option:selected").val(), infoRef=''
     if(selectedStadistics=='mpio_politico'){
-        infoRef='DANE. «MGN2020_MPIO_POLITICO» [Shapefile]. 1:25.000. «Marco Geoestadístico Nacional Vigencia 2020. Nivel Geográfico Municipio». Vigencia 2020.\n https://geoportal.dane.gov.co/geonetwork/srv/eng/catalog.search#/metadata/b54cdcbc-e6d9-47dd-afee-1265687c8c2b. (2021).'
+        infoRef='DANE. «MGN2023_MPIO_POLITICO» [Shapefile]. 1:25.000. «Marco Geoestadístico Nacional Vigencia 2023. Nivel Geográfico Municipio». Vigencia 2023.\n https://geoportal.dane.gov.co/descargas/mgn_2023/MGN2023_ManualDeUso.pdf. (2023).'
     }else{
-        infoRef='DANE. «MGN2020_DPTO_POLITICO» [Shapefile]. 1:25.000. «Marco Geoestadístico Nacional Vigencia 2020. Nivel Geográfico Departamento. Vigencia 2020.\n https://geoportal.dane.gov.co/geonetwork/srv/eng/catalog.search#/metadata/b9b83698-50b1-4865-bb1e-2cbe1ca2ae41. (2021).'
+        infoRef='DANE. «MGN2023_DPTO_POLITICO» [Shapefile]. 1:25.000. «Marco Geoestadístico Nacional Vigencia 2023. Nivel Geográfico Departamento. Vigencia 2023.\n https://geoportal.dane.gov.co/descargas/mgn_2023/MGN2023_ManualDeUso.pdf. (2023).'
     }
 
     // final json constructor

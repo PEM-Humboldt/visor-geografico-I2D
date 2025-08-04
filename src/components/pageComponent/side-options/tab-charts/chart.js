@@ -17,17 +17,17 @@ export const chartData =(data)=>{
         chartEndemicSp= charCreate(data,'chartdivSpEnd','endemicas');    
         chartExoticSp= charCreate(data,'chartdivSpEx','exoticas');      
         $('#loading-chart').attr("style", "display:none");   
-    }catch{
-        console.log('no se puede cargar')
+    }catch(err){
+        console.log('no se puede cargar');
     }
-}
+};
 
 // the data comes from an api
 export const chartDangerData =(data)=>{
     try{
         chartDangerSp= charCreate(data,'chartdivDangerSp','amenazadas','danger');    
         $('#loading-chart').attr("style", "display:none");  
-    }catch{
-        console.log('no se puede cargar')
+    }catch(err){
+        console.log('no se puede cargar');
     }
-}
+};

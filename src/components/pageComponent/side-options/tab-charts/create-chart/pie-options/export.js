@@ -4,7 +4,7 @@ export var itemsExport=[
         "label": "...",
         "menu": [
             {
-                "type": "pdf", "label": "IMAGEN" , "options": { "addURL":false }   
+                "type": "jpg", "label": "IMAGEN" , "options": { "addURL":false }   
               }
         ]
     }
