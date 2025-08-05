@@ -1,4 +1,4 @@
-# Plan de trabajo para Visor Geográfico I2D (Frontend)
+# Plan de trabajo para Visor Geográfico I2D (Backend)
 
 ## Estrategia de ramas y gestión de issues
 - Se crearon forks para actualizar los repositorios principales.
@@ -15,6 +15,22 @@
 - El plan aplica para ambos repositorios.
 - El setup del visor implica creación de URL, configuración, branding (nombre, logo) y estructura para esta funcionalidad.
 
+## Cronograma y productos principales
+
+| Producto / Actividad                                                    | Fecha tentativa de entrega | Comentario                                    |
+| ----------------------------------------------------------------------- | -------------------------- | --------------------------------------------- |
+| 📄 1. Plan de trabajo (cronograma, productos, fechas de entrega)        | **6 ago 2025**             | Dentro de los 5 días hábiles desde el inicio. |
+| 🗃️ 2. Informe técnico – Base de datos (consultas, estructura, pruebas)  | **30 ago 2025**            | Bloque para primer pago.                      |
+| 🔧 3. Informe técnico – Backend (código, lógica, dependencias)          | **30 sep 2025**            | Bloque para segundo pago.                     |
+| 💻 4. Informe técnico – Frontend (interfaz, accesibilidad, pruebas)     | **15 oct 2025**            |                                               |
+| 🧪 5. Informe del entorno de pruebas (pruebas antes de producción)      | **31 oct 2025**            |                                               |
+| ✨ 6. Nueva funcional para el manjeo personalizado de URLs              | **10 nov 2025**            |                                               |
+| 📘 7. Documentación técnica completa y actualizada                      | **15 nov 2025**            |                                               |
+| 📚 Actualización y nueva documentación del sistema                      | **20 nov 2025**            |                                               |
+| 👥 Socialización de cambios con equipo                                  | **22 nov 2025**            | Debe ir acompañada de informe de soporte.     |
+| 📆 Participación en reuniones / atención a observaciones                | Durante toda la ejecución  | Continuo, según agenda del supervisor.        |
+| 📝 Correcciones y ajustes a entregables                                 | Según observaciones        | Antes del acta de liquidación final.          |
+
 ## Resumen de recomendaciones clave de UPGRADE_STRATEGY.md
 - Modernizar el frontend usando frameworks como React, Vue, Angular o Svelte, y actualizar herramientas de build (Vite, Webpack 5+, Parcel 2+).
 - Asegurar compatibilidad hacia atrás y planificar migraciones graduales.
@@ -30,21 +46,6 @@
 ## Pendientes
 - Falta el envío de la base de datos para el entorno de pruebas y desarrollo.
 - Para el setup y creación del visor personalizado, se debe crear una historia de usuario con los requerimientos exactos.
-
-## Lista de tareas
-- [ ] 📄 Plan de trabajo (cronograma, productos, fechas)
-- [ ] 🗃️ Informe técnico – Base de datos (cambios, optimización, pruebas)
-- [ ] 🔧 Informe técnico – Backend (código, dependencias, lógica de negocio)
-- [ ] 💻 Informe técnico – Frontend (UI, accesibilidad, funcionalidad, pruebas)
-- [ ] 🧪 Informe de entorno de pruebas (configuración, validaciones, recomendaciones para producción)
-- [ ] ⚙️ Setup y creación del visor (estructura, URL, configuración, branding)
-- [ ] 📘 Documentación técnica final (diagramas, manuales, configuración, mantenimiento)
-- [ ] 👥 Socialización de cambios con el equipo definido por el supervisor
-- [ ] 🔄 Actualización de documentación existente (diagramas, instrucciones, etc.)
-- [ ] 📚 Nueva documentación generada por los cambios realizados
-- [ ] 📆 Asistencia a reuniones y atención a requerimientos del supervisor
-- [ ] 📝 Atención a observaciones y correcciones de productos entregados
-- [ ] ⚙️ Otras actividades necesarias para cumplir el objeto del contrato
 
 ## Objetivo actual
 Redactar y aprobar el plan de trabajo.
