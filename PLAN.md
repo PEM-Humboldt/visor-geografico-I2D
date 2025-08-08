@@ -40,9 +40,6 @@
 - Incluye PostgreSQL (db), backend Django y volúmenes para archivos estáticos/media.
 - Falta agregar y configurar GeoServer para servicios geoespaciales.
 
-## Preguntas
-- ¿Se definirán las variables del proyecto únicamente en inglés? (pendiente de decisión)
-
 ## Pendientes
 - Falta el envío de la base de datos para el entorno de pruebas y desarrollo.
 - Para el setup y creación del visor personalizado, se debe crear una historia de usuario con los requerimientos exactos.
