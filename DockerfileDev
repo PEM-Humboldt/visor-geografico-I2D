@@ -3,6 +3,7 @@ FROM node:18.3.0 AS dev
 USER node
 WORKDIR /home/node/app
 COPY package.json /home/node/app
-COPY .env.local /home/node/app/.env
+# Use custom .env file for development
+COPY .env /home/node/app/.env
 RUN npm install
 CMD ["npm", "run", "dev"]

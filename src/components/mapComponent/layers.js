@@ -5,6 +5,7 @@ import { Vector as VectorSource, OSM, XYZ } from 'ol/source';
 import { GeoJSON } from 'ol/format'
 import { wmsLayer } from '../server/geoserver/wms'
 import { styleMpio, styleHighlight, styleHighlightPoint } from './layer-style/layers-style'
+import { CARTODB_POSITRON_URL, OTM_TILE_URL, WMFLABS_BW_URL, STAMEN_TERRAIN_URL, ESRI_WORLD_PHYSICAL_URL, ESRI_WORLD_IMAGERY_URL } from '../server/url'
 
 // Captura la URL actual
 var urlActual = window.location.href;
@@ -42,7 +43,7 @@ let v_gefpar = false;
 if (urlActual.includes("proyecto=ecoreservas")) {
     proyectos = 'ecoreservas';
     streetma = new TileLayer({ title: 'Streetmap', visible: false, source: new OSM({ crossOrigin: null }), maxZoom: 20, minResolution: 2, name: 'Street Map' });
-    CartoDB_Positro = new TileLayer({ title: 'CartoDB Positron', visible: true, source: new XYZ({ url: 'http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png' }), attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" rel="noopener">CARTO</a>', subdomains: 'abcd', maxZoom: 19, name: 'CartoDB Positron' });
+    CartoDB_Positro = new TileLayer({ title: 'CartoDB Positron', visible: true, source: new XYZ({ url: CARTODB_POSITRON_URL }), attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" rel="noopener">CARTO</a>', subdomains: 'abcd', maxZoom: 19, name: 'CartoDB Positron' });
     
     // Seleccionar los elementos por su ID
     const logoEcoP = document.getElementById("logo_eco_p");
@@ -55,7 +56,7 @@ if (urlActual.includes("proyecto=ecoreservas")) {
 } else {
     proyectos = 'general';
     streetma = new TileLayer({ title: 'Streetmap', visible: true, source: new OSM({ crossOrigin: null }), maxZoom: 20, minResolution: 2, name: 'Street Map' });
-    CartoDB_Positro = new TileLayer({ title: 'CartoDB Positron', visible: false, source: new XYZ({ url: 'http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png' }), attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" rel="noopener">CARTO</a>', subdomains: 'abcd', maxZoom: 19, name: 'CartoDB Positron' });
+    CartoDB_Positro = new TileLayer({ title: 'CartoDB Positron', visible: false, source: new XYZ({ url: CARTODB_POSITRON_URL }), attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" rel="noopener">CARTO</a>', subdomains: 'abcd', maxZoom: 19, name: 'CartoDB Positron' });
     if (urlActual.includes("capa=aicas")) {
         v_aicas = true;
     }
@@ -139,11 +140,11 @@ export var proyecto = proyectos;
 
 //Capa base
 export var streetmap = streetma;// = new TileLayer({ title: 'Streetmap', visible: true, source: new OSM({ crossOrigin: null }), maxZoom: 20, minResolution: 2, name: 'Street Map' });
-var otm = new TileLayer({ title: 'OTM', visible: false, source: new XYZ({ url: "https://tile.opentopomap.org/{z}/{x}/{y}.png", attributions: ' © OpenStreetMap contributors' }), name: 'OTM' });
-var bw = new TileLayer({ title: 'B & W', visible: false, source: new XYZ({ url: "http://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png", attributions: ' © OpenStreetMap contributors' }), name: 'BW' });
-var terrain = new TileLayer({ title: 'Terrain', visible: false, source: new XYZ({ url: "http://a.tile.stamen.com/terrain/{z}/{x}/{y}.png", attributions: ' © OpenStreetMap contributors' }), name: 'Terrain' });
-var Esri_WorldPhysical = new TileLayer({ title: 'Esri WorldPhysical', visible: false, attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service', source: new XYZ({ url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}' }), maxZoom: 8, name: 'Esri WorldPhysical' });
-var Esri_WorldImagery = new TileLayer({ title: 'Esri WorldImagery', visible: false, source: new XYZ({ url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}' }), attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community', name: 'Esri WorldImagery' });
+var otm = new TileLayer({ title: 'OTM', visible: false, source: new XYZ({ url: OTM_TILE_URL, attributions: ' © OpenStreetMap contributors' }), name: 'OTM' });
+var bw = new TileLayer({ title: 'B & W', visible: false, source: new XYZ({ url: WMFLABS_BW_URL, attributions: ' © OpenStreetMap contributors' }), name: 'BW' });
+var terrain = new TileLayer({ title: 'Terrain', visible: false, source: new XYZ({ url: STAMEN_TERRAIN_URL, attributions: ' © OpenStreetMap contributors' }), name: 'Terrain' });
+var Esri_WorldPhysical = new TileLayer({ title: 'Esri WorldPhysical', visible: false, attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service', source: new XYZ({ url: ESRI_WORLD_PHYSICAL_URL }), maxZoom: 8, name: 'Esri WorldPhysical' });
+var Esri_WorldImagery = new TileLayer({ title: 'Esri WorldImagery', visible: false, source: new XYZ({ url: ESRI_WORLD_IMAGERY_URL }), attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community', name: 'Esri WorldImagery' });
 export var CartoDB_Positron = CartoDB_Positro;// = new TileLayer({ title: 'CartoDB Positron', visible: false, source: new XYZ({ url: 'http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png' }), attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" rel="noopener">CARTO</a>', subdomains: 'abcd', maxZoom: 19, name: 'CartoDB Positron' });
 
 //capa para seleccion

@@ -1,0 +1,349 @@
+nohup: ignoring input
+Server running at http://localhost:1244 
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import './color';
+  │         ^^^^^^^^^
+  ╵
+    src/scss/index.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'sizes';
+  │         ^^^^^^^
+  ╵
+    src/scss/map.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import 'color';
+  │         ^^^^^^^
+  ╵
+    src/scss/map.scss 2:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'sizes';
+  │         ^^^^^^^
+  ╵
+    src/scss/map.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import 'color';
+  │         ^^^^^^^
+  ╵
+    src/scss/map.scss 2:9  root stylesheet
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import './color';
+  │         ^^^^^^^^^
+  ╵
+    src/scss/index.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import '../../scss/sizes.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/tutorialComponent/tutorial.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import '../../scss/color';
+  │         ^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/tutorialComponent/tutorial.scss 2:9  root stylesheet
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'sizes';
+  │         ^^^^^^^
+  ╵
+    src/scss/layercontrol.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import 'color';
+  │         ^^^^^^^
+  ╵
+    src/scss/layercontrol.scss 2:9  root stylesheet
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import '../../../scss/sizes.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/pageComponent/side-bar/sidebar.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import '../../../scss/color';
+  │         ^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/pageComponent/side-bar/sidebar.scss 2:9  root stylesheet
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import '../../../scss/sizes.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/pageComponent/side-options/sideoptions.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import '../../../scss/color';
+  │         ^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/pageComponent/side-options/sideoptions.scss 2:9  root stylesheet
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import '../../../../scss/color';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/pageComponent/side-options/tab-charts/chart.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+✨  Built in 17.54s.
+✨  Built in 2.62s.
+✨  Built in 1.40s.
+✨  Built in 1.08s.
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import '../../scss/sizes.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/tutorialComponent/tutorial.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import '../../scss/color';
+  │         ^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/tutorialComponent/tutorial.scss 2:9  root stylesheet
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'sizes';
+  │         ^^^^^^^
+  ╵
+    src/scss/layercontrol.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import 'color';
+  │         ^^^^^^^
+  ╵
+    src/scss/layercontrol.scss 2:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import './color';
+  │         ^^^^^^^^^
+  ╵
+    src/scss/index.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import '../../../scss/sizes.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/pageComponent/side-bar/sidebar.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import '../../../scss/color';
+  │         ^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/pageComponent/side-bar/sidebar.scss 2:9  root stylesheet
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import '../../../scss/sizes.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/pageComponent/side-options/sideoptions.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import '../../../scss/color';
+  │         ^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/pageComponent/side-options/sideoptions.scss 2:9  root stylesheet
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'sizes';
+  │         ^^^^^^^
+  ╵
+    src/scss/map.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import 'color';
+  │         ^^^^^^^
+  ╵
+    src/scss/map.scss 2:9  root stylesheet
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import '../../../../scss/color';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/pageComponent/side-options/tab-charts/chart.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+✨  Built in 18.96s.
