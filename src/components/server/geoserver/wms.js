@@ -13,11 +13,24 @@ export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,
     var wms = new TileLayer({
         visible: visibility,
         title: geoserverName,
+        opacity: 1.0,
         source: new TileWMS({
             url: GEOSERVER_URL+geoserverStore+'/wms',
-            params: {'LAYERS':  geoserverStore+':'+geoserverLayer, 'STYLES': '','TILED':true}
-        }), name: geoserverLayer,
-        urldownload:geonetwork
+            params: {
+                'LAYERS': geoserverStore+':'+geoserverLayer, 
+                'STYLES': '',
+                'TILED': true,
+                'FORMAT': 'image/png',
+                'TRANSPARENT': true,
+                'VERSION': '1.3.0'
+            },
+            projection: 'EPSG:3857',
+            crossOrigin: 'anonymous',
+            serverType: 'geoserver'
+        }), 
+        name: geoserverLayer,
+        urldownload: geonetwork,
+        extent: [-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244]
     });
     return wms
 }

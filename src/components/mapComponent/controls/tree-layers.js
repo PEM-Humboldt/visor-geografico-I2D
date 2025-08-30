@@ -8,13 +8,23 @@ var k = 0;
 var numcap = proyecto === 'general' ? 3 : 18;
 
 export function buildLayerTree(layer) {
-    //var name = layer.get('name') || "Group";
+    // Safety check: ensure layer has getLayers method (is a GroupLayer)
+    if (!layer || typeof layer.getLayers !== 'function') {
+        console.warn('buildLayerTree: Invalid layer passed, skipping:', layer);
+        return;
+    }
+    
     var layers = layer.getLayers().getArray();
-    var len = layers.length;
-    for (var i = 0; i < len - numcap; i++) {
-        var accordion = document.getElementById('accordion');
+    for (var i = 0; i < layers.length - numcap; i++) {
         var group = layers[i];
-        var groupName = group.get('name');
+        
+        // Safety check: ensure group has getLayers method and is actually a GroupLayer
+        if (!group || typeof group.getLayers !== 'function') {
+            console.warn('buildLayerTree: Skipping invalid group (likely VectorLayer):', group.get('title') || group.get('name') || 'unnamed');
+            continue;
+        }
+        
+        var groupName = group.get('title') || group.get('name') || `Group ${i}`;
         var groupElements = createGroupElements(accordion, i, groupName);
         var collapseOne = groupElements.collapseOne;
         var lay = group.getLayers().getArray();
@@ -37,7 +47,13 @@ export function buildLayerTree(layer) {
             check.setAttribute('type', 'checkbox');
             check.id = subname;
             check.onclick = function (ev) {
-                cleanHighlights(ev)
+                cleanHighlights(ev);
+                // Toggle layer visibility
+                const layerToToggle = lay[j];
+                if (layerToToggle && typeof layerToToggle.setVisible === 'function') {
+                    layerToToggle.setVisible(ev.target.checked);
+                    console.log(`Layer ${layerToToggle.get('title')} visibility set to: ${ev.target.checked}`);
+                }
             }
             if (lay[j].values_.visible === true) {
                 check.checked = true;
@@ -77,7 +93,7 @@ export function buildLayerTree(layer) {
         var combinedCollapsesSan = combinedCardsSan;
         // Extract the last three groups
         var lastThreeGroups = layers.slice(2, 14);
-        var lastThreeGroupss = layers.slice(len - 9);
+        var lastThreeGroupss = layers.slice(layers.length - 9);
 
         // Create combined cards for each group
         createCombinedCardsForGroups(ggrupo, combinedCardsCundi, combinedCollapsesCundi, lastThreeGroups, 0);
@@ -215,6 +231,13 @@ function createCombinedCardsForGroups(groupNames, combinedCards, parentElement, 
 function createGroupLayers(groups, index, parentElement) {
     for (var i = index * 3; i < (index + 1) * 3; i++) {
         var group = groups[i];
+        
+        // Check if group exists and has getLayers method
+        if (!group || typeof group.getLayers !== 'function') {
+            console.warn('Skipping invalid group in createGroupLayers:', group);
+            continue;
+        }
+        
         var groupCard = document.createElement('div');
         groupCard.className = "card";
         parentElement.appendChild(groupCard);
@@ -261,6 +284,12 @@ function createGroupLayersContent(groupLayers, parentElement) {
         check.id = subname;
         check.onclick = function (ev) {
             cleanHighlights(ev);
+            // Toggle layer visibility
+            const layerToToggle = groupLayers[j];
+            if (layerToToggle && typeof layerToToggle.setVisible === 'function') {
+                layerToToggle.setVisible(ev.target.checked);
+                console.log(`Layer ${layerToToggle.get('title')} visibility set to: ${ev.target.checked}`);
+            }
         }
 
         if (groupLayers[j].values_.visible === true) {
