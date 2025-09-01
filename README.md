@@ -26,12 +26,120 @@ Ejecute la siguiente sentencia para instalar las dependencias del proyecto:
 
     npm install
 
-### 1.3. Ejecución:
-Ejecute la siguiente instrucción:
+### 1.3. Configuración de entorno:
+Antes de ejecutar el proyecto, configure las variables de entorno:
 
+1. **Para desarrollo local**, cree un archivo `.env` basado en `.env.example`:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Configure las URLs locales** en su archivo `.env`:
+   ```bash
+   NODE_ENV=development
+   GEOSERVER_URL=http://localhost:8081/geoserver/
+   PYTHONSERVER=http://localhost:8001/
+   ```
+
+### 1.4. Ejecución:
+Ejecute una de las siguientes instrucciones:
+
+- **Entorno de desarrollo** (usa .env personalizado):
+    ```bash
+    npm run dev
+    ```
+
+- **Entorno de pruebas** (usa .env.test):
+    ```bash
+    npm run dev:test
+    ```
+
+- **Entorno por defecto**:
+    ```bash
     npm start
+    ```
 
-La instrucción iniciará el proyecto en su entorno local y se abrirá en el navegador.
+La instrucción iniciará el proyecto en su entorno local y se abrirá en el navegador en http://localhost:1234.
+
+---
+
+## Desarrollo con Docker
+
+### 🐳 Configuración Docker
+
+Este proyecto incluye soporte completo para desarrollo con Docker a través del repositorio principal `humboldt`. El contenedor Docker maneja automáticamente la configuración del entorno y las dependencias.
+
+#### Archivos Docker:
+- **`DockerfileDev`**: Contenedor de desarrollo con hot-reload
+- **`.env`**: Variables de entorno personalizadas para desarrollo local
+- **`.env.test`**: Variables de entorno para pruebas
+- **`.env.example`**: Plantilla de configuración
+
+#### Variables de entorno importantes:
+```bash
+# Configuración para desarrollo local
+NODE_ENV=development
+GEOSERVER_URL=http://localhost:8081/geoserver/
+PYTHONSERVER=http://localhost:8001/
+
+# URLs de servicios externos
+GEONETWORK_URL=https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/
+DATAVERSE_URL=https://doi.org/10.21068/
+```
+
+### 🔧 Comandos Docker
+
+Desde el directorio principal `humboldt/`:
+
+```bash
+# Construir el contenedor frontend
+docker-compose build frontend
+
+# Iniciar todos los servicios (incluye frontend)
+docker-compose up -d
+
+# Ver logs del frontend
+docker-compose logs -f frontend
+
+# Reiniciar solo el frontend
+docker-compose restart frontend
+
+# Entrar al contenedor frontend
+docker exec -it visor_i2d_frontend bash
+```
+
+### 🌐 Puertos y URLs
+
+| Servicio | Puerto | URL | Descripción |
+|----------|--------|-----|-------------|
+| **Frontend Dev** | 1234 | http://localhost:1234 | Servidor de desarrollo con hot-reload |
+| **Frontend HMR** | 1235 | - | Hot Module Replacement |
+| **Frontend Prod** | 8080 | http://localhost:8080 | Servidor de producción |
+
+### ⚠️ Troubleshooting Docker
+
+#### Error: Frontend conecta a servidores de prueba
+Si ves errores `ERR_NAME_NOT_RESOLVED` con URLs como `test-geoserver.humboldt.org.co`:
+
+**Causa**: El `DockerfileDev` estaba configurado para usar siempre `.env.test`
+
+**Solución**: Ya corregido en la versión actual
+- `DockerfileDev` ahora usa `COPY .env /home/node/app/.env`
+- Comando cambiado de `npm run dev:test` a `npm run dev`
+
+**Verificación**:
+```bash
+# Verificar que usa el comando correcto
+docker logs visor_i2d_frontend --tail 5
+# Debe mostrar: "npm run dev" (no "npm run dev:test")
+```
+
+#### Reconstruir después de cambios en .env
+```bash
+# Reconstruir y reiniciar
+docker-compose build frontend
+docker-compose down && docker-compose up -d
+```
 
 ---
 
@@ -88,12 +196,48 @@ Después levante el contenedor:
 
 ## Configuración de variables y entorno
 
-- Las URLs de los servicios externos (backend, geoserver, etc.) se configuran en el archivo:
+A partir de ahora, las URLs se pueden configurar mediante variables de entorno. Hay un archivo de ejemplo (.env.example) y un archivo para pruebas (.env.test).
+
+- Variables disponibles:
+  - GEOSERVER_URL
+  - GEONETWORK_URL
+  - DATAVERSE_URL
+  - PYTHONSERVER
+  - CARTODB_POSITRON_URL
+  - OTM_TILE_URL
+  - WMFLABS_BW_URL
+  - STAMEN_TERRAIN_URL
+  - ESRI_WORLD_PHYSICAL_URL
+  - ESRI_WORLD_IMAGERY_URL
+  - PDF_ASSET_BASE_URL (opcional; URL base pública para resolver imágenes en PDFs)
+
+- Ubicación central de configuración en código:
   ```
   src/components/server/url.js
   ```
-- Para desarrollo local, puedes cambiar la variable `PYTHONSERVER` a la URL de tu backend local (por ejemplo, `http://localhost:8000/api/`).
-- En producción, usa la URL pública del backend.
+
+### Entornos
+- Desarrollo local (por defecto):
+  - Ejecuta:
+    ```
+    npm run dev
+    ```
+- Pruebas (usa .env.test):
+  - Ejecuta:
+    ```
+    npm run dev:test
+    ```
+- Compilación para despliegue:
+  - Producción por defecto:
+    ```
+    npm run build
+    ```
+  - Pruebas (inyecta .env.test):
+    ```
+    npm run build:test
+    ```
+
+Nota: Parcel resuelve process.env.* en tiempo de compilación. Los scripts :test usan dotenv-cli para cargar .env.test.
 
 ---
 

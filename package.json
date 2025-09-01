@@ -15,9 +15,12 @@
     ],
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "parcel src/index.html",
-        "dev": "parcel src/index.html",
-        "build": "parcel build --public-url . src/index.html --out-dir build"
+        "start": "parcel src/index.html --port 1234 --hmr-port 1235 --hmr-hostname localhost",
+        "dev": "parcel src/index.html --port 1234 --hmr-port 1235 --hmr-hostname localhost",
+    "build": "dotenv -e .env -- parcel build --public-url . src/index.html --out-dir build",
+    "start:test": "dotenv -e .env.test -- parcel src/index.html --port 1234 --hmr-port 1235 --hmr-hostname localhost",
+    "dev:test": "dotenv -e .env.test -- parcel src/index.html --port 1234 --hmr-port 1235 --hmr-hostname localhost",
+    "build:test": "dotenv -e .env.test -- parcel build --public-url . src/index.html --out-dir build"
     },
     "author": "",
     "license": "MIT",
@@ -42,6 +45,7 @@
     "devDependencies": {
         "parcel-bundler": "^1.12.4",
         "parcel-plugin-bundle-visualiser": "^1.2.0",
-        "sass": "^1.32.4"
+        "sass": "^1.32.4",
+        "dotenv-cli": "^7.3.0"
     }
 }

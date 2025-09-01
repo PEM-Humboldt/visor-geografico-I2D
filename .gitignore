@@ -3,3 +3,7 @@ node_modules/
 dist/
 /nbproject/private/
 package-lock.json
+.env.local
+.env
+build/
+.env

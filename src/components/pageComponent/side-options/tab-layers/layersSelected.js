@@ -39,7 +39,11 @@ export function FeatSelect(features,i) {
 
         var cardTitle = document.createElement('b');
         cardTitle.className = "";
-        cardTitle.innerHTML = feature.id_;
+        if (feature.values_.nombre) {
+            cardTitle.innerHTML = feature.values_.nombre;
+        } else {
+            cardTitle.innerHTML = feature.id_;
+        }
         cardlink.appendChild(cardTitle);
 
         var collapseOne = document.createElement('div');
@@ -65,7 +69,22 @@ export function FeatSelect(features,i) {
                 var row = table.insertRow(j);
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);
-                cell1.innerHTML = i;
+                let label = i;
+                switch(i) {
+                    case 'dpto_nombre':
+                        label = 'Departamento';
+                        break;
+                    case 'nombre':
+                        label = 'Nombre';
+                        break;
+                    case 'codigo':
+                        label = 'Código';
+                        break;
+                    case 'area_ha':
+                        label = 'Área (ha)';
+                        break;
+                }
+                cell1.innerHTML = label;
                 cell2.innerHTML = feature.values_[i];
                 j = j + 1;
             }

@@ -65,9 +65,9 @@ export function savePDF() {
             },
             // TODO: change the static url if change the domain
             images: {
-                i2d: 'https://i2d.humboldt.org.co/visor-I2D/' + logoi2d,
+                i2d: (process.env.PDF_ASSET_BASE_URL || (window.location.origin + '/')) + logoi2d,
                 // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
-                footerpdf: 'https://i2d.humboldt.org.co/visor-I2D/' + footeri2d,
+                footerpdf: (process.env.PDF_ASSET_BASE_URL || (window.location.origin + '/')) + footeri2d,
 
                 // i2d: 'http://localhost:1234/'+logoi2d,
                 // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
