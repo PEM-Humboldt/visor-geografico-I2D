@@ -13,6 +13,7 @@ import projectService from '../services/projectService';
 
 import { onClickMap } from './controls/map-click'
 import { buildLayerTree, findBy } from './controls/tree-layers';
+// Import URL params functions dynamically to avoid circular dependencies
 
 var zoom = document.createElement('span');
 zoom.innerHTML = '<i class="fas fa-expand"></i>';
@@ -73,6 +74,9 @@ const initializeMap = async () => {
         extent: [-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244]
       })
     });
+    
+    // Expose map globally for URL parameter handling
+    window.mapInstance = map;
     
     // Force map render after initialization and debug layer states
     setTimeout(() => {
@@ -188,12 +192,30 @@ document.addEventListener("DOMContentLoaded", async function () {
       buildLayerTree(layerGroup);
     }
 
-    // Layer toggle functionality
+    // Layer toggle functionality with URL parameter sync
     $('.layers-input').on('click', function () {
       var layername = this.id;
       var layer = findBy(layerGroup, 'name', layername);
       if (layer) {
-        layer.setVisible(!layer.getVisible());
+        const newVisibility = !layer.getVisible();
+        layer.setVisible(newVisibility);
+        
+        // Sync with URL parameters
+        const geoserverName = layer.get('geoserverName') || layer.get('name');
+        if (newVisibility) {
+          // Import the setURLParam function dynamically to avoid circular imports
+          import('../utils/urlParams').then(({ setURLParam }) => {
+            setURLParam('capa', geoserverName);
+          });
+        } else {
+          // Check if this was the active layer in URL
+          import('../utils/urlParams').then(({ getURLParam, removeURLParam }) => {
+            const currentCapa = getURLParam('capa');
+            if (currentCapa === geoserverName) {
+              removeURLParam('capa');
+            }
+          });
+        }
       }
     });
 
@@ -209,6 +231,19 @@ document.addEventListener("DOMContentLoaded", async function () {
       });
     }
 
+    // Process URL parameters for automatic layer loading (dynamic import to avoid circular dependency)
+    import('../utils/urlParams.js').then(({ processURLParams, getAvailableLayerNames }) => {
+      processURLParams();
+      
+      // Debug: Log available layer names for reference
+      setTimeout(() => {
+        const availableLayers = getAvailableLayerNames();
+        console.log('Available layers for URL parameters:', availableLayers);
+      }, 2000);
+    }).catch(error => {
+      console.error('Error loading URL parameter utilities:', error);
+    });
+    
     console.log('Map initialization completed');
   } catch (error) {
     console.error('Error during map initialization:', error);

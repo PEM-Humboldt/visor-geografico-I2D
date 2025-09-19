@@ -191,6 +191,38 @@ class ProjectService {
     }
 
     /**
+     * Switch to a different project
+     * @param {string} projectName - Project short name to switch to
+     * @returns {Promise<boolean>} True if switch was successful
+     */
+    async switchProject(projectName) {
+        try {
+            // Load the new project
+            const project = await this.loadProject(projectName);
+            
+            if (project) {
+                // Update URL parameter without reloading
+                const url = new URL(window.location);
+                url.searchParams.set('proyecto', projectName);
+                window.history.pushState({}, '', url);
+                
+                // Update project-specific UI
+                this.updateProjectUI(project);
+                
+                // Reset initialization flag to allow reinitialization
+                this.initialized = false;
+                
+                console.log(`Successfully switched to project: ${projectName}`);
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error('Error switching project:', error);
+            return false;
+        }
+    }
+
+    /**
      * Check if project management is available
      * @returns {Promise<boolean>} True if backend API is available
      */

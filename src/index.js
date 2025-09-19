@@ -9,3 +9,8 @@ import './components/pageComponent/side-options/side-options'
 import './components/uiLinks'
 
 import './components/tutorialComponent/tutorial'
+
+// Debug helpers for development
+if (process.env.NODE_ENV !== 'production') {
+  import('./components/utils/debugLayers.js');
+}

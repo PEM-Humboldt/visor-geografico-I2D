@@ -134,6 +134,9 @@ const createDynamicLayerGroups = async (project) => {
                     // Ensure layer is properly configured
                     layer.setVisible(layerConfig.estado_inicial);
                     groupLayers.push(layer);
+                    console.log(`✅ Added layer ${layerConfig.nombre_display} to group ${group.nombre}`);
+                } else {
+                    console.error(`❌ Failed to create layer ${layerConfig.nombre_display} in group ${group.nombre}`);
                 }
             }
         }
