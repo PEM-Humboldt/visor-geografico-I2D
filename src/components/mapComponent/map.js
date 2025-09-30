@@ -13,6 +13,7 @@ import projectService from '../services/projectService';
 
 import { onClickMap } from './controls/map-click'
 import { buildLayerTree, findBy } from './controls/tree-layers';
+import { buildHierarchicalLayerTree } from './controls/hierarchical-tree-layers';
 // Import URL params functions dynamically to avoid circular dependencies
 
 var zoom = document.createElement('span');
@@ -39,18 +40,18 @@ const initializeMap = async () => {
 
     // Get dynamic layers
     selectedLayers = await getProjectLayers();
-    
+
     // Initialize legacy exports for backward compatibility
     await initializeLegacyExports();
 
     // Create the map with dynamic layers
     const layersArray = selectedLayers._layerArray || Object.values(selectedLayers).filter(layer => layer !== null);
-    
+
     console.log(`Initializing map with ${layersArray.length} layer groups`);
     layersArray.forEach((layer, index) => {
       console.log(`Layer ${index}: ${layer.get('title') || layer.get('name') || 'unnamed'} (visible: ${layer.getVisible()})`);
     });
-    
+
     map = new Map({
       controls: defaultControls({
         attributionOptions: { collapsible: true },
@@ -74,24 +75,24 @@ const initializeMap = async () => {
         extent: [-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244]
       })
     });
-    
+
     // Expose map globally for URL parameter handling
     window.mapInstance = map;
-    
+
     // Force map render after initialization and debug layer states
     setTimeout(() => {
       if (map) {
         map.render();
         console.log('Map render forced');
-        
+
         // Debug: Check if layers are actually added to the map
         const mapLayers = map.getLayers().getArray();
         console.log(`Map has ${mapLayers.length} layers after initialization`);
-        
+
         let hasVisibleWMSLayers = false;
         mapLayers.forEach((layer, index) => {
           console.log(`Map Layer ${index}: ${layer.get('title') || layer.get('name') || 'unnamed'} - visible: ${layer.getVisible()}`);
-          
+
           // Check sublayers for GroupLayers
           if (layer.getLayers) {
             const sublayers = layer.getLayers().getArray();
@@ -99,7 +100,7 @@ const initializeMap = async () => {
               const isVisible = sublayer.getVisible();
               const layerName = sublayer.get('title') || sublayer.get('name');
               console.log(`  Sublayer ${subIndex}: ${layerName} - visible: ${isVisible}, opacity: ${sublayer.getOpacity()}`);
-              
+
               // Check if this is a visible WMS layer (not base layers)
               if (isVisible && layerName && !layerName.includes('CartoDB') && !layerName.includes('Departamentos') && !layerName.includes('Municipios')) {
                 hasVisibleWMSLayers = true;
@@ -108,7 +109,7 @@ const initializeMap = async () => {
             });
           }
         });
-        
+
         // Debug visible WMS layers without changing viewport
         if (hasVisibleWMSLayers) {
           console.log('Found visible WMS layers - keeping current viewport');
@@ -186,10 +187,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Setup map events
     setupMapEvents();
 
-    // Build layer tree
+    // Build layer tree - use hierarchical for ecoreservas, legacy for others
     const layerGroup = getLayerGroup();
     if (layerGroup) {
-      buildLayerTree(layerGroup);
+      if (currentProject && currentProject.nombre_corto === 'ecoreservas') {
+        // Use new hierarchical tree for ecoreservas
+        buildHierarchicalLayerTree(currentProject, layerGroup);
+      } else {
+        // Use legacy tree for other projects
+        buildLayerTree(layerGroup);
+      }
     }
 
     // Layer toggle functionality with URL parameter sync
@@ -199,7 +206,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (layer) {
         const newVisibility = !layer.getVisible();
         layer.setVisible(newVisibility);
-        
+
         // Sync with URL parameters
         const geoserverName = layer.get('geoserverName') || layer.get('name');
         if (newVisibility) {
@@ -234,7 +241,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Process URL parameters for automatic layer loading (dynamic import to avoid circular dependency)
     import('../utils/urlParams.js').then(({ processURLParams, getAvailableLayerNames }) => {
       processURLParams();
-      
+
       // Debug: Log available layer names for reference
       setTimeout(() => {
         const availableLayers = getAvailableLayerNames();
@@ -243,7 +250,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }).catch(error => {
       console.error('Error loading URL parameter utilities:', error);
     });
-    
+
     console.log('Map initialization completed');
   } catch (error) {
     console.error('Error during map initialization:', error);
