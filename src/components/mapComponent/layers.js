@@ -130,9 +130,6 @@ if (urlActual.includes("proyecto=ecoreservas")) {
         v_weplan = true;
     }
     if (urlActual.includes("capa=gefparamos")) {
-        v_gefmun = true;
-    }
-    if (urlActual.includes("capa=gefparamos")) {
         v_gefpar = true;
     }
 }
@@ -213,8 +210,8 @@ if (proyectos === 'general') {
 
     var integridad = wmsLayer('restauracion', 'integr_total4326', 'Integridad', v_integridad, '55d29ef5-e419-489f-a450-3299e4bcc4d4');
 
-    var gefparamo = wmsLayer('gefparamos', 'paramo', 'Paramos', v_gefpar, 'LPM4RE');
-    var gefmunicipio = wmsLayer('gefparamos', 'municipio', 'Municipios', v_gefmun, 'LPM4RE');
+    var gefparamo = wmsLayer('gefparamos', 'paramo', 'Complejos de páramos - para más información →', v_gefpar, 'LPM4RE');
+    var gefmunicipio = wmsLayer('gefparamos', 'municipio', 'Municipios - para más información →', v_gefmun, 'LPM4RE');
 
 } else if (proyectos === 'ecoreservas') {
     var p_best_comp = wmsLayer('ecoreservas', 'Preservación_priorizando_todos_los_enfoques_Compensación', 'Todos los enfoques de costos-Inversión en compensación', true, '4eca511b-d4db-49bc-8efa-a1f20e7c45ac');
@@ -311,9 +308,9 @@ if (proyectos === 'general') {
     });
     gefpar = new GroupLayer({
         fold: 'close',
-        title: 'GEF Páramos',
+        title: 'Conflictos Socioambientales en páramos',
         layers: [gefparamo, gefmunicipio],
-        name: 'GEF Páramos'
+        name: 'Conflictos Socioambientales en páramos'
     });
 } else if (proyectos === 'ecoreservas') {
     comp_preservacion = new GroupLayer({
