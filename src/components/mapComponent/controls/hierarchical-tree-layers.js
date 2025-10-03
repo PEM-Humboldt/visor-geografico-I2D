@@ -221,10 +221,14 @@ function renderLayerGroup(group, parentElement, layerGroup, groupId, level = 0) 
   card.id = `combined_${groupId}`;
   parentElement.appendChild(card);
 
-  // Create header with appropriate styling based on level
+  // Create header - don't add bg-warning/bg-success classes, use color from API
   const cardHeader = document.createElement("div");
-  const headerClass = getHeaderClass(level);
-  cardHeader.className = `card-header ${headerClass}`;
+  cardHeader.className = "card-header";
+
+  // Apply color as background color for the entire header
+  const groupColor = group.color || '#e3e3e3';
+  cardHeader.style.cssText = `background-color: ${groupColor} !important;`;
+
   card.appendChild(cardHeader);
 
   // Create collapse link
