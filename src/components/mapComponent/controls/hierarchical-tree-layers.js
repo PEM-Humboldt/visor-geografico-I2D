@@ -150,8 +150,25 @@ function renderBaseLayer(layer, parentElement, layerIndex, groupIndex) {
 
   checkbox.onclick = function (ev) {
     cleanHighlights(ev);
-    layer.setVisible(ev.target.checked);
-    console.log(`Base layer ${layer.get("title")} visibility set to: ${ev.target.checked}`);
+    const isVisible = ev.target.checked;
+    layer.setVisible(isVisible);
+
+    // Sync with URL parameters for base layers too
+    const layerName = layer.get('name') || layer.get('geoserverName');
+    if (isVisible && layerName) {
+      import('../../utils/urlParams').then(({ setURLParam }) => {
+        setURLParam('capa', layerName);
+      }).catch(err => console.error('Error setting URL param:', err));
+    } else if (!isVisible && layerName) {
+      import('../../utils/urlParams').then(({ getURLParam, removeURLParam }) => {
+        const currentCapa = getURLParam('capa');
+        if (currentCapa === layerName) {
+          removeURLParam('capa');
+        }
+      }).catch(err => console.error('Error removing URL param:', err));
+    }
+
+    console.log(`Base layer ${layer.get("title")} visibility set to: ${isVisible}`);
   };
 
   formCheck.appendChild(checkbox);
@@ -325,12 +342,31 @@ function renderLayer(layerData, parentElement, layerGroup) {
     // Set initial visibility
     olLayer.setVisible(layerData.estado_inicial);
 
-    // Add click handler
+    // Add click handler with URL parameter sync
     checkbox.onclick = function (ev) {
       cleanHighlights(ev);
-      olLayer.setVisible(ev.target.checked);
+      const isVisible = ev.target.checked;
+      olLayer.setVisible(isVisible);
+
+      // Sync with URL parameters
+      const geoserverName = layerData.nombre_geoserver;
+      if (isVisible) {
+        // Dynamically import to avoid circular dependencies
+        import('../../utils/urlParams').then(({ setURLParam }) => {
+          setURLParam('capa', geoserverName);
+        }).catch(err => console.error('Error setting URL param:', err));
+      } else {
+        // Remove URL parameter if this was the active layer
+        import('../../utils/urlParams').then(({ getURLParam, removeURLParam }) => {
+          const currentCapa = getURLParam('capa');
+          if (currentCapa === geoserverName) {
+            removeURLParam('capa');
+          }
+        }).catch(err => console.error('Error removing URL param:', err));
+      }
+
       console.log(
-        `Layer ${layerData.nombre_display} visibility set to: ${ev.target.checked}`
+        `Layer ${layerData.nombre_display} visibility set to: ${isVisible}`
       );
     };
 

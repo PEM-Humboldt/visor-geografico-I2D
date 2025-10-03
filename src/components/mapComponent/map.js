@@ -200,11 +200,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     // Layer toggle functionality with URL parameter sync
-    $('.layers-input').on('click', function () {
+    // Use event delegation to handle dynamically created checkboxes
+    $(document).on('click', '.layers-input', function () {
       var layername = this.id;
       var layer = findBy(layerGroup, 'name', layername);
       if (layer) {
-        const newVisibility = !layer.getVisible();
+        const newVisibility = this.checked; // Use checkbox state directly
         layer.setVisible(newVisibility);
 
         // Sync with URL parameters
