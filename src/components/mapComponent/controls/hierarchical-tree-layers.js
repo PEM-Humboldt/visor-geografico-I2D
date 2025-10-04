@@ -7,6 +7,233 @@ const urlParams = new URLSearchParams(window.location.search);
 const proyecto = urlParams.get('proyecto') || 'general';
 
 /**
+ * Fit map view to layer extent with animation
+ * Fetches actual extent from GeoServer for WMS layers
+ * @param {Object} layer - OpenLayers layer
+ */
+async function fitMapToLayerExtent(layer) {
+  if (!layer || !window.mapInstance) {
+    console.warn('Cannot fit to extent: layer or map not available');
+    return;
+  }
+
+  try {
+    const source = layer.getSource();
+    if (!source) {
+      console.warn('Layer has no source');
+      return;
+    }
+
+    let extent = null;
+
+    // For WMS/TileWMS layers, fetch extent from GeoServer
+    if (source.constructor.name === 'TileWMS' || source.getParams) {
+      const params = source.getParams();
+      const layerName = params.LAYERS;
+
+      if (layerName) {
+        console.log(`Fetching extent for WMS layer: ${layerName}`);
+        extent = await fetchWMSLayerExtent(source.getUrls()[0], layerName);
+      }
+    }
+
+    // For vector layers, use source extent
+    if (!extent && typeof source.getExtent === 'function') {
+      extent = source.getExtent();
+    }
+
+    // Fallback to layer property extent (but check if it's not the max extent)
+    if (!extent || !isFinite(extent[0])) {
+      const layerExtent = layer.get('extent');
+      // Only use if it's not the maximum EPSG:3857 extent
+      if (layerExtent && layerExtent[0] !== -20037508.342789244) {
+        extent = layerExtent;
+      }
+    }
+
+    // Check if extent is valid
+    if (!extent || !isFinite(extent[0]) || !isFinite(extent[1]) ||
+        !isFinite(extent[2]) || !isFinite(extent[3])) {
+      console.warn('Layer extent is not valid or could not be fetched:', layer.get('name'));
+      return;
+    }
+
+    // Check if extent is not the maximum extent (indicates no real extent available)
+    if (extent[0] === -20037508.342789244 && extent[2] === 20037508.342789244) {
+      console.warn('Layer has maximum extent, cannot zoom to specific area:', layer.get('name'));
+      return;
+    }
+
+    // Check if extent is not empty (all zeros or very small)
+    const width = extent[2] - extent[0];
+    const height = extent[3] - extent[1];
+    if (width < 1 || height < 1) {
+      console.warn('Layer extent is too small or empty:', layer.get('name'));
+      return;
+    }
+
+    console.log(`🎯 Fitting map to layer extent:`, extent);
+    console.log(`🗺️ Current map center:`, window.mapInstance.getView().getCenter());
+    console.log(`🔍 Current map zoom:`, window.mapInstance.getView().getZoom());
+
+    // Fit the view to the extent with padding and animation
+    window.mapInstance.getView().fit(extent, {
+      padding: [50, 50, 50, 50], // Add padding around the extent
+      duration: 1000, // Animation duration in milliseconds
+      maxZoom: 16, // Don't zoom in too much for small features
+      callback: function(complete) {
+        if (complete) {
+          console.log(`✅ Map view fit completed`);
+          console.log(`🗺️ New map center:`, window.mapInstance.getView().getCenter());
+          console.log(`🔍 New map zoom:`, window.mapInstance.getView().getZoom());
+        } else {
+          console.warn(`⚠️ Map view fit was interrupted`);
+        }
+      }
+    });
+
+    console.log(`🎬 Map view.fit() called, animation started`);
+  } catch (error) {
+    console.error('Error fitting to layer extent:', error);
+  }
+}
+
+/**
+ * Fetch WMS layer extent from GeoServer GetCapabilities
+ * @param {string} wmsUrl - WMS service URL
+ * @param {string} layerName - Full layer name (workspace:layer)
+ * @returns {Promise<Array|null>} Extent array [minx, miny, maxx, maxy] or null
+ */
+async function fetchWMSLayerExtent(wmsUrl, layerName) {
+  try {
+    // Build GetCapabilities URL
+    const capabilitiesUrl = `${wmsUrl}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities`;
+
+    console.log(`🔍 Fetching capabilities from: ${capabilitiesUrl}`);
+    console.log(`🔍 Looking for layer: ${layerName}`);
+
+    // Extract layer name without workspace prefix (e.g., "ecoreservas:layer_name" -> "layer_name")
+    const layerNameWithoutWorkspace = layerName.includes(':') ? layerName.split(':')[1] : layerName;
+    console.log(`🔍 Layer name without workspace: ${layerNameWithoutWorkspace}`);
+
+    const response = await fetch(capabilitiesUrl);
+    if (!response.ok) {
+      console.error(`❌ GetCapabilities request failed: ${response.status} ${response.statusText}`);
+      return null;
+    }
+
+    const text = await response.text();
+    console.log(`✅ GetCapabilities response received (${text.length} bytes)`);
+
+    // Parse XML
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(text, 'text/xml');
+
+    // Check for XML parsing errors
+    const parserError = xmlDoc.getElementsByTagName('parsererror');
+    if (parserError.length > 0) {
+      console.error('❌ XML parsing error:', parserError[0].textContent);
+      return null;
+    }
+
+    // Find the layer in capabilities
+    const layers = xmlDoc.getElementsByTagName('Layer');
+    console.log(`📋 Found ${layers.length} layers in capabilities`);
+
+    // Log all available layer names for debugging
+    const availableLayerNames = [];
+    for (let i = 0; i < layers.length; i++) {
+      const nameNode = layers[i].getElementsByTagName('Name')[0];
+      if (nameNode) {
+        availableLayerNames.push(nameNode.textContent);
+      }
+    }
+    console.log(`📋 Available layers:`, availableLayerNames);
+
+    for (let i = 0; i < layers.length; i++) {
+      const layerNode = layers[i];
+      const nameNode = layerNode.getElementsByTagName('Name')[0];
+
+      // Match against both full name and name without workspace
+      if (nameNode && (nameNode.textContent === layerName || nameNode.textContent === layerNameWithoutWorkspace)) {
+        console.log(`✅ Found matching layer: ${nameNode.textContent} (searched for: ${layerName})`);
+
+        // Try to get EX_GeographicBoundingBox first (WGS84)
+        const geoBBox = layerNode.getElementsByTagName('EX_GeographicBoundingBox')[0];
+        if (geoBBox) {
+          const westBound = parseFloat(geoBBox.getElementsByTagName('westBoundLongitude')[0].textContent);
+          const eastBound = parseFloat(geoBBox.getElementsByTagName('eastBoundLongitude')[0].textContent);
+          const southBound = parseFloat(geoBBox.getElementsByTagName('southBoundLatitude')[0].textContent);
+          const northBound = parseFloat(geoBBox.getElementsByTagName('northBoundLatitude')[0].textContent);
+
+          console.log(`📍 WGS84 bounds: [${westBound}, ${southBound}, ${eastBound}, ${northBound}]`);
+
+          // Transform from WGS84 to EPSG:3857
+          const extent = transformExtent([westBound, southBound, eastBound, northBound]);
+          console.log(`📍 Transformed extent (EPSG:3857):`, extent);
+          console.log(`🎯 Calling map.getView().fit() with extent:`, extent);
+          return extent;
+        }
+
+        // Fallback to BoundingBox with CRS
+        const bboxNodes = layerNode.getElementsByTagName('BoundingBox');
+        console.log(`📦 Found ${bboxNodes.length} BoundingBox elements`);
+
+        for (let j = 0; j < bboxNodes.length; j++) {
+          const bbox = bboxNodes[j];
+          const crs = bbox.getAttribute('CRS') || bbox.getAttribute('SRS');
+          console.log(`📦 BoundingBox ${j}: CRS=${crs}`);
+
+          if (crs === 'EPSG:3857' || crs === 'EPSG:900913') {
+            const minx = parseFloat(bbox.getAttribute('minx'));
+            const miny = parseFloat(bbox.getAttribute('miny'));
+            const maxx = parseFloat(bbox.getAttribute('maxx'));
+            const maxy = parseFloat(bbox.getAttribute('maxy'));
+
+            const extent = [minx, miny, maxx, maxy];
+            console.log(`✅ Found EPSG:3857 extent for ${layerName}:`, extent);
+            console.log(`🎯 Calling map.getView().fit() with extent:`, extent);
+            return extent;
+          }
+        }
+
+        console.warn(`⚠️ Layer found but no suitable bounding box`);
+      }
+    }
+
+    console.warn(`❌ Could not find extent for layer ${layerName} in capabilities`);
+    console.warn(`💡 Searched for: "${layerName}" and "${layerNameWithoutWorkspace}"`);
+    console.warn(`💡 Available layers: ${availableLayerNames.join(', ')}`);
+    return null;
+  } catch (error) {
+    console.error(`❌ Error fetching WMS capabilities:`, error);
+    console.error(`Stack trace:`, error.stack);
+    return null;
+  }
+}
+
+/**
+ * Transform extent from WGS84 (EPSG:4326) to Web Mercator (EPSG:3857)
+ * @param {Array} extent - [minLon, minLat, maxLon, maxLat]
+ * @returns {Array} Transformed extent [minX, minY, maxX, maxY]
+ */
+function transformExtent(extent) {
+  const [minLon, minLat, maxLon, maxLat] = extent;
+
+  // Transform coordinates from EPSG:4326 to EPSG:3857
+  const minX = minLon * 20037508.34 / 180;
+  const maxX = maxLon * 20037508.34 / 180;
+
+  let minY = Math.log(Math.tan((90 + minLat) * Math.PI / 360)) / (Math.PI / 180);
+  minY = minY * 20037508.34 / 180;
+
+  let maxY = Math.log(Math.tan((90 + maxLat) * Math.PI / 360)) / (Math.PI / 180);
+  maxY = maxY * 20037508.34 / 180;
+
+  return [minX, minY, maxX, maxY];
+}
+
+/**
  * Hierarchical Layer Tree Builder
  * Renders layer groups from API with full hierarchical support
  */
@@ -152,6 +379,11 @@ function renderBaseLayer(layer, parentElement, layerIndex, groupIndex) {
     cleanHighlights(ev);
     const isVisible = ev.target.checked;
     layer.setVisible(isVisible);
+
+    // Fit map to layer extent when enabling
+    if (isVisible) {
+      fitMapToLayerExtent(layer);
+    }
 
     // Sync with URL parameters for base layers too
     const layerName = layer.get('name') || layer.get('geoserverName');
@@ -347,6 +579,11 @@ function renderLayer(layerData, parentElement, layerGroup) {
       cleanHighlights(ev);
       const isVisible = ev.target.checked;
       olLayer.setVisible(isVisible);
+
+      // Fit map to layer extent when enabling
+      if (isVisible) {
+        fitMapToLayerExtent(olLayer);
+      }
 
       // Sync with URL parameters
       const geoserverName = layerData.nombre_geoserver;
