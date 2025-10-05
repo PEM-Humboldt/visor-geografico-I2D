@@ -261,8 +261,8 @@ export function buildHierarchicalLayerTree(projectData, layerGroup) {
   AllLayers = [];
   layerIndex = 0;
 
-  // Add close button
-  addCloseButton(accordion);
+  // // Add close button
+  // addCloseButton(accordion);
 
   // First, render base layer groups from OpenLayers (Capas Base, División político-administrativa)
   renderBaseLayers(layerGroup, accordion);
@@ -345,7 +345,27 @@ function renderBaseLayerGroup(group, accordion, index, groupName) {
 
   const cardHeader = document.createElement("div");
   cardHeader.className = "card-header";
+  cardHeader.style.position = "relative";  // Required for absolute positioning
   card.appendChild(cardHeader);
+
+  // Add close button to first card only
+  if (index === 0) {
+    const closeButton = document.createElement("a");
+    closeButton.className = "card-link float-right";
+    closeButton.setAttribute("data-toggle", "collapse");
+    closeButton.setAttribute(
+      "style",
+      "position:absolute; right:8px; top:8px; color: rgb(42, 71, 80); cursor:pointer; z-index:10; pointer-events:auto;"
+    );
+    closeButton.setAttribute("href", "#");
+    closeButton.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      document.getElementById("accordion").className = "d-none";
+    };
+    closeButton.innerHTML = '<i class="fas fa-times"></i>';
+    cardHeader.appendChild(closeButton);
+  }
 
   const cardLink = document.createElement("a");
   cardLink.className = "btn btn-link";
