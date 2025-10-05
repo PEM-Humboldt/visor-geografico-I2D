@@ -247,6 +247,9 @@ let layerIndex = 0;
  * @param {Object} layerGroup - OpenLayers layer group
  */
 export function buildHierarchicalLayerTree(projectData, layerGroup) {
+    console.log('🟣 buildHierarchicalLayerTree CALLED');
+  console.log('🟣 projectData:', projectData);
+  console.log('🟣 layerGroup:', layerGroup);
   const accordion = document.getElementById("accordion");
   if (!accordion) {
     console.error("Accordion element not found");
@@ -283,6 +286,24 @@ export function buildHierarchicalLayerTree(projectData, layerGroup) {
   }
 
   console.log(`Built hierarchical tree with ${AllLayers.length} layers`);
+
+    // Populate AllLayers from the actual map layer groups
+  // This ensures we capture all layers, not just base layers
+  if (layerGroup && typeof layerGroup.getLayers === 'function') {
+    AllLayers = []; // Clear and rebuild
+    const groups = layerGroup.getLayers().getArray();
+    groups.forEach((group, groupIndex) => {
+      if (groupIndex === 0) return; // Skip Capas Base (group 0)
+
+      if (group && typeof group.getLayers === 'function') {
+        const layers = group.getLayers().getArray();
+        layers.forEach(layer => {
+          AllLayers.push(layer);
+        });
+      }
+    });
+    console.log(`🟣 Rebuilt AllLayers from map, new length: ${AllLayers.length}`);
+  }
 }
 
 /**
@@ -411,7 +432,7 @@ function renderBaseLayer(layer, parentElement, layerIndex, groupIndex) {
   label.innerHTML = layer.get("title") || layer.get("name");
   formCheck.appendChild(label);
 
-  // Add download link if available
+    // Add download link if available
   const urldownload = layer.get("urldownload");
   if (urldownload && urldownload !== "") {
     const downloadLink = document.createElement("div");
@@ -422,10 +443,13 @@ function renderBaseLayer(layer, parentElement, layerIndex, groupIndex) {
   }
 
   // Store layer reference (skip first group index 0)
+  console.log(`🟣 renderBaseLayer: groupIndex=${groupIndex}, layer=${layer.get('name')}, will add=${groupIndex !== 0}`);
   if (groupIndex !== 0) {
     AllLayers[AllLayers.length] = layer;
+    console.log(`🟣 Added layer to AllLayers, new length: ${AllLayers.length}`);
   }
 }
+
 
 /**
  * Add close button to accordion
@@ -722,4 +746,5 @@ $("#ControlCapas").on("click", function () {
   closeTutorialOnStep4();
 });
 
-export const AllLayerss = AllLayers;
+export const getAllLayerss = () => AllLayers;
+export const AllLayerss = AllLayers; // Keep for backward compatibility, but it won't update

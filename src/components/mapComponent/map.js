@@ -180,23 +180,38 @@ const setupMapEvents = () => {
 
 // Initialize everything when DOM is ready
 document.addEventListener("DOMContentLoaded", async function () {
+  console.log('🔵🔵🔵 DOMContentLoaded fired in map.js');
+  console.log('🔵 window.location.href:', window.location.href);
   try {
+    console.log('🔵🔵🔵 Calling initializeMap');
     // Initialize map with project configuration
     await initializeMap();
 
+    console.log('🔵🔵🔵 Calling setupMapEvents');
     // Setup map events
     setupMapEvents();
 
+
+
     // Build layer tree - use hierarchical for ecoreservas, legacy for others
     const layerGroup = getLayerGroup();
+    console.log('🔵 Building layer tree');
+    console.log('🔵 layerGroup:', layerGroup);
+    console.log('🔵 currentProject:', currentProject);
+    console.log('🔵 currentProject?.nombre_corto:', currentProject?.nombre_corto);
+
     if (layerGroup) {
       if (currentProject && currentProject.nombre_corto === 'ecoreservas') {
+        console.log('🔵 Calling buildHierarchicalLayerTree for ecoreservas')  ;
         // Use new hierarchical tree for ecoreservas
         buildHierarchicalLayerTree(currentProject, layerGroup);
       } else {
+        console.log('🔵 Calling buildLayerTree for general project');
         // Use legacy tree for other projects
         buildLayerTree(layerGroup);
       }
+    }else {
+      console.log('🔵 No layerGroup found!');
     }
 
     // Layer toggle functionality with URL parameter sync
