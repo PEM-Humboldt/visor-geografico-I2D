@@ -36,6 +36,8 @@ const initializeMap = async () => {
       const mapConfig = projectService.getMapConfig();
       nzoom = mapConfig.zoom;
       ncenter = mapConfig.center;
+      console.log(`🗺️ Project map config: center=[${ncenter}], zoom=${nzoom}`);
+      console.log(`📍 Project: ${currentProject.nombre} (${currentProject.nombre_corto})`);
     }
 
     // Get dynamic layers
@@ -75,6 +77,8 @@ const initializeMap = async () => {
         extent: [-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244]
       })
     });
+
+    console.log(`✅ Map created with initial view: center=[${ncenter}], zoom=${nzoom}`);
 
     // Expose map globally for URL parameter handling
     window.mapInstance = map;

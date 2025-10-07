@@ -20,8 +20,14 @@ let existingSidebar, dptoFeature, mpioFeature
 
 // Get the correct AllLayerss array based on project
 const getAllLayers = () => {
-    // return proyecto === 'ecoreservas' ? HierarchicalLayersArray : TreeLayersArray;
-    return proyecto === 'ecoreservas' ? getHierarchicalLayers() : TreeLayersArray;
+    // Always use hierarchical layers since buildHierarchicalLayerTree is used for all projects
+    const hierarchicalLayers = getHierarchicalLayers();
+    console.log('🟡 getAllLayers called - proyecto:', proyecto);
+    console.log('🟡 hierarchicalLayers.length:', hierarchicalLayers.length);
+    console.log('🟡 TreeLayersArray.length:', TreeLayersArray.length);
+    
+    // Use hierarchical layers if available, otherwise fall back to tree layers
+    return hierarchicalLayers.length > 0 ? hierarchicalLayers : TreeLayersArray;
 };
 
 // get wms layers if turn on
