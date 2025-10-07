@@ -201,17 +201,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     console.log('🔵 currentProject?.nombre_corto:', currentProject?.nombre_corto);
 
     if (layerGroup) {
-      if (currentProject && currentProject.nombre_corto === 'ecoreservas') {
-        console.log('🔵 Calling buildHierarchicalLayerTree for ecoreservas')  ;
-        // Use new hierarchical tree for ecoreservas
+      if (currentProject && currentProject.layer_groups) {
+        console.log('🔵 Calling buildHierarchicalLayerTree for', currentProject.nombre_corto);
+        // Use hierarchical tree for all projects (respects fold_state from API)
         buildHierarchicalLayerTree(currentProject, layerGroup);
       } else {
-        console.log('🔵 Calling buildLayerTree for general project');
-        // Use legacy tree for other projects
+        console.log('🔵 Calling buildLayerTree as fallback');
+        // Use legacy tree only as fallback
         buildLayerTree(layerGroup);
       }
-    }else {
-      console.log('🔵 No layerGroup found!');
     }
 
     // Layer toggle functionality with URL parameter sync
