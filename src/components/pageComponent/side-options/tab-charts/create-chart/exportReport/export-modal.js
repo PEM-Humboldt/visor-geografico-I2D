@@ -54,7 +54,7 @@ var jsonModal = () => {
 
             <button type='submit' id="downloadPDF" value="downloadPDF" class='btn btn-primary btn-block'>Descargar Informe (PDF)</button>
             <button type='submit' id="downloadAll" value="downloadAll" class='btn btn-primary btn-block'>Descargar Informe y datos</button>
-        
+
           `
     }]
   }
@@ -76,7 +76,6 @@ $('#download-resume').on('click', function () {
 //  modal for export pdf
 $(document).on('submit', 'form#formSolicitante', function (e) {
   let type = $(this).find("button[type=submit]:focus")[0].value
-  // console.log(type)
   e.preventDefault();
 
   let json = {

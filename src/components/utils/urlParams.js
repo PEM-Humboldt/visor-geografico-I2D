@@ -17,16 +17,14 @@ async function fitMapToLayerExtent(layer) {
   }
 
   try {
-    console.log(`🗺️ fitMapToLayerExtent called for layer:`, layer.get('title') || layer.get('name'));
-    
+
     const source = layer.getSource();
     if (!source) {
       console.warn('⚠️ Layer has no source');
       return;
     }
 
-    console.log(`📦 Layer source type: ${source.constructor.name}`);
-    
+
     let extent = null;
 
     // For WMS/TileWMS layers, fetch extent from GeoServer
@@ -35,14 +33,7 @@ async function fitMapToLayerExtent(layer) {
       const layerName = params.LAYERS;
 
       if (layerName) {
-        console.log(`🌐 Fetching extent for WMS layer: ${layerName}`);
         extent = await fetchWMSLayerExtent(source.getUrls()[0], layerName);
-        
-        if (extent) {
-          console.log(`✅ Successfully fetched extent from GeoServer:`, extent);
-        } else {
-          console.warn(`⚠️ Could not fetch extent from GeoServer for layer: ${layerName}`);
-        }
       }
     }
 
@@ -81,27 +72,16 @@ async function fitMapToLayerExtent(layer) {
       return;
     }
 
-    console.log(`🎯 Fitting map to layer extent:`, extent);
-    console.log(`🗺️ Current map center:`, window.mapInstance.getView().getCenter());
-    console.log(`🔍 Current map zoom:`, window.mapInstance.getView().getZoom());
-
     // Fit the view to the extent with padding and animation
     window.mapInstance.getView().fit(extent, {
       padding: [50, 50, 50, 50], // Add padding around the extent
       duration: 1000, // Animation duration in milliseconds
       maxZoom: 16, // Don't zoom in too much for small features
       callback: function(complete) {
-        if (complete) {
-          console.log(`✅ Map view fit completed`);
-          console.log(`🗺️ New map center:`, window.mapInstance.getView().getCenter());
-          console.log(`🔍 New map zoom:`, window.mapInstance.getView().getZoom());
-        } else {
-          console.warn(`⚠️ Map view fit was interrupted`);
-        }
+        // no-op
       }
     });
 
-    console.log(`🎬 Map view.fit() called, animation started`);
   } catch (error) {
     console.error('Error fitting to layer extent:', error);
   }
@@ -118,12 +98,9 @@ async function fetchWMSLayerExtent(wmsUrl, layerName) {
     // Build GetCapabilities URL
     const capabilitiesUrl = `${wmsUrl}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities`;
 
-    console.log(`🔍 Fetching capabilities from: ${capabilitiesUrl}`);
-    console.log(`🔍 Looking for layer: ${layerName}`);
 
     // Extract layer name without workspace prefix (e.g., "ecoreservas:layer_name" -> "layer_name")
     const layerNameWithoutWorkspace = layerName.includes(':') ? layerName.split(':')[1] : layerName;
-    console.log(`🔍 Layer name without workspace: ${layerNameWithoutWorkspace}`);
 
     const response = await fetch(capabilitiesUrl);
     if (!response.ok) {
@@ -132,7 +109,6 @@ async function fetchWMSLayerExtent(wmsUrl, layerName) {
     }
 
     const text = await response.text();
-    console.log(`✅ GetCapabilities response received (${text.length} bytes)`);
 
     // Parse XML
     const parser = new DOMParser();
@@ -147,9 +123,8 @@ async function fetchWMSLayerExtent(wmsUrl, layerName) {
 
     // Find the layer in capabilities
     const layers = xmlDoc.getElementsByTagName('Layer');
-    console.log(`📋 Found ${layers.length} layers in capabilities`);
 
-    // Log all available layer names for debugging
+    // Collect available layer names
     const availableLayerNames = [];
     for (let i = 0; i < layers.length; i++) {
       const nameNode = layers[i].getElementsByTagName('Name')[0];
@@ -157,7 +132,7 @@ async function fetchWMSLayerExtent(wmsUrl, layerName) {
         availableLayerNames.push(nameNode.textContent);
       }
     }
-    console.log(`📋 Available layers:`, availableLayerNames);
+    // no console output in production
 
     for (let i = 0; i < layers.length; i++) {
       const layerNode = layers[i];
@@ -165,12 +140,12 @@ async function fetchWMSLayerExtent(wmsUrl, layerName) {
 
       // Check both full layer name and name without workspace prefix
       const nodeLayerName = nameNode ? nameNode.textContent : '';
-      const matches = nodeLayerName === layerName || 
+      const matches = nodeLayerName === layerName ||
                      nodeLayerName === layerNameWithoutWorkspace ||
                      (layerName.includes(':') && nodeLayerName === layerName.split(':')[1]);
 
       if (nameNode && matches) {
-        console.log(`✅ Found matching layer: ${layerName} (matched as: ${nodeLayerName})`);
+        // matching layer found
 
         // Try to get EX_GeographicBoundingBox first (WGS84)
         const geoBBox = layerNode.getElementsByTagName('EX_GeographicBoundingBox')[0];
@@ -180,23 +155,17 @@ async function fetchWMSLayerExtent(wmsUrl, layerName) {
           const southBound = parseFloat(geoBBox.getElementsByTagName('southBoundLatitude')[0].textContent);
           const northBound = parseFloat(geoBBox.getElementsByTagName('northBoundLatitude')[0].textContent);
 
-          console.log(`📍 WGS84 bounds: [${westBound}, ${southBound}, ${eastBound}, ${northBound}]`);
-
           // Transform from WGS84 to EPSG:3857
           const extent = transformExtent([westBound, southBound, eastBound, northBound]);
-          console.log(`📍 Transformed extent (EPSG:3857):`, extent);
-          console.log(`🎯 Calling map.getView().fit() with extent:`, extent);
           return extent;
         }
 
         // Fallback to BoundingBox with CRS
         const bboxNodes = layerNode.getElementsByTagName('BoundingBox');
-        console.log(`📦 Found ${bboxNodes.length} BoundingBox elements`);
 
         for (let j = 0; j < bboxNodes.length; j++) {
           const bbox = bboxNodes[j];
           const crs = bbox.getAttribute('CRS') || bbox.getAttribute('SRS');
-          console.log(`📦 BoundingBox ${j}: CRS=${crs}`);
 
           if (crs === 'EPSG:3857' || crs === 'EPSG:900913') {
             const minx = parseFloat(bbox.getAttribute('minx'));
@@ -205,8 +174,6 @@ async function fetchWMSLayerExtent(wmsUrl, layerName) {
             const maxy = parseFloat(bbox.getAttribute('maxy'));
 
             const extent = [minx, miny, maxx, maxy];
-            console.log(`✅ Found EPSG:3857 extent for ${layerName}:`, extent);
-            console.log(`🎯 Calling map.getView().fit() with extent:`, extent);
             return extent;
           }
         }
@@ -215,9 +182,7 @@ async function fetchWMSLayerExtent(wmsUrl, layerName) {
       }
     }
 
-    console.warn(`❌ Could not find extent for layer ${layerName} in capabilities`);
-    console.warn(`💡 Searched for: "${layerName}" and "${layerNameWithoutWorkspace}"`);
-    console.warn(`💡 Available layers: ${availableLayerNames.join(', ')}`);
+    // Could not find extent for layer in capabilities
     return null;
   } catch (error) {
     console.error(`❌ Error fetching WMS capabilities:`, error);
@@ -358,11 +323,8 @@ const findLayerByDisplayName = (displayName) => {
 export const activateLayer = (layerName) => {
     if (!layerName) return false;
 
-    console.log(`🔍 Attempting to activate layer: ${layerName}`);
-
     // Decode URL-encoded layer name (handles %C3%B3 -> ó, etc.)
     const decodedLayerName = decodeURIComponent(layerName);
-    console.log(`🔍 Decoded layer name: ${decodedLayerName}`);
 
     // First try to find by geoserver name (both encoded and decoded)
     let layer = findLayerByGeoserverName(layerName);
@@ -379,27 +341,15 @@ export const activateLayer = (layerName) => {
     }
 
     if (layer) {
-        console.log(`✅ Found layer: ${layer.get('title') || layer.get('name')}`);
-        console.log(`📍 Layer properties:`, {
-            name: layer.get('name'),
-            geoserverName: layer.get('geoserverName'),
-            title: layer.get('title'),
-            displayName: layer.get('displayName'),
-            visible: layer.getVisible()
-        });
-
         // Set layer visible
         layer.setVisible(true);
-        console.log(`👁️ Layer visibility set to true`);
 
         // Fit map to layer extent
-        console.log(`🎯 Calling fitMapToLayerExtent...`);
         fitMapToLayerExtent(layer);
 
         // Force refresh the layer source to ensure it renders
         const source = layer.getSource();
         if (source && typeof source.refresh === 'function') {
-            console.log(`Refreshing source for layer: ${layerName}`);
             source.refresh();
         }
 
@@ -407,7 +357,6 @@ export const activateLayer = (layerName) => {
         if (window.mapInstance) {
             window.mapInstance.updateSize();
             window.mapInstance.render();
-            console.log(`Forced map render for layer: ${layerName}`);
         }
 
         // Also check the corresponding checkbox if it exists
@@ -415,13 +364,10 @@ export const activateLayer = (layerName) => {
         const checkbox = document.getElementById(layerId);
         if (checkbox) {
             checkbox.checked = true;
-            console.log(`Checked checkbox for layer: ${layerId}`);
         }
 
         // Update URL parameter to reflect current state
         setURLParam('capa', layerName);
-
-        console.log(`Layer ${layerName} activated successfully - visible: ${layer.getVisible()}, opacity: ${layer.getOpacity()}`);
         return true;
     } else {
         console.warn(`Layer ${layerName} not found`);
@@ -437,7 +383,6 @@ export const activateLayer = (layerName) => {
 export const deactivateLayer = (layerName) => {
     if (!layerName) return false;
 
-    console.log(`Attempting to deactivate layer: ${layerName}`);
 
     // Try to find by geoserver name first
     let layer = findLayerByGeoserverName(layerName);
@@ -448,7 +393,6 @@ export const deactivateLayer = (layerName) => {
     }
 
     if (layer) {
-        console.log(`Found layer: ${layer.get('title') || layer.get('name')}`);
         layer.setVisible(false);
 
         // Also uncheck the corresponding checkbox if it exists
@@ -461,7 +405,6 @@ export const deactivateLayer = (layerName) => {
         // Remove URL parameter
         removeURLParam('capa');
 
-        console.log(`Layer ${layerName} deactivated successfully`);
         return true;
     } else {
         console.warn(`Layer ${layerName} not found`);
@@ -480,13 +423,11 @@ export const processURLParams = (onLayerTreeReady) => {
 
     // Check if we're already processing a project switch to avoid loops
     if (window.processingProjectSwitch) {
-        console.log('Project switch already in progress, skipping...');
         return;
     }
 
     // Handle project switching first - but only if it's different from current
     if (proyectoParam) {
-        console.log(`URL parameter 'proyecto' found: ${proyectoParam}`);
 
         // Check if this is actually a different project
         import('../services/projectService.js').then(({ default: projectService }) => {
@@ -494,27 +435,22 @@ export const processURLParams = (onLayerTreeReady) => {
             const currentProjectName = currentProject ? currentProject.nombre_corto : 'general';
 
             if (proyectoParam !== currentProjectName) {
-                console.log(`Switching from ${currentProjectName} to ${proyectoParam}`);
                 switchProject(proyectoParam);
             } else {
-                console.log(`Already on project ${proyectoParam}, no switch needed`);
+                // already on requested project
             }
         });
     }
 
     // Handle layer activation with retry mechanism
     if (capaParam) {
-        console.log(`🎯 URL parameter 'capa' found: ${capaParam}`);
-        console.log(`📍 Will zoom to layer extent after activation`);
 
         // Try to activate layer with retries if layer tree isn't ready yet
         const tryActivateLayer = (retries = 5, delay = 300) => {
             const success = activateLayer(capaParam);
             if (success) {
-                console.log(`✅ Successfully processed URL parameter: capa=${capaParam}`);
                 if (onLayerTreeReady) onLayerTreeReady();
             } else if (retries > 0) {
-                console.log(`⏳ Layer not found yet, retrying in ${delay}ms... (${retries} retries left)`);
                 setTimeout(() => tryActivateLayer(retries - 1, delay), delay);
             } else {
                 console.error(`❌ Failed to activate layer from URL parameter after all retries: ${capaParam}`);
@@ -525,7 +461,6 @@ export const processURLParams = (onLayerTreeReady) => {
         // Start activation attempts after a short initial delay
         setTimeout(() => tryActivateLayer(), 500);
     } else {
-        console.log(`ℹ️ No 'capa' parameter in URL - using project default center coordinates`);
         if (onLayerTreeReady) onLayerTreeReady();
     }
 };
@@ -538,12 +473,10 @@ export const switchProject = async (projectName) => {
     try {
         // Prevent multiple simultaneous switches
         if (window.processingProjectSwitch) {
-            console.log('Project switch already in progress, ignoring...');
             return;
         }
 
         window.processingProjectSwitch = true;
-        console.log(`Switching to project: ${projectName}`);
 
         // For now, simply reload the page with the new project parameter
         // This ensures all layers and UI elements are properly reinitialized

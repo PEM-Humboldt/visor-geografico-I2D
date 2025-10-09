@@ -38,9 +38,6 @@ let dynamicLayers = new Map();
 const initializeProject = async () => {
   try {
     currentProject = await projectService.initializeProject();
-    console.log(
-      `Dynamic layers initialized for project: ${currentProject.nombre}`,
-    );
     return currentProject;
   } catch (error) {
     console.error("Error initializing dynamic layers:", error);
@@ -175,9 +172,6 @@ const createDynamicWMSLayer = (layerConfig) => {
       }
     }
 
-    console.log(
-      `Layer ${layerConfig.nombre_display}: visibility=${layerConfig.estado_inicial}, actual=${layer.getVisible()}, opacity=${layer.getOpacity()}`,
-    );
   }
 
   return layer;
@@ -203,9 +197,6 @@ const createDynamicLayerGroups = async (project) => {
           // Ensure layer is properly configured
           layer.setVisible(layerConfig.estado_inicial);
           groupLayers.push(layer);
-          console.log(
-            `✅ Added layer ${layerConfig.nombre_display} to group ${group.nombre}`,
-          );
         } else {
           console.error(
             `❌ Failed to create layer ${layerConfig.nombre_display} in group ${group.nombre}`,
@@ -226,16 +217,6 @@ const createDynamicLayerGroups = async (project) => {
 
       // Ensure the group layer is properly configured
       groupLayer.setVisible(true);
-
-      // Debug: log the group and its layers
-      console.log(
-        `Created group "${groupName}" with ${groupLayers.length} layers`,
-      );
-      groupLayers.forEach((layer, idx) => {
-        console.log(
-          `  - Layer ${idx}: ${layer.get("title")} (visible: ${layer.getVisible()})`,
-        );
-      });
 
       // Use unique key to avoid overwriting groups with same name
       const uniqueKey = `${groupName}_${group.id}`;
@@ -272,8 +253,6 @@ const getProjectLayers = async () => {
     const baseLayers = createBaseLayers(project);
     const dynamicGroups = await createDynamicLayerGroups(project);
 
-    console.log("Dynamic groups created:", Object.keys(dynamicGroups));
-
     // Create array of GroupLayer instances for OpenLayers compatibility
     const dynamicGroupLayers = Object.values(dynamicGroups).filter(
       (group) => group instanceof GroupLayer,
@@ -306,16 +285,12 @@ const getProjectLayers = async () => {
         sublayers.forEach((sublayer) => {
           if (sublayer.getVisible()) {
             hasVisibleLayers = true;
-            console.log(
-              `Found visible layer: ${sublayer.get("title")} - will refresh source`,
-            );
 
             if (sublayer.getSource) {
               const source = sublayer.getSource();
               if (source && typeof source.refresh === "function") {
                 setTimeout(() => {
                   source.refresh();
-                  console.log(`Refreshed source for: ${sublayer.get("title")}`);
                 }, 300);
               }
             }
@@ -324,21 +299,13 @@ const getProjectLayers = async () => {
       }
     });
 
-    console.log(
-      `Layer initialization complete. Has visible layers: ${hasVisibleLayers}`,
-    );
+
 
     // Debug layer visibility
     layerGroups.forEach((group, index) => {
       if (group && typeof group.getLayers === "function") {
         const layers = group.getLayers().getArray();
-        console.log(
-          `Group ${index} (${group.get("title") || "unnamed"}): ${layers.length} layers`,
-        );
         layers.forEach((layer, layerIndex) => {
-          console.log(
-            `  Layer ${layerIndex}: ${layer.get("title") || layer.get("name")} - visible: ${layer.getVisible()}`,
-          );
         });
       }
     });
@@ -456,10 +423,6 @@ export const initializeLegacyExports = async () => {
       if (logoEcoP) {
         logoEcoP.style.display = "inline-block";
         if (currentProject.logo_pequeno_url) {
-          console.log(
-            "Updating ecoreservas small logo to:",
-            currentProject.logo_pequeno_url,
-          );
           logoEcoP.src = currentProject.logo_pequeno_url;
         }
       }
@@ -467,10 +430,6 @@ export const initializeLegacyExports = async () => {
       if (logoEcoG) {
         logoEcoG.style.display = "inline-block";
         if (currentProject.logo_completo_url) {
-          console.log(
-            "Updating ecoreservas complete logo to:",
-            currentProject.logo_completo_url,
-          );
           logoEcoG.src = currentProject.logo_completo_url;
         }
       }
@@ -501,7 +460,6 @@ export const initializeLegacyExports = async () => {
       if (key.startsWith("uso_sostenible")) comp_uso_sostenible = layers[key];
     });
 
-    console.log("Legacy layer exports initialized");
     return layers;
   } catch (error) {
     console.error("Error initializing legacy exports:", error);

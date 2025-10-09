@@ -40,7 +40,6 @@ class ProjectService {
             this.cache.set(projectName, projectData);
             this.currentProject = projectData;
 
-            console.log(`Project loaded: ${projectData.nombre}`);
             return projectData;
         } catch (error) {
             console.error('Error loading project from API:', error);
@@ -186,7 +185,6 @@ class ProjectService {
             }
         };
 
-        console.log(`Using fallback project: ${projectName}`);
         return fallbackProjects[projectName] || fallbackProjects.general;
     }
 
@@ -212,7 +210,6 @@ class ProjectService {
                 // Reset initialization flag to allow reinitialization
                 this.initialized = false;
                 
-                console.log(`Successfully switched to project: ${projectName}`);
                 return true;
             }
             return false;

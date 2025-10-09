@@ -33,7 +33,6 @@ async function fitMapToLayerExtent(layer) {
       const layerName = params.LAYERS;
 
       if (layerName) {
-        console.log(`Fetching extent for WMS layer: ${layerName}`);
         extent = await fetchWMSLayerExtent(source.getUrls()[0], layerName);
       }
     }
@@ -73,27 +72,17 @@ async function fitMapToLayerExtent(layer) {
       return;
     }
 
-    console.log(`🎯 Fitting map to layer extent:`, extent);
-    console.log(`🗺️ Current map center:`, window.mapInstance.getView().getCenter());
-    console.log(`🔍 Current map zoom:`, window.mapInstance.getView().getZoom());
-
     // Fit the view to the extent with padding and animation
     window.mapInstance.getView().fit(extent, {
       padding: [50, 50, 50, 50], // Add padding around the extent
       duration: 1000, // Animation duration in milliseconds
       maxZoom: 16, // Don't zoom in too much for small features
       callback: function(complete) {
-        if (complete) {
-          console.log(`✅ Map view fit completed`);
-          console.log(`🗺️ New map center:`, window.mapInstance.getView().getCenter());
-          console.log(`🔍 New map zoom:`, window.mapInstance.getView().getZoom());
-        } else {
+        if (!complete) {
           console.warn(`⚠️ Map view fit was interrupted`);
         }
       }
     });
-
-    console.log(`🎬 Map view.fit() called, animation started`);
   } catch (error) {
     console.error('Error fitting to layer extent:', error);
   }
@@ -110,12 +99,8 @@ async function fetchWMSLayerExtent(wmsUrl, layerName) {
     // Build GetCapabilities URL
     const capabilitiesUrl = `${wmsUrl}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities`;
 
-    console.log(`🔍 Fetching capabilities from: ${capabilitiesUrl}`);
-    console.log(`🔍 Looking for layer: ${layerName}`);
-
     // Extract layer name without workspace prefix (e.g., "ecoreservas:layer_name" -> "layer_name")
     const layerNameWithoutWorkspace = layerName.includes(':') ? layerName.split(':')[1] : layerName;
-    console.log(`🔍 Layer name without workspace: ${layerNameWithoutWorkspace}`);
 
     const response = await fetch(capabilitiesUrl);
     if (!response.ok) {
@@ -124,7 +109,6 @@ async function fetchWMSLayerExtent(wmsUrl, layerName) {
     }
 
     const text = await response.text();
-    console.log(`✅ GetCapabilities response received (${text.length} bytes)`);
 
     // Parse XML
     const parser = new DOMParser();
@@ -139,9 +123,8 @@ async function fetchWMSLayerExtent(wmsUrl, layerName) {
 
     // Find the layer in capabilities
     const layers = xmlDoc.getElementsByTagName('Layer');
-    console.log(`📋 Found ${layers.length} layers in capabilities`);
 
-    // Log all available layer names for debugging
+    // Collect all available layer names for debugging
     const availableLayerNames = [];
     for (let i = 0; i < layers.length; i++) {
       const nameNode = layers[i].getElementsByTagName('Name')[0];
@@ -149,7 +132,6 @@ async function fetchWMSLayerExtent(wmsUrl, layerName) {
         availableLayerNames.push(nameNode.textContent);
       }
     }
-    console.log(`📋 Available layers:`, availableLayerNames);
 
     for (let i = 0; i < layers.length; i++) {
       const layerNode = layers[i];
@@ -157,8 +139,6 @@ async function fetchWMSLayerExtent(wmsUrl, layerName) {
 
       // Match against both full name and name without workspace
       if (nameNode && (nameNode.textContent === layerName || nameNode.textContent === layerNameWithoutWorkspace)) {
-        console.log(`✅ Found matching layer: ${nameNode.textContent} (searched for: ${layerName})`);
-
         // Try to get EX_GeographicBoundingBox first (WGS84)
         const geoBBox = layerNode.getElementsByTagName('EX_GeographicBoundingBox')[0];
         if (geoBBox) {
@@ -167,23 +147,17 @@ async function fetchWMSLayerExtent(wmsUrl, layerName) {
           const southBound = parseFloat(geoBBox.getElementsByTagName('southBoundLatitude')[0].textContent);
           const northBound = parseFloat(geoBBox.getElementsByTagName('northBoundLatitude')[0].textContent);
 
-          console.log(`📍 WGS84 bounds: [${westBound}, ${southBound}, ${eastBound}, ${northBound}]`);
-
           // Transform from WGS84 to EPSG:3857
           const extent = transformExtent([westBound, southBound, eastBound, northBound]);
-          console.log(`📍 Transformed extent (EPSG:3857):`, extent);
-          console.log(`🎯 Calling map.getView().fit() with extent:`, extent);
           return extent;
         }
 
         // Fallback to BoundingBox with CRS
         const bboxNodes = layerNode.getElementsByTagName('BoundingBox');
-        console.log(`📦 Found ${bboxNodes.length} BoundingBox elements`);
 
         for (let j = 0; j < bboxNodes.length; j++) {
           const bbox = bboxNodes[j];
           const crs = bbox.getAttribute('CRS') || bbox.getAttribute('SRS');
-          console.log(`📦 BoundingBox ${j}: CRS=${crs}`);
 
           if (crs === 'EPSG:3857' || crs === 'EPSG:900913') {
             const minx = parseFloat(bbox.getAttribute('minx'));
@@ -192,8 +166,6 @@ async function fetchWMSLayerExtent(wmsUrl, layerName) {
             const maxy = parseFloat(bbox.getAttribute('maxy'));
 
             const extent = [minx, miny, maxx, maxy];
-            console.log(`✅ Found EPSG:3857 extent for ${layerName}:`, extent);
-            console.log(`🎯 Calling map.getView().fit() with extent:`, extent);
             return extent;
           }
         }
@@ -248,9 +220,6 @@ let layerIndex = 0;
  * @param {Object} layerGroup - OpenLayers layer group
  */
 export function buildHierarchicalLayerTree(projectData, layerGroup) {
-    console.log('🟣 buildHierarchicalLayerTree CALLED');
-  console.log('🟣 projectData:', projectData);
-  console.log('🟣 layerGroup:', layerGroup);
   const accordion = document.getElementById("accordion");
   if (!accordion) {
     console.error("Accordion element not found");
@@ -286,9 +255,7 @@ export function buildHierarchicalLayerTree(projectData, layerGroup) {
     accordion.className = "d-block";
   }
 
-  console.log(`Built hierarchical tree with ${AllLayers.length} layers`);
-
-    // Populate AllLayers from the actual map layer groups
+  // Populate AllLayers from the actual map layer groups
   // This ensures we capture all layers, not just base layers
   if (layerGroup && typeof layerGroup.getLayers === 'function') {
     AllLayers = []; // Clear and rebuild
@@ -303,7 +270,6 @@ export function buildHierarchicalLayerTree(projectData, layerGroup) {
         });
       }
     });
-    console.log(`🟣 Rebuilt AllLayers from map, new length: ${AllLayers.length}`);
   }
 }
 
@@ -330,7 +296,6 @@ function renderBaseLayers(layerGroup, accordion) {
     }
 
     const groupName = group.get("title") || group.get("name") || `Group ${i}`;
-    console.log(`Rendering base layer group ${i}: ${groupName}`);
     renderBaseLayerGroup(group, accordion, i, groupName);
   }
 }
@@ -441,8 +406,6 @@ function renderBaseLayer(layer, parentElement, layerIndex, groupIndex) {
         }
       }).catch(err => console.error('Error removing URL param:', err));
     }
-
-    console.log(`Base layer ${layer.get("title")} visibility set to: ${isVisible}`);
   };
 
   formCheck.appendChild(checkbox);
@@ -464,10 +427,8 @@ function renderBaseLayer(layer, parentElement, layerIndex, groupIndex) {
   }
 
   // Store layer reference (skip first group index 0)
-  console.log(`🟣 renderBaseLayer: groupIndex=${groupIndex}, layer=${layer.get('name')}, will add=${groupIndex !== 0}`);
   if (groupIndex !== 0) {
     AllLayers[AllLayers.length] = layer;
-    console.log(`🟣 Added layer to AllLayers, new length: ${AllLayers.length}`);
   }
 }
 
@@ -646,10 +607,6 @@ function renderLayer(layerData, parentElement, layerGroup) {
           }
         }).catch(err => console.error('Error removing URL param:', err));
       }
-
-      console.log(
-        `Layer ${layerData.nombre_display} visibility set to: ${isVisible}`
-      );
     };
 
     // Store layer reference

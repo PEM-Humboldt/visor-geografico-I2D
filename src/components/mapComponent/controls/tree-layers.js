@@ -12,21 +12,15 @@ var k = 0;
 var numcap = proyecto === "general" ? 3 : 18;
 
 export function buildLayerTree(layer) {
-  // Safety check: ensure layer has getLayers method (is a GroupLayer)
   if (!layer || typeof layer.getLayers !== "function") {
     console.warn("buildLayerTree: Invalid layer passed, skipping:", layer);
     return;
   }
 
-  console.log(`🟣 buildLayerTree CALLED - proyecto: ${proyecto}, numcap: ${numcap}`);
-  
   var layers = layer.getLayers().getArray();
-  console.log(`🟣 Total layers in map: ${layers.length}`);
-  console.log(`🟣 Will process ${layers.length - numcap} layer groups`);
-  
+
   for (var i = 0; i < layers.length - numcap; i++) {
     var group = layers[i];
-    console.log(`🟣 Processing group ${i}:`, group.get("title") || group.get("name"));
 
     // Safety check: ensure group has getLayers method and is actually a GroupLayer
     if (!group || typeof group.getLayers !== "function") {
@@ -65,9 +59,6 @@ export function buildLayerTree(layer) {
         const layerToToggle = lay[j];
         if (layerToToggle && typeof layerToToggle.setVisible === "function") {
           layerToToggle.setVisible(ev.target.checked);
-          console.log(
-            `Layer ${layerToToggle.get("title")} visibility set to: ${ev.target.checked}`,
-          );
         }
       };
       if (lay[j].values_.visible === true) {
@@ -91,48 +82,33 @@ export function buildLayerTree(layer) {
       }
       if (i !== 0) {
         AllLayers[k] = lay[j];
-        console.log(`🟣 Added layer to AllLayers[${k}]: ${lay[j].get("title")} (group ${i}, sublayer ${j})`);
         k = k + 1;
-      } else {
-        console.log(`🟣 Skipped layer (i=0): ${lay[j].get("title")} (group ${i}, sublayer ${j})`);
       }
     }
   }
-  
-  console.log(`🟣 buildLayerTree COMPLETE - AllLayers.length: ${AllLayers.length}`);
-  console.log(`🟣 AllLayers:`, AllLayers);
-  
+
   // Rebuild AllLayers from the actual map layer groups (like hierarchical-tree-layers.js does)
   // This ensures we capture all layers correctly
   if (layer && typeof layer.getLayers === 'function') {
     AllLayers = []; // Clear and rebuild
     k = 0; // Reset counter
     const groups = layer.getLayers().getArray();
-    console.log(`🟣 Rebuilding AllLayers from ${groups.length} groups`);
-    
+
     groups.forEach((group, groupIndex) => {
-      console.log(`🟣 Group ${groupIndex}: ${group.get('title') || group.get('name')}`);
-      
       // Skip first group (index 0) - this is typically Capas Base
       if (groupIndex === 0) {
-        console.log(`🟣 Skipping group 0 (Capas Base)`);
         return;
       }
-      
+
       if (group && typeof group.getLayers === 'function') {
         const groupLayers = group.getLayers().getArray();
-        console.log(`🟣 Group ${groupIndex} has ${groupLayers.length} layers`);
-        
         groupLayers.forEach(layer => {
           AllLayers.push(layer);
-          console.log(`🟣 Added layer to AllLayers[${AllLayers.length - 1}]: ${layer.get('title') || layer.get('name')}`);
         });
       }
     });
-    
-    console.log(`🟣 Rebuilt AllLayers from map, final length: ${AllLayers.length}`);
   }
-  
+
   if (proyecto === "ecoreservas") {
     // Define the group names
     var ggrupo = ["Compensación", "Inversión 1%", "Inversión Voluntaria"];
@@ -342,9 +318,6 @@ function createGroupLayersContent(groupLayers, parentElement) {
       const layerToToggle = groupLayers[j];
       if (layerToToggle && typeof layerToToggle.setVisible === "function") {
         layerToToggle.setVisible(ev.target.checked);
-        console.log(
-          `Layer ${layerToToggle.get("title")} visibility set to: ${ev.target.checked}`,
-        );
       }
     };
 

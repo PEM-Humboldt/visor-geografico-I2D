@@ -16,13 +16,6 @@ export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,
     
     // URL encode the layer name to handle special characters (ó, í, etc.)
     const encodedLayerName = encodeURIComponent(sanitizedLayerName);
-    
-    console.log(`Creating WMS layer: store=${geoserverStore}, original layer=${sanitizedLayerName}, encoded=${encodedLayerName}, name=${geoserverName}`);
-    
-    // Check if this layer might cause issues
-    if (sanitizedLayerName.length > 100) {
-        console.warn(`Layer name is very long (${sanitizedLayerName.length} chars): ${sanitizedLayerName}`);
-    }
     try {
         var wms = new TileLayer({
             visible: visibility,
@@ -52,15 +45,13 @@ export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,
         // Add error handling for the WMS source
         const source = wms.getSource();
         source.on('tileloaderror', function(event) {
-            console.error(`Tile load error for layer ${geoserverName}:`, event);
-            console.error(`Failed URL: ${event.tile.src_}`);
+            // Silently handle tile load errors
         });
         
-        console.log(`✅ Successfully created WMS layer: ${geoserverName}`);
         return wms;
         
     } catch (error) {
-        console.error(`❌ Error creating WMS layer ${geoserverName}:`, error);
+        // Silently handle WMS layer creation errors
         return null;
     }
 }

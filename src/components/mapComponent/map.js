@@ -36,8 +36,6 @@ const initializeMap = async () => {
       const mapConfig = projectService.getMapConfig();
       nzoom = mapConfig.zoom;
       ncenter = mapConfig.center;
-      console.log(`🗺️ Project map config: center=[${ncenter}], zoom=${nzoom}`);
-      console.log(`📍 Project: ${currentProject.nombre} (${currentProject.nombre_corto})`);
     }
 
     // Get dynamic layers
@@ -48,11 +46,6 @@ const initializeMap = async () => {
 
     // Create the map with dynamic layers
     const layersArray = selectedLayers._layerArray || Object.values(selectedLayers).filter(layer => layer !== null);
-
-    console.log(`Initializing map with ${layersArray.length} layer groups`);
-    layersArray.forEach((layer, index) => {
-      console.log(`Layer ${index}: ${layer.get('title') || layer.get('name') || 'unnamed'} (visible: ${layer.getVisible()})`);
-    });
 
     map = new Map({
       controls: defaultControls({
@@ -78,24 +71,19 @@ const initializeMap = async () => {
       })
     });
 
-    console.log(`✅ Map created with initial view: center=[${ncenter}], zoom=${nzoom}`);
-
     // Expose map globally for URL parameter handling
     window.mapInstance = map;
 
-    // Force map render after initialization and debug layer states
+    // Force map render after initialization
     setTimeout(() => {
       if (map) {
         map.render();
-        console.log('Map render forced');
 
         // Debug: Check if layers are actually added to the map
         const mapLayers = map.getLayers().getArray();
-        console.log(`Map has ${mapLayers.length} layers after initialization`);
 
         let hasVisibleWMSLayers = false;
         mapLayers.forEach((layer, index) => {
-          console.log(`Map Layer ${index}: ${layer.get('title') || layer.get('name') || 'unnamed'} - visible: ${layer.getVisible()}`);
 
           // Check sublayers for GroupLayers
           if (layer.getLayers) {
@@ -103,12 +91,10 @@ const initializeMap = async () => {
             sublayers.forEach((sublayer, subIndex) => {
               const isVisible = sublayer.getVisible();
               const layerName = sublayer.get('title') || sublayer.get('name');
-              console.log(`  Sublayer ${subIndex}: ${layerName} - visible: ${isVisible}, opacity: ${sublayer.getOpacity()}`);
 
               // Check if this is a visible WMS layer (not base layers)
               if (isVisible && layerName && !layerName.includes('CartoDB') && !layerName.includes('Departamentos') && !layerName.includes('Municipios')) {
                 hasVisibleWMSLayers = true;
-                console.log(`Found visible WMS layer: ${layerName}`);
               }
             });
           }
@@ -116,12 +102,11 @@ const initializeMap = async () => {
 
         // Debug visible WMS layers without changing viewport
         if (hasVisibleWMSLayers) {
-          console.log('Found visible WMS layers - keeping current viewport');
+          // keep current viewport
         }
       }
     }, 1000);
 
-    console.log(`Map initialized with ${Object.keys(selectedLayers).length} layer groups`);
     return map;
   } catch (error) {
     console.error('Error initializing map:', error);
@@ -184,33 +169,21 @@ const setupMapEvents = () => {
 
 // Initialize everything when DOM is ready
 document.addEventListener("DOMContentLoaded", async function () {
-  console.log('🔵🔵🔵 DOMContentLoaded fired in map.js');
-  console.log('🔵 window.location.href:', window.location.href);
   try {
-    console.log('🔵🔵🔵 Calling initializeMap');
     // Initialize map with project configuration
     await initializeMap();
 
-    console.log('🔵🔵🔵 Calling setupMapEvents');
     // Setup map events
     setupMapEvents();
 
-
-
     // Build layer tree - use hierarchical for ecoreservas, legacy for others
     const layerGroup = getLayerGroup();
-    console.log('🔵 Building layer tree');
-    console.log('🔵 layerGroup:', layerGroup);
-    console.log('🔵 currentProject:', currentProject);
-    console.log('🔵 currentProject?.nombre_corto:', currentProject?.nombre_corto);
 
     if (layerGroup) {
       if (currentProject && currentProject.layer_groups) {
-        console.log('🔵 Calling buildHierarchicalLayerTree for', currentProject.nombre_corto);
         // Use hierarchical tree for all projects (respects fold_state from API)
         buildHierarchicalLayerTree(currentProject, layerGroup);
       } else {
-        console.log('🔵 Calling buildLayerTree as fallback');
         // Use legacy tree only as fallback
         buildLayerTree(layerGroup);
       }
@@ -259,17 +232,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Process URL parameters for automatic layer loading (dynamic import to avoid circular dependency)
     import('../utils/urlParams.js').then(({ processURLParams, getAvailableLayerNames }) => {
       processURLParams();
-
-      // Debug: Log available layer names for reference
-      setTimeout(() => {
-        const availableLayers = getAvailableLayerNames();
-        console.log('Available layers for URL parameters:', availableLayers);
-      }, 2000);
     }).catch(error => {
       console.error('Error loading URL parameter utilities:', error);
     });
-
-    console.log('Map initialization completed');
   } catch (error) {
     console.error('Error during map initialization:', error);
   }
