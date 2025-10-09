@@ -1,10 +1,11 @@
 import $ from "jquery";
 import { closeTutorialOnStep4 } from "../../tutorialComponent/tutorial";
-import logoi2d from "../../../assets/legend/ecoreservas.png";
+// import logoi2d from "../../../assets/legend/ecoreservas.png";
 
 // Get proyecto from URL params instead of importing from layers
 const urlParams = new URLSearchParams(window.location.search);
 const proyecto = urlParams.get('proyecto') || 'general';
+const GEOSERVER_URL = process.env.GEOSERVER_URL || 'https://geoservicios.humboldt.org.co/geoserver/';
 
 /**
  * Fit map view to layer extent with animation
@@ -679,14 +680,13 @@ function renderLayer(layerData, parentElement, layerGroup) {
     formCheck.appendChild(metadataLink);
   }
 
-  // Add logo for ecoreservas
-  if (proyecto === "ecoreservas") {
-    const logoDiv = document.createElement("div");
-    const image = document.createElement("img");
-    image.src = logoi2d;
-    logoDiv.appendChild(image);
-    formCheck.appendChild(logoDiv);
-  }
+  const logoDiv = document.createElement("div");
+  const image = document.createElement("img");
+  const geoserverStore = layerData.store_geoserver || proyecto;
+  image.src = `${GEOSERVER_URL}wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&LAYER=${layerData.store_geoserver}:${layerData.nombre_geoserver}&FORMAT=image/png`;
+  logoDiv.appendChild(image);
+  formCheck.appendChild(logoDiv);
+
 }
 
 /**
