@@ -15,8 +15,8 @@ export const HUMBOLDT_SITE_URL = process.env.HUMBOLDT_SITE_URL || 'http://www.hu
 // Base map and tile servers
 export const CARTODB_POSITRON_URL = process.env.CARTODB_POSITRON_URL || 'http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
 export const OTM_TILE_URL = process.env.OTM_TILE_URL || 'https://tile.opentopomap.org/{z}/{x}/{y}.png';
-export const WMFLABS_BW_URL = process.env.WMFLABS_BW_URL || 'http://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png';
-export const STAMEN_TERRAIN_URL = process.env.STAMEN_TERRAIN_URL || 'http://a.tile.stamen.com/terrain/{z}/{x}/{y}.png';
+export const WMFLABS_BW_URL = process.env.WMFLABS_BW_URL || 'https://api.maptiler.com/maps/toner-v2/256 /{z}/{x}/{y}.png?key=Ky7K1wE0D0jgsipnioH8';
+export const STAMEN_TERRAIN_URL = process.env.STAMEN_TERRAIN_URL || 'https://tileserver.memomaps.de/tilegen /{z}/{x}/{y}.png';
 export const ESRI_WORLD_PHYSICAL_URL = process.env.ESRI_WORLD_PHYSICAL_URL || 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}';
 export const ESRI_WORLD_IMAGERY_URL = process.env.ESRI_WORLD_IMAGERY_URL || 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
 

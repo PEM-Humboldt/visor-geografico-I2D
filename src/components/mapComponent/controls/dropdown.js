@@ -12,12 +12,12 @@ export function createDropdown(title,name,data){
     if(lengthData>0){
       for (let i = 0; i < lengthData; i++) {
         let coord=data[i].coord_central;
-        // dropdown items
-        let dropdownItems = document.createElement('option');
+        // dropdown items - use <a> instead of <option> for clickable items
+        let dropdownItems = document.createElement('a');
         dropdownItems.textContent=data[i].nombre+ ',' +data[i].dpto_nombre;
         dropdownItems.setAttribute('class','dropdown-item');
-        dropdownItems.setAttribute('type', 'button');
-        dropdownItems.setAttribute('value', coord);
+        dropdownItems.setAttribute('href', '#');
+        dropdownItems.setAttribute('data-coord', coord);
 
         menuItems.append(dropdownItems);
       }
@@ -30,15 +30,16 @@ export function createDropdown(title,name,data){
     }
 
 }
-// selection of dropdown item
-$('#menu-items-mupio').find('.dropdown-items').on('click', function(e) {
-  $('#dropdown-menu-mupio').hide() 
+// selection of dropdown item - use event delegation for dynamically created elements
+$(document).on('click', '#dropdown-items .dropdown-item', function(e) {
+  e.preventDefault();
+  $('#dropdown-menu-mupio').hide();
   
-  let coordinate = e.target.value.replace(/'/g, '"');
+  let coordinate = $(this).attr('data-coord').replace(/'/g, '"');
   coordinate = JSON.parse(coordinate);
   // zoom to the center coordinate
-  let coo1=fromLonLat(coordinate,'EPSG:3857')
-  fitCenter(coo1)
+  let coo1=fromLonLat(coordinate,'EPSG:3857');
+  fitCenter(coo1);
   
   layerSelection(coo1);
-})
+});

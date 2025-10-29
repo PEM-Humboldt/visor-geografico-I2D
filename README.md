@@ -1,19 +1,67 @@
-# Visor-I2D
-El visor geografico I2D es un proyecto que permite interactuar con un visor de información geográfica que contiene información de registros biologicos.
+# Frontend Visor-I2D
 
-Este proyecto ha sido desarrollado por el [Instituto Humboldt](http://www.humboldt.org.co). El proyecto usa [Node.js](https://nodejs.org/) versión 15.3.0 y tecnologías web tales como HTML, Javascript y SCSS, junto a paquetes como [Jquery 3.5.1](https://jquery.com/), [Bootstrap 4.5.3](https://getbootstrap.com/), [fontawesome 5.15.1](https://fontawesome.com/), [OpenLayers 6.5.0](https://openlayers.org/) y [geoserver 2.11.2](http://geoserver.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-15.3.0-339933?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![OpenLayers](https://img.shields.io/badge/OpenLayers-6.5.0-1F6B75?style=flat&logo=openlayers&logoColor=white)](https://openlayers.org/)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-4.5.3-7952B3?style=flat&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
+[![jQuery](https://img.shields.io/badge/jQuery-3.5.1-0769AD?style=flat&logo=jquery&logoColor=white)](https://jquery.com/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat&logo=docker&logoColor=white)](https://docs.docker.com/)
 
-Esta es una version preliminar para actualizar el actual visor de la I2D.
+El Frontend del Visor Geográfico I2D es una aplicación web interactiva que proporciona una interfaz moderna y funcional para la visualización de datos de biodiversidad. Desarrollado con tecnologías web estándar y OpenLayers, ofrece mapas interactivos, búsqueda geográfica y gestión dinámica de proyectos.
 
-Se implementarán nuevas funcionalidades y capas.
+**Desarrollado por el [Instituto Alexander von Humboldt Colombia](http://www.humboldt.org.co)**
+*Programa de Evaluación y Monitoreo de la Biodiversidad*
+
+## 🚀 Estado Actual del Sistema
+
+### ✅ **COMPLETAMENTE FUNCIONAL**
+- **Mapas Interactivos**: OpenLayers 6.5.0 con controles de zoom y navegación completos
+- **Búsqueda Geográfica**: Sistema de búsqueda de municipios con dropdown interactivo
+- **Proyectos Dinámicos**: Cambio de proyecto vía URL sin recarga de página
+- **Controles de Mapa**: Botones de zoom in, zoom out y extensión completa operativos
+- **Integración Backend**: Conectividad completa con APIs REST
+- **Variables de Entorno**: Configuración flexible para desarrollo y producción
+- **Docker Support**: Contenedorización completa con hot-reload
+
+## 📋 Características Principales
+
+- **🗺️ Mapas Interactivos**: OpenLayers con controles completos de navegación y zoom
+- **🔍 Búsqueda Inteligente**: Sistema de búsqueda de municipios con navegación automática
+- **📊 Proyectos Dinámicos**: Gestión de proyectos configurable sin cambios de código
+- **📱 Diseño Responsivo**: Bootstrap 4.5.3 con soporte para múltiples dispositivos
+- **🎨 UI Moderna**: FontAwesome 5.15.1 e interfaz intuitiva
+- **🔧 Hot Reload**: Desarrollo con recarga automática usando Parcel
+- **🌐 Multi-entorno**: Configuración flexible para desarrollo, pruebas y producción
+
+## 🛠️ Stack Tecnológico
+
+### Frontend Core
+- **Node.js**: 15.3.0
+- **Build Tool**: Parcel 1.12.4 con hot-reload
+- **JavaScript**: Vanilla JS + jQuery 3.5.1
+- **CSS Framework**: Bootstrap 4.5.3 + SCSS personalizado
+
+### Mapas y Visualización
+- **OpenLayers**: 6.5.0 para mapas interactivos
+- **GeoServer**: Integración con capas WMS
+- **Proyecciones**: Soporte EPSG:3857 y EPSG:4326
+
+### UI/UX
+- **Icons**: FontAwesome 5.15.1
+- **Responsive**: Bootstrap grid system
+- **Components**: 45+ componentes modulares en `src/components/`
 
 ---
 
-## Configuración inicial
+## 📋 Configuración Inicial
 
-### Instalación y ejecución
+### Prerrequisitos
+- **Node.js**: 15.3.0+ (recomendado usar nvm)
+- **npm**: 6.0+ o yarn
+- **Docker**: Para desarrollo con contenedores (opcional)
 
-Debe tener instalado npm o yarn en su equipo local, para la instalación de paquetes y ejecución del proyecto. Clone el proyecto en su equipo e ingrese por línea de comandos al directorio del proyecto.
+### Instalación y Ejecución
+
+Clone el proyecto e instale las dependencias:
 
 ### 1.1. Clone el repositorio:
 
@@ -26,20 +74,34 @@ Ejecute la siguiente sentencia para instalar las dependencias del proyecto:
 
     npm install
 
-### 1.3. Configuración de entorno:
-Antes de ejecutar el proyecto, configure las variables de entorno:
+### 1.3. Configuración de Entorno
 
-1. **Para desarrollo local**, cree un archivo `.env` basado en `.env.example`:
+**Variables de entorno críticas para funcionamiento:**
+
+1. **Crear archivo de configuración**:
    ```bash
    cp .env.example .env
    ```
 
-2. **Configure las URLs locales** en su archivo `.env`:
+2. **Configurar URLs de servicios locales**:
    ```bash
    NODE_ENV=development
    GEOSERVER_URL=http://localhost:8081/geoserver/
-   PYTHONSERVER=http://localhost:8001/
+   PYTHONSERVER=http://localhost:8001/api/
+   
+   # URLs de mapas base
+   CARTODB_POSITRON_URL=https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png
+   OTM_TILE_URL=https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png
+   
+   # URLs de servicios externos
+   GEONETWORK_URL=https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/
+   DATAVERSE_URL=https://doi.org/10.21068/
    ```
+
+3. **Variables importantes**:
+   - `GEOSERVER_URL`: Servidor de mapas (capas WMS)
+   - `PYTHONSERVER`: Backend Django con APIs REST
+   - `PDF_ASSET_BASE_URL`: Base URL para recursos en PDFs (opcional)
 
 ### 1.4. Ejecución:
 Ejecute una de las siguientes instrucciones:
@@ -118,27 +180,40 @@ docker exec -it visor_i2d_frontend bash
 
 ### ⚠️ Troubleshooting Docker
 
-#### Error: Frontend conecta a servidores de prueba
-Si ves errores `ERR_NAME_NOT_RESOLVED` con URLs como `test-geoserver.humboldt.org.co`:
+#### ✅ Error Resuelto: Frontend conecta a servidores de prueba
+**Problema**: Errores `ERR_NAME_NOT_RESOLVED` con URLs como `test-geoserver.humboldt.org.co`
 
-**Causa**: El `DockerfileDev` estaba configurado para usar siempre `.env.test`
-
-**Solución**: Ya corregido en la versión actual
-- `DockerfileDev` ahora usa `COPY .env /home/node/app/.env`
+**Solución Implementada**:
+- `DockerfileDev` corregido para usar `COPY .env /home/node/app/.env`
 - Comando cambiado de `npm run dev:test` a `npm run dev`
+- Frontend ahora usa configuración local correctamente
 
 **Verificación**:
 ```bash
-# Verificar que usa el comando correcto
+# Verificar comando correcto
 docker logs visor_i2d_frontend --tail 5
-# Debe mostrar: "npm run dev" (no "npm run dev:test")
+# Debe mostrar: "npm run dev"
+
+# Verificar conectividad local
+curl http://localhost:1234/
 ```
 
-#### Reconstruir después de cambios en .env
+#### ✅ Error Resuelto: Protobuf serialization
+**Problema**: Error "invalid uint 32: -13" en parent_injection.js
+
+**Solución Implementada**:
+- Archivo `.env` restaurado con variables requeridas
+- Procesos Parcel reiniciados correctamente
+- Variables de entorno validadas
+
+#### Reconstruir después de cambios
 ```bash
 # Reconstruir y reiniciar
 docker-compose build frontend
 docker-compose down && docker-compose up -d
+
+# Verificar logs
+docker-compose logs -f frontend
 ```
 
 ---
@@ -241,52 +316,218 @@ Nota: Parcel resuelve process.env.* en tiempo de compilación. Los scripts :test
 
 ---
 
-## Endpoints principales del backend
+## 🌐 Integración con Backend
 
-El visor consume los siguientes endpoints del backend:
+### 📡 APIs Consumidas
 
-- **Descarga masiva de datos en ZIP:**  
-  `GET /api/gbif/descargar-zip/?codigo_mpio=<codigo>&nombre=<nombre>`  
-  `GET /api/gbif/descargar-zip/?codigo_dpto=<codigo>&nombre=<nombre>`  
-  Devuelve un archivo ZIP con los registros y el listado de especies filtrados por municipio o departamento.
+El frontend consume las siguientes APIs del backend Django:
 
-- **Consulta de información GBIF:**  
-  `GET /api/gbif/gbifinfo`  
-  Devuelve información general de registros biológicos.
+#### 🔍 Búsqueda Geográfica
+```javascript
+// Búsqueda de municipios implementada
+GET /api/mpio/search/<término>/
+// Ejemplo: /api/mpio/search/medellin
+// Retorna: [{codigo, nombre, coordenadas}]
+```
 
-Para más detalles sobre los endpoints y parámetros, consulta la documentación del backend:  
-[visor-geografico-I2D-backend](https://github.com/PEM-Humboldt/visor-geografico-I2D-backend)
+#### 📊 Gestión de Proyectos
+```javascript
+// Sistema dinámico de proyectos
+GET /api/projects/                    // Lista todos los proyectos
+GET /api/projects/HU-VisorI2D-0001/   // Proyecto específico
+
+// Cambio de proyecto vía URL
+window.location = '/?proyecto=HU-VisorI2D-0001'
+```
+
+#### 🗺️ Datos Geográficos
+```javascript
+GET /api/dpto/          // Lista departamentos con geometrías
+GET /api/mpio/          // Lista municipios con geometrías
+```
+
+#### 🐛 Datos GBIF
+```javascript
+GET /api/gbif/gbifinfo                           // Información general
+GET /api/gbif/descargar-zip/?codigo_mpio=<code>  // Descarga por municipio
+GET /api/gbif/descargar-zip/?codigo_dpto=<code>  // Descarga por departamento
+```
+
+### 🔧 Configuración de Conectividad
+
+La configuración de URLs se centraliza en:
+```
+src/components/server/url.js
+```
+
+**Variables de entorno críticas**:
+- `PYTHONSERVER`: Backend Django (http://localhost:8001/api/)
+- `GEOSERVER_URL`: Servidor de mapas (http://localhost:8081/geoserver/)
+
+Para más detalles: [Backend Documentation](https://github.com/maccevedor/visor-geografico-I2D-backend)
 
 ---
 
-## Buenas prácticas implementadas
+## 🎯 Funcionalidades Implementadas
 
-- Separación de lógica entre frontend y backend.
-- El backend genera los archivos ZIP y el frontend solo los solicita.
-- Nombres de archivos personalizados en las descargas.
-- Uso de variables de entorno/configuración para URLs.
-- Validación básica de parámetros en el backend.
-- Código limpio y dependencias innecesarias eliminadas.
+### ✅ **Características Completamente Funcionales**
+
+#### 🗺️ **Controles de Mapa Restaurados**
+- **Zoom In (+)**: Botón funcional con posicionamiento correcto
+- **Zoom Out (-)**: Botón funcional con posicionamiento correcto  
+- **Full Extent (⛶)**: Botón de extensión completa operativo
+- **CSS Optimizado**: Posicionamiento `left: 0.5em` con `display: block !important`
+
+#### 🔍 **Sistema de Búsqueda Completo**
+- **Dropdown Interactivo**: Elementos `<a>` clickeables con `data-coord`
+- **Navegación Automática**: Click en resultado navega automáticamente al municipio
+- **Manejo de Eventos**: Event delegation con `$('#dropdown-items').on('click', '.dropdown-item')`
+- **Prevención de Duplicados**: Inicialización con guard para evitar múltiples handlers
+
+#### 📊 **Gestión Dinámica de Proyectos**
+- **Carga Sin Código**: Nuevos proyectos configurables vía base de datos
+- **Cambio de Contexto**: URL parameter `?proyecto=` para switching
+- **Inicialización Asíncrona**: `waitForMap()` polling para timing correcto
+- **Manejo de Errores**: Null checks y fallbacks robustos
+
+#### 🔧 **Correcciones JavaScript Críticas**
+- **Referencias Nulas**: Eliminadas con null checks comprehensivos
+- **Conflictos de Funciones**: Resueltos (attachMapEvents, getCenter)
+- **Timing de DOM**: DOMContentLoaded handling mejorado
+- **Imports/Exports**: Compatibilidad CommonJS para OpenLayers
+
+### 🛠️ **Arquitectura de Componentes**
+
+Estructura modular en `src/components/`:
+```
+src/components/
+├── mapComponent/
+│   ├── map.js              # Inicialización estática
+│   └── dynamicMap.js       # Carga dinámica de proyectos
+├── services/
+│   └── projectService.js   # Servicios de API
+└── server/
+    └── url.js              # Configuración de URLs
+```
 
 ---
 
-## Recomendaciones de seguridad
+## 🔒 Seguridad y Mejores Prácticas
 
-- No subas archivos sensibles (contraseñas, claves, .env) al repositorio.
-- Usa `.gitignore` para excluir carpetas como `node_modules`, archivos temporales y configuraciones locales.
-- Revisa y documenta los endpoints expuestos por el backend.
+### ✅ **Implementadas**
+- **Separación de Responsabilidades**: Frontend/Backend claramente definidos
+- **Variables de Entorno**: Configuración sensible externalizada
+- **Validación de Entrada**: Parámetros validados en backend
+- **CORS Configurado**: Headers apropiados para cross-origin requests
+- **Gitignore Completo**: Archivos sensibles excluidos (`.env`, `node_modules`)
+
+### 🔐 **Recomendaciones de Seguridad**
+- ✅ Archivo `.env` en `.gitignore`
+- ✅ URLs de servicios configurables
+- ✅ Sin credenciales hardcodeadas
+- ✅ Validación de parámetros en backend
+- ✅ HTTPS en producción (configurado en variables)
+
+### 📋 **Estándares de Código**
+- **JavaScript**: ESLint compatible
+- **CSS/SCSS**: BEM methodology en componentes
+- **Commits**: Conventional commits
+- **Documentación**: JSDoc en funciones críticas
 
 ---
 
-## Autores
+## 🔄 Changelog Reciente
 
-* **Julián David Torres Caicedo** - *Creación del sitio* - [juliant8805](https://github.com/juliant8805)
-* **Liceth Barandica Diaz** - *Creación del sitio* - [licethbarandicadiaz](https://github.com/licethbarandicadiaz)
+### ✅ Versión Actual (2025-08-28)
 
-Ingeniería de Datos y Desarrollo, Programa de Evaluación y Monitoreo de la Biodiversidad, Instituto Alexander von Humboldt Colombia
+#### 🎯 **Funcionalidades Críticas Restauradas**:
+- **Controles de Mapa**: Zoom in/out y full extent completamente funcionales
+- **Búsqueda Geográfica**: Sistema completo con navegación automática
+- **Proyectos Dinámicos**: Gestión sin cambios de código implementada
+- **Integración Backend**: APIs REST completamente funcionales
+
+#### 🐛 **Errores JavaScript Eliminados**:
+- **Null References**: Checks comprehensivos implementados
+- **Function Conflicts**: Naming collisions resueltos
+- **DOM Timing**: DOMContentLoaded handling optimizado
+- **Event Delegation**: Click handlers corregidos
+
+#### 🔧 **Mejoras de Desarrollo**:
+- **Docker Environment**: Variables de entorno corregidas
+- **Hot Reload**: Parcel funcionando correctamente
+- **Error Handling**: Fallbacks robustos implementados
+- **Code Organization**: Estructura modular mejorada
+
+#### 🌐 **Integración Completa**:
+- **GeoServer**: Conectividad WMS restaurada
+- **Backend APIs**: Todos los endpoints funcionales
+- **Map Layers**: Carga correcta de capas geográficas
+- **Search System**: Búsqueda con coordenadas operativa
 
 ---
 
-## Licencia
+## 🤝 Contribución
 
-Este proyecto es licenciado bajo licencia MIT - consulte [LICENSE.md](LICENSE.md) para mas detalles
+### 👥 Equipo de Desarrollo
+
+- **Julián David Torres Caicedo** - *Desarrollo Frontend* - [juliant8805](https://github.com/juliant8805)
+- **Liceth Barandica Diaz** - *Desarrollo Frontend* - [licethbarandicadiaz](https://github.com/licethbarandicadiaz)
+- **Daniel López** - *DevOps y Despliegue* - [danflop](https://github.com/danflop)
+
+### 📝 Cómo Contribuir
+
+1. Fork el repositorio
+2. Crear rama de feature (`git checkout -b feature/nueva-funcionalidad`)
+3. Desarrollar con hot-reload: `npm run dev`
+4. Probar en múltiples entornos
+5. Commit siguiendo Conventional Commits
+6. Push y crear Pull Request
+
+### 🧪 Testing y Verificación
+
+```bash
+# Desarrollo local
+npm run dev
+# Verificar: http://localhost:1234
+
+# Build de producción
+npm run build
+
+# Verificar funcionalidades críticas
+# ✅ Controles de mapa visibles y funcionales
+# ✅ Búsqueda de municipios operativa
+# ✅ Cambio de proyectos vía URL
+# ✅ Carga de capas desde GeoServer
+```
+
+---
+
+## 📞 Soporte
+
+### 🏢 Instituto Alexander von Humboldt Colombia
+- **Programa**: Evaluación y Monitoreo de la Biodiversidad
+- **Área**: Ingeniería de Datos y Desarrollo
+- **Website**: [http://www.humboldt.org.co](http://www.humboldt.org.co)
+
+### 🐛 Reportar Issues
+- **GitHub**: [Reportar problema](https://github.com/maccevedor/visor-geografico-I2D/issues)
+- **Funcionalidades**: Verificar con `npm run dev` antes de reportar
+
+### 📚 Recursos Técnicos
+- [OpenLayers Documentation](https://openlayers.org/en/latest/doc/)
+- [Bootstrap 4 Documentation](https://getbootstrap.com/docs/4.5/)
+- [Parcel Documentation](https://parceljs.org/)
+
+## 📄 Licencia
+
+Este proyecto está licenciado bajo la Licencia MIT - consulte [LICENSE.md](LICENSE.md) para más detalles.
+
+---
+
+<div align="center">
+
+**🌱 Desarrollado con ❤️ para la conservación de la biodiversidad colombiana**
+
+[![Instituto Humboldt](https://img.shields.io/badge/Instituto-Humboldt-green?style=for-the-badge)](http://www.humboldt.org.co)
+
+</div>

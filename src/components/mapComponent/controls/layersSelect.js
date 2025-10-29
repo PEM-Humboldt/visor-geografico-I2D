@@ -1,7 +1,8 @@
 import $ from "jquery";
 
 import { FeatSelect } from '../../pageComponent/side-options/tab-layers/layersSelected'
-import { AllLayerss } from './tree-layers'
+import { AllLayerss as TreeLayersArray } from './tree-layers'
+import { getAllLayerss as getHierarchicalLayers } from './hierarchical-tree-layers'
 import { wmsGetProps } from '../../server/geoserver/wmsGetProps';
 import { openSideOptions } from '../../pageComponent/side-options/side-options'
 
@@ -16,12 +17,24 @@ import { set_title_mupio, set_title_dpto, set_cod_mupio, set_cod_dpto } from '..
 
 // =========================================================================
 let existingSidebar, dptoFeature, mpioFeature
+
+// Get the correct AllLayerss array based on project
+const getAllLayers = () => {
+    // Always use hierarchical layers since buildHierarchicalLayerTree is used for all projects
+    const hierarchicalLayers = getHierarchicalLayers();
+
+    // Use hierarchical layers if available, otherwise fall back to tree layers
+    return hierarchicalLayers.length > 0 ? hierarchicalLayers : TreeLayersArray;
+};
+
 // get wms layers if turn on
 export var layerSelection = (coordinate) => {
+    const AllLayerss = getAllLayers();
+
     // select the wms layers
     $('#contenedorg').html('');
     $('#nav-layers').attr("style", "display:none");
-    // wms layers          
+    // wms layers
     let varMpio = null;
 
     for (var i = 1; i < AllLayerss.length; i++) {
@@ -62,7 +75,7 @@ var Selection = (features, i) => {
     // if layer different to mupio and dpto
     hightlightRemove();
 
-    // selection 
+    // selection
     // municipios stadistics i=1 // dpto stadistics i=0
     if (i == 1 || i == 0) {
         if (i == 0) {
@@ -75,6 +88,7 @@ var Selection = (features, i) => {
 
         // get data from python and create chart
         openData(feature, cod_dpto)
+    } else {
     }
 
     // layers on click coordinate create group table
@@ -89,7 +103,7 @@ var SelectionLayers = (features, i) => {
 var createDropdownStadistics = (feature, id) => {
     $("#stadisticstype").empty(); //To reset dropdown
     let title_dpto = '';
-    // if mupio layer is on 
+    // if mupio layer is on
     if (id == 1) {
         title_dpto = set_title_dpto(feature.values_.dpto_nombre)
         let title_mupio = set_title_mupio(feature.values_.nombre)
@@ -98,7 +112,7 @@ var createDropdownStadistics = (feature, id) => {
         $("#stadisticstype").append("<option value='dpto_politico' id='titleDpto'>Departamento " + title_dpto + "</option>")
 
         existingSidebar = $('#titleMpio');
-        // if dpto layer is on 
+        // if dpto layer is on
     } else if (id == 0) {
         title_dpto = set_title_dpto(feature.values_.nombre)
         $("#stadisticstype").append("<option value='dpto_politico' selected id='titleDpto'>Departamento " + title_dpto + "</option>")
@@ -159,15 +173,22 @@ var openData = (feature, cod_depto) => {
         }
     }
 
+    // Show UI elements for ecoreservas project
     if (proyecto === 'ecoreservas') {
         $('#layersData').attr("style", "display:block");
-        $('#loading-chart').attr("style", "display:none");
-        // if mupio or depto changes
-    } else if ((selectedStadistics == 'mpio_politico' && existingSidebar[0].innerText != "Municipio " + feature.values_.nombre) || (selectedStadistics == 'dpto_politico' && existingSidebar[0].innerText != "Departamento " + feature.values_.nombre)) {
+    }
 
+    // Check if this is the first load or if location changed
+    const isFirstLoad = $('#nav-chart').css('display') == 'none';
+    const locationChanged = existingSidebar && existingSidebar[0] && (
+        (selectedStadistics == 'mpio_politico' && existingSidebar[0].innerText != "Municipio " + feature.values_.nombre) ||
+        (selectedStadistics == 'dpto_politico' && existingSidebar[0].innerText != "Departamento " + feature.values_.nombre)
+    );
+
+    if (isFirstLoad || locationChanged) {
         $('#resume-data-tab').tab('show');
         // obtener fecha de descarga solo una vez
-        if ($('.gbifInfo')[0].innerText == '') {
+        if ($('.gbifInfo')[0] && $('.gbifInfo')[0].innerText == '') {
             let urlReq = 'gbif/gbifinfo';
             pythonGetRequest(gbifData, urlReq, 'No fue posible cargar la información de gbif')
         }
@@ -176,8 +197,8 @@ var openData = (feature, cod_depto) => {
         if ($('#nav-chart').css('display') == 'none') {
             $('#nav-chart').attr("style", "display:block");
         }
-    } else if ($('#nav-chart').css('display') == 'none') {
-        $('#resume-data-tab').tab('show');
-        $('#nav-chart').attr("style", "display:block");
+    } else {
+        console.log('>>> Skipping GBIF load - conditions not met');
     }
+
 }
