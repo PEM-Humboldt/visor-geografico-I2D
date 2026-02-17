@@ -34,17 +34,17 @@ var jsonModal = () => {
       "html": `
             <div class="form-group" id="entidadSolicitante">
               <label for='entitySolicitante'>Entidad del Solicitante*</label>
-              <input type='text'  maxlength="50" class='form-control' id='entitySolicitante' aria-describedby='entityHelp' placeholder='Ingresar el nombre de la entidad' required>
+              <input type='text'  maxlength="40" class='form-control' id='entitySolicitante' aria-describedby='entityHelp' placeholder='Ingresar el nombre de la entidad' required>
               <div class="invalid-feedback">Por favor ingrese un nombre correcto.</div>
             </div>
             <div class="form-group" id="nombreUser">
               <label for='nameSolicitante'>Nombre del Solicitante*</label>
-              <input type='text'  maxlength="50" class='form-control' id='nameSolicitante' aria-describedby='nameHelp' placeholder='Ingresar el nombre del solicitante' required>
+              <input type='text'  maxlength="40" class='form-control' id='nameSolicitante' aria-describedby='nameHelp' placeholder='Ingresar el nombre del solicitante' required>
               <div class="invalid-feedback">Por favor ingrese un nombre correcto.</div>
             </div>
             <div class="form-group" id="mailUser">
               <label for='mailSolicitante'>Correo del Solicitante*</label>
-              <input type='email'  maxlength="50" class='form-control' id='mailSolicitante' aria-describedby='emailHelp' placeholder='Ingresar el correo' required>
+              <input type='email'  maxlength="60" class='form-control' id='mailSolicitante' aria-describedby='emailHelp' placeholder='Ingresar el correo' required>
               <div class="invalid-feedback">Por favor ingrese un correo correcto.</div>
             </div>
             <div class="form-group" id="objetivoUser">
@@ -54,7 +54,7 @@ var jsonModal = () => {
 
             <button type='submit' id="downloadPDF" value="downloadPDF" class='btn btn-primary btn-block'>Descargar Informe (PDF)</button>
             <button type='submit' id="downloadAll" value="downloadAll" class='btn btn-primary btn-block'>Descargar Informe y datos</button>
-        
+
           `
     }]
   }
@@ -76,7 +76,6 @@ $('#download-resume').on('click', function () {
 //  modal for export pdf
 $(document).on('submit', 'form#formSolicitante', function (e) {
   let type = $(this).find("button[type=submit]:focus")[0].value
-  // console.log(type)
   e.preventDefault();
 
   let json = {
@@ -139,7 +138,34 @@ $(document).on('submit', 'form#formSolicitante', function (e) {
   }
 
   var handleError = () => {
-    alert('No fue posible almacenar su información')
+    const errorModal = `
+      <div class="modal fade" id="errorModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+              <h5 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Error al Guardar</h5>
+              <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              <p><strong>No fue posible almacenar su información.</strong></p>
+              <p>Por favor verifique que:</p>
+              <ul>
+                <li><strong>Entidad</strong> y <strong>Nombre</strong> no excedan <strong>40 caracteres</strong></li>
+                <li><strong>Correo</strong> no exceda <strong>60 caracteres</strong></li>
+              </ul>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    $('body').append(errorModal);
+    $('#errorModal').modal('show');
+    $('#errorModal').on('hidden.bs.modal', function () {
+      $(this).remove();
+    });
   }
   pythonPostRequest('requestcreate/', json, handleCallback, handleError)
 });

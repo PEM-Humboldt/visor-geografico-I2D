@@ -12,16 +12,157 @@ import { chartReg, chartDangerSp } from '../../chart'
 import { textGbif, textDanger, textReferences, dangerString } from './config/pdf-text'
 import { title_mupio, title_depto } from "../../../../../globalVars";
 
+// Helper function to convert image URL to data URL (base64)
+function imageToDataURL(imagePath) {
+    return new Promise((resolve, reject) => {
+        // If already a data URL, return it directly
+        if (imagePath.startsWith('data:')) {
+            resolve(imagePath);
+            return;
+        }
+
+        // Construct the full image URL
+        // Parcel bundles images and changes their paths, so we need to use the actual bundled path
+        let fullImagePath = imagePath;
+        
+        // If it's already a full URL, use it
+        if (!imagePath.startsWith('http://') && !imagePath.startsWith('https://')) {
+            // For bundled assets, the path is already correct from the import
+            // Just ensure it's an absolute URL
+            if (!imagePath.startsWith('/')) {
+                fullImagePath = '/' + imagePath;
+            }
+            fullImagePath = window.location.origin + fullImagePath;
+        }
+
+        const alternativePaths = [];
+
+        // Helper function to try loading an image from a URL
+        function tryLoadImage(url) {
+            return fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    return new Promise((resolveBlob, rejectBlob) => {
+                        const reader = new FileReader();
+                        reader.onloadend = function() {
+                            const dataURL = reader.result;
+                            if (!dataURL || !dataURL.startsWith('data:')) {
+                                rejectBlob(new Error('Invalid data URL generated'));
+                                return;
+                            }
+                            // Ensure the data URL has the correct format for pdfMake
+                            // pdfMake expects: data:image/png;base64,... or data:image/jpeg;base64,...
+                            if (!dataURL.match(/^data:image\/(png|jpeg|jpg);base64,/)) {
+                                // If the MIME type is missing or incorrect, try to fix it
+                                // Extract base64 part
+                                const base64Match = dataURL.match(/base64,(.+)$/);
+                                if (base64Match) {
+                                    // Assume PNG if MIME type is missing
+                                    const fixedDataURL = 'data:image/png;base64,' + base64Match[1];
+                                    resolveBlob(fixedDataURL);
+                                } else {
+                                    rejectBlob(new Error('Invalid data URL format - missing base64 data'));
+                                }
+                                return;
+                            }
+                            resolveBlob(dataURL);
+                        };
+                        reader.onerror = function() {
+                            rejectBlob(new Error('Failed to read blob'));
+                        };
+                        reader.readAsDataURL(blob);
+                    });
+                });
+        }
+
+        // Try loading from primary path, then alternatives
+        const pathsToTry = [fullImagePath, ...alternativePaths];
+        let lastError = null;
+
+        function tryNextPath(index) {
+            if (index >= pathsToTry.length) {
+                // All paths failed, try Image element fallback
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+
+                img.onload = function() {
+                    try {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+                        const dataURL = canvas.toDataURL('image/png');
+                        if (!dataURL || !dataURL.startsWith('data:') || !dataURL.match(/^data:image\/(png|jpeg|jpg);base64,/)) {
+                            throw new Error('Invalid data URL generated from canvas');
+                        }
+                        resolve(dataURL);
+                    } catch (canvasError) {
+                        reject(new Error('Failed to convert image to data URL: ' + canvasError.message));
+                    }
+                };
+
+                img.onerror = function() {
+                    reject(new Error('Failed to load image from all paths. Last error: ' + (lastError ? lastError.message : 'unknown')));
+                };
+
+                img.src = fullImagePath;
+                return;
+            }
+
+            const currentPath = pathsToTry[index];
+            tryLoadImage(currentPath)
+                .then(dataURL => {
+                    resolve(dataURL);
+                })
+                .catch(error => {
+                    lastError = error;
+                    tryNextPath(index + 1);
+                });
+        }
+
+        tryNextPath(0);
+    });
+}
+
 // /** Function that exports PDF*/
 
 export function savePDF() {
+    // First, convert images to data URLs, then get chart data
     Promise.all([
-        //chartReg.exporting.pdfmake,
+        imageToDataURL(logoi2d),
+        imageToDataURL(footeri2d),
         chartReg.exporting.getJSON("json"),
         chartDangerSp.exporting.getJSON("json")
-        // chartSp.exporting.getImage("png"),
     ]).then(function (res) {
-        //var pdfMake = res[0];   
+        // res[0] = logo data URL
+        // res[1] = footer data URL
+        // res[2] = chartReg JSON
+        // res[3] = chartDangerSp JSON
+
+        // Verify data URLs are valid
+        if (!res[0] || !res[0].startsWith('data:')) {
+            throw new Error('Invalid logo data URL');
+        }
+        if (!res[1] || !res[1].startsWith('data:')) {
+            throw new Error('Invalid footer data URL');
+        }
+
+        // Final validation: ensure data URLs are in the correct format for pdfMake
+        const logoDataURL = res[0];
+        const footerDataURL = res[1];
+
+        if (!logoDataURL.match(/^data:image\/(png|jpeg|jpg);base64,/)) {
+            throw new Error('Logo data URL is not in the correct format for pdfMake');
+        }
+        if (!footerDataURL.match(/^data:image\/(png|jpeg|jpg);base64,/)) {
+            throw new Error('Footer data URL is not in the correct format for pdfMake');
+        }
 
         // Create document template
         var doc = {
@@ -34,8 +175,8 @@ export function savePDF() {
                     text: ['Bogotá, D.C. ', todayDate],
                     style: 'ubicacion'
                 },
-                textGbif(res[0]),
-                textDanger(res[1]),
+                textGbif(res[2]),
+                textDanger(res[3]),
                 textReferences()
 
             ],
@@ -63,15 +204,11 @@ export function savePDF() {
                     }
                 ]
             },
-            // TODO: change the static url if change the domain
+            // Images as data URLs (base64 encoded)
+            // pdfMake requires data URLs in format: data:image/png;base64,... or data:image/jpeg;base64,...
             images: {
-                i2d: 'https://i2d.humboldt.org.co/visor-I2D/' + logoi2d,
-                // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
-                footerpdf: 'https://i2d.humboldt.org.co/visor-I2D/' + footeri2d,
-
-                // i2d: 'http://localhost:1234/'+logoi2d,
-                // in browser is supported loading images via url (https or http protocol) (minimal version: 0.1.67)
-                // footerpdf: 'http://localhost:1234/'+footeri2d,
+                i2d: logoDataURL, // logo as data URL
+                footerpdf: footerDataURL, // footer as data URL
             },
             pageBreakBefore: function (currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {
                 //check if signature part is completely on the last page, add pagebreak if not
@@ -133,5 +270,8 @@ export function savePDF() {
         } else {
             pdfprint.download(`Reporte de Biodiversidad ${title_depto}.pdf`);
         }
+    }).catch(function(error) {
+        console.error('Error generating PDF:', error);
+        alert('Error al generar el PDF: ' + error.message);
     });
 }

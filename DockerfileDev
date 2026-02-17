@@ -1,0 +1,9 @@
+# Development stage
+FROM node:18.3.0 AS dev
+USER node
+WORKDIR /home/node/app
+COPY package.json /home/node/app
+# Use custom .env file for development
+COPY .env /home/node/app/.env
+RUN npm install
+CMD ["npm", "run", "dev"]

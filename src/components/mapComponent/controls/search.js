@@ -24,8 +24,17 @@ let timeout = null;
 $('#search-input').on('input',(e)=>{
     clearTimeout(timeout);
     timeout = setTimeout(()=> {
-        let urlReq='mpio/search/'+e.target.value;
-        pythonGetRequest(searchCallback,urlReq,'No fue posible buscar la información')
+        // Trim whitespace and validate search term
+        const searchTerm = e.target.value.trim();
+
+        // Only make API call if search term has at least 2 characters
+        if (searchTerm.length >= 2) {
+            let urlReq='mpio/search/'+encodeURIComponent(searchTerm);
+            pythonGetRequest(searchCallback,urlReq,'No fue posible buscar la información')
+        } else {
+            // Clear dropdown if search term is too short
+            createDropdown('mpio','municipio',[]);
+        }
     }, 10);
 })
 
@@ -33,8 +42,8 @@ $('#search-input').on('keyup', (e) => {
     if($('#search-input').val().length>0){
         $('#dropdown-menu-mupio').show()
     }else{
-        $('#dropdown-menu-mupio').hide() 
-    } 
+        $('#dropdown-menu-mupio').hide()
+    }
 });
 
 var searchCallback=(data)=>{
