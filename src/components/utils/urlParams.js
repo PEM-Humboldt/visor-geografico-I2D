@@ -430,12 +430,18 @@ export const processURLParams = (onLayerTreeReady) => {
     if (proyectoParam) {
 
         // Check if this is actually a different project
-        import('../services/projectService.js').then(({ default: projectService }) => {
+        import('../services/projectService.js').then(async ({ default: projectService }) => {
             const currentProject = projectService.getCurrentProject();
             const currentProjectName = currentProject ? currentProject.nombre_corto : 'general';
 
             if (proyectoParam !== currentProjectName) {
+              const requestedProject = await projectService.loadProject(proyectoParam);
+
+              if (requestedProject.nombre_corto === proyectoParam){
                 switchProject(proyectoParam);
+              } else {
+                // it must be in fallback
+              }
             } else {
                 // already on requested project
             }
