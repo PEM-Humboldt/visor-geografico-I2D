@@ -253,7 +253,7 @@ Para la correcta ejecución de las funcionalidades del frontend, la siguiente ru
 
 Alternativamente puede desplegar usando contenedores de docker. Primero construya la imagen:
 
-`docker build -t visor-i2d:1.1.0 .`
+`docker build -t visor-i2d:1.1.1 .`
 
 Detenga el contenedor:
 
@@ -265,7 +265,7 @@ Borre el contenedor antiguo:
 
 Después levante el contenedor:
 
-`docker run --name=visor_i2d --network=i2d.net -p 3000:80 -d visor-i2d:1.1.0`
+`docker run --name=visor_i2d --network=i2d.net -p 3000:80 -d visor-i2d:1.1.1`
 
 ---
 
