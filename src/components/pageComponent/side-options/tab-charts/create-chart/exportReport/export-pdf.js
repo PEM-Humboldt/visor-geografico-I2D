@@ -1,5 +1,6 @@
 import logoi2d from '../../../../../../assets/img/logo-humboldt-v2.png'
 import footeri2d from '../../../../../../assets/img/footer.png'
+import { PDF_ASSET_BASE_URL } from '../../../../../server/url'
 
 import pdfMake from "pdfmake/build/pdfmake.min";
 import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -29,10 +30,10 @@ function imageToDataURL(imagePath) {
         if (!imagePath.startsWith('http://') && !imagePath.startsWith('https://')) {
             // For bundled assets, the path is already correct from the import
             // Just ensure it's an absolute URL
-            if (!imagePath.startsWith('/')) {
+            if (!imagePath.startsWith('/') && !PDF_ASSET_BASE_URL.endsWith('/')) {
                 fullImagePath = '/' + imagePath;
             }
-            fullImagePath = window.location.origin + fullImagePath;
+            fullImagePath = PDF_ASSET_BASE_URL + fullImagePath;
         }
 
         const alternativePaths = [];

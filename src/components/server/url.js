@@ -22,4 +22,4 @@ export const ESRI_WORLD_IMAGERY_URL = process.env.ESRI_WORLD_IMAGERY_URL || 'htt
 
 // Public base URL used to resolve asset URLs in generated PDFs
 // Example: https://i2d.humboldt.org.co/visor-I2D/
-export const PDF_ASSET_BASE_URL = process.env.PDF_ASSET_BASE_URL || '';
+export const PDF_ASSET_BASE_URL = process.env.PDF_ASSET_BASE_URL || window.location.origin;
