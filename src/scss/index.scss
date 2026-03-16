@@ -34,6 +34,11 @@ button, *:focus {
     display: block;
 }
 
+.layer-container {
+    max-height: 65vh;
+    overflow: auto;
+}
+
 #content {
     width: 100%;
 }

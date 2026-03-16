@@ -473,6 +473,9 @@ function renderLayerGroup(group, parentElement, layerGroup, groupId, level = 0) 
   // Create card for this group
   const card = document.createElement("div");
   card.className = "card overflow-auto";
+  if (group.layers?.length && !group.subgroups?.length){
+    card.classList.add("layer-container");
+  }
   card.id = `combined_${groupId}`;
   parentElement.appendChild(card);
 
