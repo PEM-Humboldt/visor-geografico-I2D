@@ -12,9 +12,16 @@ import {getProjection} from '../../mapComponent/map'
 import {feats} from '../../mapComponent/layers'
 import {fitView,getResolution} from '../../mapComponent/map'
 
-
+const circleLayers = ['red_viveros', 'procesos_gobernanza'];
 var format = [], wmsSource = [];
 
+function getDynamicBuffer(resolution) {
+    // scaleDenominator = resolution x 3571 (OGC standar (1/0.00028))
+    if (resolution > 1900) return 4;
+    if (resolution > 560) return 7;
+    if (resolution > 280) return 9;
+    return 10;
+}
 // select wms layers if turn on
 export var wmsGetProps=(AllLayers,i,coordinate,Selection)=>{
     var featureType = AllLayers[i].values_.source.params_.LAYERS;
@@ -31,12 +38,22 @@ export var wmsGetProps=(AllLayers,i,coordinate,Selection)=>{
     // if is a point or if not 
     //let resolution=layer=='procesos_gobernanza'?getResolution(): 1;
     let resolution=layer==layer?getResolution(): 1;
-    if (resolution > 200){
-        resolution=200;
+
+    const params = {
+        'INFO_FORMAT': infoFormat,
     }
+
+    if (circleLayers.includes(layer)) {
+        params['BUFFER'] = getDynamicBuffer(resolution);
+    } else {
+        if (resolution > 200){
+            resolution=200;
+        }
+    }
+    
     var url = wmsSource[i].getFeatureInfoUrl(
         coordinate, resolution, getProjection(),
-        {'INFO_FORMAT': infoFormat}
+        params
     );
     $.ajax({
         url: url,
