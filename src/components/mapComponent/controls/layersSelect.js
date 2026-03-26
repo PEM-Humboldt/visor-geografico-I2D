@@ -29,39 +29,44 @@ const getAllLayers = () => {
 
 // get wms layers if turn on
 export var layerSelection = (coordinate) => {
-    const AllLayerss = getAllLayers();
+    try {
+        const AllLayerss = getAllLayers();
 
-    // select the wms layers
-    $('#contenedorg').html('');
-    $('#nav-layers').attr("style", "display:none");
-    // wms layers
-    let varMpio = null;
+        // select the wms layers
+        $('#contenedorg').html('');
+        $('#nav-layers').attr("style", "display:none");
+        // wms layers
+        let varMpio = null;
 
-    for (var i = 1; i < AllLayerss.length; i++) {
-        // if turn on
-        if (i == 1 && AllLayerss[i].values_.visible === true) {
-            varMpio = true
-            // get mupio features data
-            wmsGetProps(AllLayerss, 1, coordinate, Selection);
-            wmsGetProps(AllLayerss, 0, coordinate, featDpto);
-            function featDpto(features, i) { dptoFeature = features[0]; SelectionLayers(features, i) }
+        for (var i = 1; i < AllLayerss.length; i++) {
+            // if turn on
+            if (i == 1 && AllLayerss[i].values_.visible === true) {
+                varMpio = true
+                // get mupio features data
+                wmsGetProps(AllLayerss, 1, coordinate, Selection);
+                wmsGetProps(AllLayerss, 0, coordinate, featDpto);
+                function featDpto(features, i) { dptoFeature = features[0]; SelectionLayers(features, i) }
 
-        } else if (i == 1 && !varMpio && AllLayerss[i].values_.visible === false) {
-            // get dpto features data
-            wmsGetProps(AllLayerss, 0, coordinate, Selection);
+            } else if (i == 1 && !varMpio && AllLayerss[i].values_.visible === false) {
+                // get dpto features data
+                wmsGetProps(AllLayerss, 0, coordinate, Selection);
 
-        } else if (AllLayerss[i].values_.visible === true) {
-            // get features data
-            wmsGetProps(AllLayerss, i, coordinate, Selection);
-        } else if (AllLayerss[i].values_.visible === false) {
-            // mupios is not active
-            $('#layers-data-tab').tab('show');
-            $('#nav-layers').attr("style", "display:block");
-            if (i == 1 && i == 0) {
-                highlightStadisticsRemove();
-                $('#nav-chart').attr("style", "display:none");
+            } else if (AllLayerss[i].values_.visible === true) {
+                // get features data
+                wmsGetProps(AllLayerss, i, coordinate, Selection);
+            } else if (AllLayerss[i].values_.visible === false) {
+                // mupios is not active
+                $('#layers-data-tab').tab('show');
+                $('#nav-layers').attr("style", "display:block");
+                if (i == 1 && i == 0) {
+                    highlightStadisticsRemove();
+                    $('#nav-chart').attr("style", "display:none");
+                }
             }
         }
+    } catch (err) {
+        console.error('An error occured selecting the layer:', error);
+        throw error;
     }
 }
 

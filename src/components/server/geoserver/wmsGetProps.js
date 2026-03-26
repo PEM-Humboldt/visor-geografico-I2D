@@ -12,9 +12,8 @@ import {getProjection} from '../../mapComponent/map'
 import {feats} from '../../mapComponent/layers'
 import {fitView,getResolution} from '../../mapComponent/map'
 
-const circleLayers = ['red_viveros', 'procesos_gobernanza'];
 var format = [], wmsSource = [];
-function getDynamicBuffer(resolution) {
+var getDynamicBuffer = (resolution) => {
     // scaleDenominator = resolution x 3571 (OGC standar (1/0.00028))
     if (resolution > 1900) return 4;
     if (resolution > 560) return 7;
@@ -22,7 +21,7 @@ function getDynamicBuffer(resolution) {
     return 10;
 }
 
-async function hasPointPropertyType(layerName) {
+var hasPointPropertyType = async (layerName) => {
     const url = `${GEOSERVER_URL}wfs?SERVICE=WFS&REQUEST=DescribeFeatureType&TYPENAME=${layerName}`;
     const response = await fetch(url);
     const text = await response.text();
@@ -31,7 +30,7 @@ async function hasPointPropertyType(layerName) {
 }
 
 // select wms layers if turn on
-export var wmsGetProps= async (AllLayers,i,coordinate,Selection)=>{
+export var wmsGetProps= (AllLayers,i,coordinate,Selection)=>{
     var featureType = AllLayers[i].values_.source.params_.LAYERS;
     var layer=featureType.split(':')[1]
     var layerName = AllLayers[i].values_.geoserverName
@@ -44,20 +43,21 @@ export var wmsGetProps= async (AllLayers,i,coordinate,Selection)=>{
         },
         serverType: 'geoserver'
     });
-    // if is a point or if not 
-    //let resolution=layer=='procesos_gobernanza'?getResolution(): 1;
+    
     let resolution=layer==layer?getResolution(): 1;
     const params = {
         'INFO_FORMAT': infoFormat,
     }
 
-    if (await hasPointPropertyType(layerName) === true) {
-        params['BUFFER'] = getDynamicBuffer(resolution);
-    } else {
-        if (resolution > 200){
-            resolution=200;
+    hasPointPropertyType(layerName).then(result => {
+        if (result) {
+            params['BUFFER'] = getDynamicBuffer(resolution);
+        } else {
+            if (resolution > 200){
+                resolution=200;
+            }
         }
-    }
+    })
     
     var url = wmsSource[i].getFeatureInfoUrl(
         coordinate, resolution, getProjection(),
@@ -78,11 +78,7 @@ export var wmsGetProps= async (AllLayers,i,coordinate,Selection)=>{
                 }
 
                 Selection(features,i);
-            }else{
-                console.log('sin features')
             }
-
-            // console.log(sele,data,sel);
         }
     });
 }
