@@ -132,11 +132,11 @@ function imageToDataURL(imagePath) {
 // /** Function that exports PDF*/
 
 export function savePDF() {
-    const logoi2d = "https://pem-humboldt.github.io/visor-geografico-I2D/assets/institutional/logo-humboldt-v2.png"
+    const logoHumboldt = "https://pem-humboldt.github.io/visor-geografico-I2D/assets/institutional/logo-humboldt-v2.png"
     const footeri2d = "https://pem-humboldt.github.io/visor-geografico-I2D/assets/ui/footer.png"
     // First, convert images to data URLs, then get chart data
     Promise.all([
-        imageToDataURL(logoi2d),
+        imageToDataURL(logoHumboldt),
         imageToDataURL(footeri2d),
         chartReg.exporting.getJSON("json"),
         chartDangerSp.exporting.getJSON("json")

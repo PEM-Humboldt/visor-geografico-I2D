@@ -350,7 +350,7 @@ function createGroupLayersContent(groupLayers, parentElement) {
     var down = document.createElement("div");
     // Crear elemento de imagen
     var image = document.createElement("img");
-    image.src = "https://pem-humboldt.github.io/visor-geografico-I2D/assets/legends/ecoreservas.png"; // Establecer la ruta de la imagen
+    image.src = "https://pem-humboldt.github.io/visor-geografico-I2D/assets/legends/ecoreservas.png";
     // Agregar la imagen al elemento div
     down.appendChild(image);
     fcheck.appendChild(down);
