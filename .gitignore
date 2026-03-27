@@ -2,7 +2,6 @@ node_modules/
 .cache/
 dist/
 /nbproject/private/
-package-lock.json
 .env.local
 .env
 build/
