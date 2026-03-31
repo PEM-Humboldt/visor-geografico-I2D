@@ -66,7 +66,6 @@ export var layerSelection = (coordinate) => {
         }
     } catch (err) {
         console.error('An error occured selecting the layer:', error);
-        throw error;
     }
 }
 
