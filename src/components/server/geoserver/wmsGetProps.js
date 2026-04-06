@@ -44,7 +44,7 @@ export var wmsGetProps= (AllLayers,i,coordinate,Selection)=>{
         serverType: 'geoserver'
     });
     
-    let resolution=layer==layer?getResolution(): 1;
+    let resolution = getResolution() ?? 1;
     const params = {
         'INFO_FORMAT': infoFormat,
     }
