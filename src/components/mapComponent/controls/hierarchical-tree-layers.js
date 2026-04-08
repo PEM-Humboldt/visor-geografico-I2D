@@ -1,6 +1,5 @@
 import $ from "jquery";
 import { closeTutorialOnStep4 } from "../../tutorialComponent/tutorial";
-// import logoi2d from "../../../assets/legend/ecoreservas.png";
 
 // Get proyecto from URL params instead of importing from layers
 const urlParams = new URLSearchParams(window.location.search);

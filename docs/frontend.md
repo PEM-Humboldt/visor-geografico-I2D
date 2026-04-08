@@ -47,9 +47,6 @@ This technical report documents the frontend architecture, current implementatio
 ### Directory Organization
 ```
 src/
-├── assets/
-│   ├── img/                    # Logos, icons, loading animations
-│   └── legend/                 # Map legend images
 ├── components/
 │   ├── formatText.js           # Text formatting utilities
 │   ├── globalVars.js           # Global variables and constants
