@@ -5,9 +5,10 @@ USER node
 RUN mkdir -p /home/node/app
 WORKDIR /home/node/app
 
-COPY package.json /home/node/app
-COPY --chown=1000:1000 package-lock.json /home/node/app
-RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 npm ci
+COPY --chown package.json package-lock.json /home/node/app
+
+RUN npm ci
+
 COPY .env /home/node/app/.env
 COPY src/ src
 RUN npm run build
