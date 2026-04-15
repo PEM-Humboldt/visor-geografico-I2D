@@ -1,6 +1,5 @@
 import $ from "jquery";
 import { closeTutorialOnStep4 } from "../../tutorialComponent/tutorial";
-// import logoi2d from "../../../assets/legend/ecoreservas.png";
 
 // Get proyecto from URL params instead of importing from layers
 const urlParams = new URLSearchParams(window.location.search);
@@ -473,6 +472,9 @@ function renderLayerGroup(group, parentElement, layerGroup, groupId, level = 0) 
   // Create card for this group
   const card = document.createElement("div");
   card.className = "card overflow-auto";
+  if (group.layers?.length && !group.subgroups?.length){
+    card.classList.add("layer-container");
+  }
   card.id = `combined_${groupId}`;
   parentElement.appendChild(card);
 
