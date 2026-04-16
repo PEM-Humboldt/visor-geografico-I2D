@@ -48,7 +48,7 @@
 }
 @include desktop {
   .ol-zoom-extent {
-    top: 6.6em;
+    top: 7.6em !important;
   }
 }
 
@@ -62,8 +62,14 @@
   padding: 0px;
 }
 .ol-control button {
-  background-color:$color_primary;
-  font-size: 1em;
+  background-color:$color_light;
+  color: $color_primary;
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   &:hover {
     background-color:$color_four;
   }
@@ -74,7 +80,7 @@
 
 .search-control {
   left: 0.5em;
-  top: 0.8em;
+  top: 0.3em;
 }
 .layer-switcher button {
   background-color:white;
