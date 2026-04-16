@@ -106,7 +106,7 @@ $(document).on('submit', 'form#formSolicitante', function (e) {
     // alert('Su información fue almacenada')
     $('#userFormModal').remove();
 
-    if (type == 'downloadPDF') {
+    if (type == 'downloadPDF' || type == 'downloadAll') {
       // create and export pdf
       savePDF();
     }
