@@ -5,7 +5,7 @@ USER node
 RUN mkdir -p /home/node/app
 WORKDIR /home/node/app
 
-COPY --chown package.json package-lock.json /home/node/app
+COPY --chown=node:node package.json package-lock.json /home/node/app
 
 RUN npm ci
 
