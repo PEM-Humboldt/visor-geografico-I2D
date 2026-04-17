@@ -1,4 +1,5 @@
 import $ from "jquery";
+import projectService from "../../services/projectService.js";
 import { closeTutorialOnStep4 } from "../../tutorialComponent/tutorial";
 
 // Get proyecto from URL params instead of importing from layers
@@ -248,9 +249,12 @@ export function buildHierarchicalLayerTree(projectData, layerGroup) {
   topLevelGroups.forEach((group, index) => {
     renderLayerGroup(group, accordion, layerGroup, `group_${index}`, 0);
   });
+  
+  let currentProject = projectService.getCurrentProject();
+  let panelVisibility = currentProject.panel_visible;
 
   // Show accordion for ecoreservas
-  if (proyecto === "ecoreservas") {
+  if (panelVisibility == true) {
     accordion.className = "d-block";
   }
 
