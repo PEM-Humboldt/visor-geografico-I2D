@@ -7,87 +7,6 @@ const proyecto = urlParams.get('proyecto') || 'general';
 const GEOSERVER_URL = process.env.GEOSERVER_URL || 'https://geoservicios.humboldt.org.co/geoserver/';
 
 /**
- * Fit map view to layer extent with animation
- * Fetches actual extent from GeoServer for WMS layers
- * @param {Object} layer - OpenLayers layer
- */
-async function fitMapToLayerExtent(layer) {
-  if (!layer || !window.mapInstance) {
-    console.warn('Cannot fit to extent: layer or map not available');
-    return;
-  }
-
-  try {
-    const source = layer.getSource();
-    if (!source) {
-      console.warn('Layer has no source');
-      return;
-    }
-
-    let extent = null;
-
-    // For WMS/TileWMS layers, fetch extent from GeoServer
-    if (source.constructor.name === 'TileWMS' || source.getParams) {
-      const params = source.getParams();
-      const layerName = params.LAYERS;
-
-      if (layerName) {
-        extent = await fetchWMSLayerExtent(source.getUrls()[0], layerName);
-      }
-    }
-
-    // For vector layers, use source extent
-    if (!extent && typeof source.getExtent === 'function') {
-      extent = source.getExtent();
-    }
-
-    // Fallback to layer property extent (but check if it's not the max extent)
-    if (!extent || !isFinite(extent[0])) {
-      const layerExtent = layer.get('extent');
-      // Only use if it's not the maximum EPSG:3857 extent
-      if (layerExtent && layerExtent[0] !== -20037508.342789244) {
-        extent = layerExtent;
-      }
-    }
-
-    // Check if extent is valid
-    if (!extent || !isFinite(extent[0]) || !isFinite(extent[1]) ||
-        !isFinite(extent[2]) || !isFinite(extent[3])) {
-      console.warn('Layer extent is not valid or could not be fetched:', layer.get('name'));
-      return;
-    }
-
-    // Check if extent is not the maximum extent (indicates no real extent available)
-    if (extent[0] === -20037508.342789244 && extent[2] === 20037508.342789244) {
-      console.warn('Layer has maximum extent, cannot zoom to specific area:', layer.get('name'));
-      return;
-    }
-
-    // Check if extent is not empty (all zeros or very small)
-    const width = extent[2] - extent[0];
-    const height = extent[3] - extent[1];
-    if (width < 1 || height < 1) {
-      console.warn('Layer extent is too small or empty:', layer.get('name'));
-      return;
-    }
-
-    // Fit the view to the extent with padding and animation
-    window.mapInstance.getView().fit(extent, {
-      padding: [50, 50, 50, 50], // Add padding around the extent
-      duration: 1000, // Animation duration in milliseconds
-      maxZoom: 16, // Don't zoom in too much for small features
-      callback: function(complete) {
-        if (!complete) {
-          console.warn(`⚠️ Map view fit was interrupted`);
-        }
-      }
-    });
-  } catch (error) {
-    console.error('Error fitting to layer extent:', error);
-  }
-}
-
-/**
  * Fetch WMS layer extent from GeoServer GetCapabilities
  * @param {string} wmsUrl - WMS service URL
  * @param {string} layerName - Full layer name (workspace:layer)
@@ -386,11 +305,6 @@ function renderBaseLayer(layer, parentElement, layerIndex, groupIndex) {
     const isVisible = ev.target.checked;
     layer.setVisible(isVisible);
 
-    // Fit map to layer extent when enabling
-    if (isVisible) {
-      fitMapToLayerExtent(layer);
-    }
-
     // Sync with URL parameters for base layers too
     const layerName = layer.get('name') || layer.get('geoserverName');
     if (isVisible && layerName) {
@@ -587,11 +501,6 @@ function renderLayer(layerData, parentElement, layerGroup) {
       cleanHighlights(ev);
       const isVisible = ev.target.checked;
       olLayer.setVisible(isVisible);
-
-      // Fit map to layer extent when enabling
-      if (isVisible) {
-        fitMapToLayerExtent(olLayer);
-      }
 
       // Sync with URL parameters
       const geoserverName = layerData.nombre_geoserver;
