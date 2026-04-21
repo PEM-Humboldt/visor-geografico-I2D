@@ -1,6 +1,6 @@
 # Frontend Visor-I2D
 
-[![Node.js](https://img.shields.io/badge/Node.js-15.3.0-339933?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18.3.0-339933?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![OpenLayers](https://img.shields.io/badge/OpenLayers-6.5.0-1F6B75?style=flat&logo=openlayers&logoColor=white)](https://openlayers.org/)
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-4.5.3-7952B3?style=flat&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
 [![jQuery](https://img.shields.io/badge/jQuery-3.5.1-0769AD?style=flat&logo=jquery&logoColor=white)](https://jquery.com/)
@@ -35,7 +35,7 @@ El Frontend del Visor Geográfico I2D es una aplicación web interactiva que pro
 ## 🛠️ Stack Tecnológico
 
 ### Frontend Core
-- **Node.js**: 15.3.0
+- **Node.js**: 18.3.0
 - **Build Tool**: Parcel 1.12.4 con hot-reload
 - **JavaScript**: Vanilla JS + jQuery 3.5.1
 - **CSS Framework**: Bootstrap 4.5.3 + SCSS personalizado
@@ -55,7 +55,7 @@ El Frontend del Visor Geográfico I2D es una aplicación web interactiva que pro
 ## 📋 Configuración Inicial
 
 ### Prerrequisitos
-- **Node.js**: 15.3.0+ (recomendado usar nvm)
+- **Node.js**: 18.3.0+ (recomendado usar nvm)
 - **npm**: 6.0+ o yarn
 - **Docker**: Para desarrollo con contenedores (opcional)
 
