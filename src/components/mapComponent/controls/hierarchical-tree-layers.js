@@ -630,7 +630,7 @@ function renderLayer(layerData, parentElement, layerGroup) {
   // Add metadata link if available
   let metadata = layerData.metadata_id;
   if (metadata) {
-    let repositorio = metadata.length <= 6 ? DATAVERSE_URL : GEONETWORK_URL;
+    let repositorio = metadata.length == 6 ? DATAVERSE_URL : GEONETWORK_URL;
     const metadataLink = document.createElement("div");
     metadataLink.innerHTML = '<i class="fas fa-link"></i>';
     metadataLink.className = "card-link float-right";

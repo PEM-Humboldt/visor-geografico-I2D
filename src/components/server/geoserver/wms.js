@@ -3,9 +3,12 @@ import TileWMS from 'ol/source/TileWMS';
 import {GEOSERVER_URL,GEONETWORK_URL,DATAVERSE_URL} from '../url'
 // wms geoserver- load layer function
 export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,metadataId){
-    let repositorio = metadataId.length <= 6 ? DATAVERSE_URL : GEONETWORK_URL;
-    var metadataLink=(metadataId=!'' && metadataId)?repositorio+metadataId:'';
-    
+    var metadataLink = '';
+    if (metadataId=!'' && metadataId) {
+        let repositorio = metadataId.length == 6 ? DATAVERSE_URL : GEONETWORK_URL;
+        metadataLink = repositorio+metadataId;
+    } 
+
     // Sanitize layer name to handle special characters and long names
     const sanitizedLayerName = geoserverLayer.trim();
     
