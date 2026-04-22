@@ -254,7 +254,7 @@ export function buildHierarchicalLayerTree(projectData, layerGroup) {
   let panelVisibility = currentProject.panel_visible;
 
   // Show accordion for ecoreservas
-  if (panelVisibility == true) {
+  if (panelVisibility) {
     accordion.className = "d-block";
   }
 
