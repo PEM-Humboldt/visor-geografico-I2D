@@ -35,7 +35,7 @@
 }
 // responsive
 @include tablet{
-  .ol-touch .ol-zoom-extent {
+  .ol-touch {
     top: 7.6em;
   }
   .ol-control button {
@@ -44,6 +44,10 @@
   }
   .ol-touch .ol-control button {
     font-size: 1.1em;
+  }
+
+  .ol-zoom-extent {
+    top: 8.6em !important;
   }
 }
 @include desktop {
