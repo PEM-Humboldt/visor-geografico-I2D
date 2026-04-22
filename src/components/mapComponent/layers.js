@@ -63,9 +63,10 @@ const createBaseLayers = (project) => {
     cartodb_positron: new TileLayer({
       title: "CartoDB Positron",
       visible: isEcoreservas,
-      source: new XYZ({ url: CARTODB_POSITRON_URL }),
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" rel="noopener">CARTO</a>',
+      source: new XYZ({ 
+        url: CARTODB_POSITRON_URL,
+        attributions: " © OpenStreetMap contributors",
+      }),
       subdomains: "abcd",
       maxZoom: 19,
       name: "CartoDB Positron",
@@ -101,16 +102,20 @@ const createBaseLayers = (project) => {
       title: "Esri WorldPhysical",
       visible: false,
       attribution: "Tiles &copy; Esri &mdash; Source: US National Park Service",
-      source: new XYZ({ url: ESRI_WORLD_PHYSICAL_URL }),
+      source: new XYZ({ 
+        url: ESRI_WORLD_PHYSICAL_URL,
+        attributions: " © OpenStreetMap contributors"
+      }),
       maxZoom: 8,
       name: "Esri WorldPhysical",
     }),
     esri_imagery: new TileLayer({
       title: "Esri WorldImagery",
       visible: false,
-      source: new XYZ({ url: ESRI_WORLD_IMAGERY_URL }),
-      attribution:
-        "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
+      source: new XYZ({ 
+        url: ESRI_WORLD_IMAGERY_URL,
+        attributions: "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+       }),
       name: "Esri WorldImagery",
     }),
   };

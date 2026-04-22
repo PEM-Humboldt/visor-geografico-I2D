@@ -155,7 +155,7 @@ function renderBaseLayerGroup(group, accordion, index, groupName) {
   }
 
   const cardLink = document.createElement("a");
-  cardLink.className = "btn btn-link";
+  cardLink.className = "btn btn-link dropdown-toggle bold";
   cardLink.setAttribute("href", "#");
   cardLink.setAttribute("data-toggle", "collapse");
   cardLink.setAttribute("aria-expanded", "true");
@@ -307,7 +307,7 @@ function renderLayerGroup(group, parentElement, layerGroup, groupId, level = 0) 
 
   // Create collapse link
   const cardLink = document.createElement("a");
-  cardLink.className = "btn btn-link";
+  cardLink.className = "btn btn-link dropdown-toggle";
   cardLink.setAttribute("href", "#");
   cardLink.setAttribute("data-toggle", "collapse");
   cardLink.setAttribute("aria-expanded", group.fold_state === "open");
@@ -316,9 +316,7 @@ function renderLayerGroup(group, parentElement, layerGroup, groupId, level = 0) 
 
   // Style for top-level groups
   if (level === 0) {
-    cardLink.style.fontWeight = "bold";
-    cardLink.style.textDecoration = "underline";
-    cardLink.style.fontStyle = "italic";
+    cardLink.classList.add('bold');
   }
 
   cardHeader.appendChild(cardLink);
