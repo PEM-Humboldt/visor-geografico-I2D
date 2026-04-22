@@ -186,7 +186,6 @@ var openData = (feature, cod_depto) => {
     );
 
     if (isFirstLoad || locationChanged) {
-        $('#resume-data-tab').tab('show');
         // obtener fecha de descarga solo una vez
         if ($('.gbifInfo')[0] && $('.gbifInfo')[0].innerText == '') {
             let urlReq = 'gbif/gbifinfo';
