@@ -1,10 +1,10 @@
 import $ from "jquery";
 import { closeTutorialOnStep4 } from "../../tutorialComponent/tutorial";
+import {GEOSERVER_URL,GEONETWORK_URL,DATAVERSE_URL} from '../../server/url'
 
 // Get proyecto from URL params instead of importing from layers
 const urlParams = new URLSearchParams(window.location.search);
 const proyecto = urlParams.get('proyecto') || 'general';
-const GEOSERVER_URL = process.env.GEOSERVER_URL || 'https://geoservicios.humboldt.org.co/geoserver/';
 
 /**
  * Transform extent from WGS84 (EPSG:4326) to Web Mercator (EPSG:3857)
@@ -438,13 +438,15 @@ function renderLayer(layerData, parentElement, layerGroup) {
   formCheck.appendChild(label);
 
   // Add metadata link if available
-  if (layerData.metadata_id) {
+  let metadata = layerData.metadata_id;
+  if (metadata) {
+    let repositorio = metadata.length == 6 ? DATAVERSE_URL : GEONETWORK_URL;
     const metadataLink = document.createElement("div");
     metadataLink.innerHTML = '<i class="fas fa-link"></i>';
     metadataLink.className = "card-link float-right";
     metadataLink.setAttribute(
       "onclick",
-      `window.open("https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/${layerData.metadata_id}")`
+      `window.open("${repositorio}${metadata}")`
     );
     formCheck.appendChild(metadataLink);
   }
