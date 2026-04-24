@@ -52,12 +52,10 @@ export var wmsGetProps= (AllLayers,i,coordinate,Selection)=>{
     hasPointPropertyType(layerName).then(result => {
         if (result) {
             params['BUFFER'] = getDynamicBuffer(resolution);
-        } else {
-            if (resolution > 200){
-                resolution=200;
-            }
+        } else if (resolution > 200){
+            resolution=200;
         }
-    
+            
         var url = wmsSource[i].getFeatureInfoUrl(
             coordinate, resolution, getProjection(),
             params
@@ -81,6 +79,8 @@ export var wmsGetProps= (AllLayers,i,coordinate,Selection)=>{
             }
         }
         });
+    }).catch(err => {
+        console.error('')
     })
 }
 
