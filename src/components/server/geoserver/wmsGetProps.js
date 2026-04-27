@@ -14,7 +14,7 @@ import {fitView,getResolution} from '../../mapComponent/map'
 
 var format = [], wmsSource = [];
 var getDynamicBuffer = (resolution) => {
-    // scaleDenominator = resolution x 3571 (OGC standar (1/0.00028))
+    // These values were defined using the following equation: scaleDenominator = resolution x 3571 (OGC standar (1/0.00028))
     if (resolution > 1900) return 4;
     if (resolution > 560) return 7;
     if (resolution > 280) return 9;
@@ -52,18 +52,16 @@ export var wmsGetProps= (AllLayers,i,coordinate,Selection)=>{
     hasPointPropertyType(layerName).then(result => {
         if (result) {
             params['BUFFER'] = getDynamicBuffer(resolution);
-        } else {
-            if (resolution > 200){
-                resolution=200;
-            }
+        } else if (resolution > 200){
+            resolution=200;
         }
-    })
-    
-    var url = wmsSource[i].getFeatureInfoUrl(
-        coordinate, resolution, getProjection(),
-        params
-    );
-    $.ajax({
+            
+        var url = wmsSource[i].getFeatureInfoUrl(
+            coordinate, resolution, getProjection(),
+            params
+        );
+        
+        $.ajax({
         url: url,
         success: function (data) {
             var feat = feats(data);
@@ -80,7 +78,10 @@ export var wmsGetProps= (AllLayers,i,coordinate,Selection)=>{
                 Selection(features,i);
             }
         }
-    });
+        });
+    }).catch(err => {
+        console.error('')
+    })
 }
 
 
