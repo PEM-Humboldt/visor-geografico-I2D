@@ -627,7 +627,7 @@ function renderLayer(layerData, parentElement, layerGroup) {
     const metadataLink = document.createElement("div");
     metadataLink.innerHTML = '<i class="fas fa-link"></i>';
     metadataLink.className = "card-link float-right";
-    metadataLink.title = "Ver metadatos de la capa";
+    metadataLink.title = "Ver metadatos";
     metadataLink.setAttribute(
       "onclick",
       `window.open("${repositorio}${metadata}")`
@@ -639,7 +639,7 @@ function renderLayer(layerData, parentElement, layerGroup) {
   zoomLayer.innerHTML = '<i class="fa fa-expand"></i>';
   zoomLayer.className = "card-link float-right";
   zoomLayer.style.marginRight = "8px";
-  zoomLayer.title = "Zoom de la capa";
+  zoomLayer.title = "Zoom a la capa";
   zoomLayer.style.display = checkbox.checked ? "block" : "none"; // visibilidad inicial
   zoomLayer.onclick = function () {
     fitMapToLayerExtent(olLayer);
