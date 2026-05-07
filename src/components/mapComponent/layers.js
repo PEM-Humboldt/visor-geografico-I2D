@@ -50,11 +50,12 @@ const initializeProject = async () => {
  */
 const createBaseLayers = (project) => {
   const isEcoreservas = project && project.nombre_corto === "ecoreservas";
+  const baseMapVisible = project?.base_map_visible ?? "streetmap";
 
   return {
     streetmap: new TileLayer({
-      title: "Streetmap",
-      visible: !isEcoreservas,
+      title: "OpenStreetMap",
+      visible: baseMapVisible === "streetmap",
       source: new OSM({ crossOrigin: null }),
       maxZoom: 20,
       minResolution: 2,
@@ -62,7 +63,7 @@ const createBaseLayers = (project) => {
     }),
     cartodb_positron: new TileLayer({
       title: "CartoDB Positron",
-      visible: isEcoreservas,
+      visible: baseMapVisible === "cartodb_positron",
       source: new XYZ({ 
         url: CARTODB_POSITRON_URL,
         attributions: " © OpenStreetMap contributors",
@@ -73,7 +74,7 @@ const createBaseLayers = (project) => {
     }),
     otm: new TileLayer({
       title: "OTM",
-      visible: false,
+      visible: baseMapVisible === "otm",
       source: new XYZ({
         url: OTM_TILE_URL,
         attributions: " © OpenStreetMap contributors",
@@ -82,7 +83,7 @@ const createBaseLayers = (project) => {
     }),
     bw: new TileLayer({
       title: "B & W",
-      visible: false,
+      visible: baseMapVisible === "bw",
       source: new XYZ({
         url: WMFLABS_BW_URL,
         attributions: " © OpenStreetMap contributors",
@@ -91,7 +92,7 @@ const createBaseLayers = (project) => {
     }),
     terrain: new TileLayer({
       title: "Terrain",
-      visible: false,
+      visible: baseMapVisible === "terrain",
       source: new XYZ({
         url: STAMEN_TERRAIN_URL,
         attributions: " © OpenStreetMap contributors",
@@ -100,7 +101,7 @@ const createBaseLayers = (project) => {
     }),
     esri_physical: new TileLayer({
       title: "Esri WorldPhysical",
-      visible: false,
+      visible: baseMapVisible === "esri_physical",
       attribution: "Tiles &copy; Esri &mdash; Source: US National Park Service",
       source: new XYZ({ 
         url: ESRI_WORLD_PHYSICAL_URL,
@@ -111,7 +112,7 @@ const createBaseLayers = (project) => {
     }),
     esri_imagery: new TileLayer({
       title: "Esri WorldImagery",
-      visible: false,
+      visible: baseMapVisible === "esri_imagery",
       source: new XYZ({ 
         url: ESRI_WORLD_IMAGERY_URL,
         attributions: "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
