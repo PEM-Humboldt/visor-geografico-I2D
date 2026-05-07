@@ -24,7 +24,6 @@ export function FeatSelect(features,i) {
         cardlink.setAttribute('data-toggle', 'collapse');
         cardlink.setAttribute('href', '#collapse' + feature.ol_uid);
         cardlink.onclick=function(e){  
-            // console.log(feature.getGeometry().getType())
             hightlightRemove();
             $('#contenedorg').on('shown.bs.collapse', function () {
                 hightlightRemove();
@@ -55,7 +54,7 @@ export function FeatSelect(features,i) {
 
         var cardbody = document.createElement('div');
         cardbody.className = "card-body";
-        cardbody.setAttribute('style', 'min-height: 150px');
+        cardbody.setAttribute('style', 'min-height: 150px; max-height: 350px; height: auto; overflo: auto');
         collapseOne.appendChild(cardbody);
 
         var table = document.createElement('table');
@@ -66,10 +65,12 @@ export function FeatSelect(features,i) {
         // atributos
         for (i in feature.values_) {
             if (i != 'geometry' && i != 'bbox') {
+                const value = feature.values_[i];
                 var row = table.insertRow(j);
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);
                 let label = i;
+                let url;
                 switch(i) {
                     case 'dpto_nombre':
                         label = 'Departamento';
@@ -84,8 +85,13 @@ export function FeatSelect(features,i) {
                         label = 'Área (ha)';
                         break;
                 }
+                
+                if (typeof value === 'string' && /^https?:\/\//i.test(value)){
+                    url = `<a href=${value}>${value}</a>`;
+                }
+                
                 cell1.innerHTML = label;
-                cell2.innerHTML = feature.values_[i];
+                cell2.innerHTML = url || value;
                 j = j + 1;
             }
         }
