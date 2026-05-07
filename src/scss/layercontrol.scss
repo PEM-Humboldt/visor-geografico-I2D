@@ -123,7 +123,7 @@
 
 .fa-link {
     cursor: pointer;
-    opacity: 0.4;
+    opacity: 0.7;
     &:hover{
         opacity: 1;
     }
@@ -131,6 +131,8 @@
 
 .fa-expand {
     line-height: 1.4;
+    cursor: pointer;
+    opacity: 0.7;
 }
 
 .bold {
