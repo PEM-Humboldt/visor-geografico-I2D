@@ -91,7 +91,7 @@ export function FeatSelect(features,i) {
                 }
                 
                 cell1.innerHTML = label;
-                cell2.innerHTML = url ? url : value;
+                cell2.innerHTML = url || value;
                 j = j + 1;
             }
         }
