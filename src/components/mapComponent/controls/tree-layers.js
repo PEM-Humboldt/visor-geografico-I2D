@@ -5,7 +5,6 @@ import {
   proyecto,
 } from "../layers";
 import { closeTutorialOnStep4 } from "../../tutorialComponent/tutorial";
-import logoi2d from "../../../assets/legend/ecoreservas.png";
 
 var AllLayers = [];
 var k = 0;
@@ -351,7 +350,7 @@ function createGroupLayersContent(groupLayers, parentElement) {
     var down = document.createElement("div");
     // Crear elemento de imagen
     var image = document.createElement("img");
-    image.src = logoi2d; // Establecer la ruta de la imagen
+    image.src = "https://pem-humboldt.github.io/visor-geografico-I2D/assets/legends/ecoreservas.png";
     // Agregar la imagen al elemento div
     down.appendChild(image);
     fcheck.appendChild(down);

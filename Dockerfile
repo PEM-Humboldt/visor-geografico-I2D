@@ -5,10 +5,12 @@ USER node
 RUN mkdir -p /home/node/app
 WORKDIR /home/node/app
 
-COPY package.json /home/node/app
+COPY --chown=node:node package.json package-lock.json /home/node/app
+
+RUN npm ci
+
 COPY .env /home/node/app/.env
 COPY src/ src
-RUN npm install
 RUN npm run build
 
 # Production stage

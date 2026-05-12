@@ -1,189 +1,11 @@
 import $ from "jquery";
+import projectService from "../../services/projectService.js";
 import { closeTutorialOnStep4 } from "../../tutorialComponent/tutorial";
-// import logoi2d from "../../../assets/legend/ecoreservas.png";
+import {GEOSERVER_URL,GEONETWORK_URL,DATAVERSE_URL} from '../../server/url'
 
 // Get proyecto from URL params instead of importing from layers
 const urlParams = new URLSearchParams(window.location.search);
 const proyecto = urlParams.get('proyecto') || 'general';
-const GEOSERVER_URL = process.env.GEOSERVER_URL || 'https://geoservicios.humboldt.org.co/geoserver/';
-
-/**
- * Fit map view to layer extent with animation
- * Fetches actual extent from GeoServer for WMS layers
- * @param {Object} layer - OpenLayers layer
- */
-async function fitMapToLayerExtent(layer) {
-  if (!layer || !window.mapInstance) {
-    console.warn('Cannot fit to extent: layer or map not available');
-    return;
-  }
-
-  try {
-    const source = layer.getSource();
-    if (!source) {
-      console.warn('Layer has no source');
-      return;
-    }
-
-    let extent = null;
-
-    // For WMS/TileWMS layers, fetch extent from GeoServer
-    if (source.constructor.name === 'TileWMS' || source.getParams) {
-      const params = source.getParams();
-      const layerName = params.LAYERS;
-
-      if (layerName) {
-        extent = await fetchWMSLayerExtent(source.getUrls()[0], layerName);
-      }
-    }
-
-    // For vector layers, use source extent
-    if (!extent && typeof source.getExtent === 'function') {
-      extent = source.getExtent();
-    }
-
-    // Fallback to layer property extent (but check if it's not the max extent)
-    if (!extent || !isFinite(extent[0])) {
-      const layerExtent = layer.get('extent');
-      // Only use if it's not the maximum EPSG:3857 extent
-      if (layerExtent && layerExtent[0] !== -20037508.342789244) {
-        extent = layerExtent;
-      }
-    }
-
-    // Check if extent is valid
-    if (!extent || !isFinite(extent[0]) || !isFinite(extent[1]) ||
-        !isFinite(extent[2]) || !isFinite(extent[3])) {
-      console.warn('Layer extent is not valid or could not be fetched:', layer.get('name'));
-      return;
-    }
-
-    // Check if extent is not the maximum extent (indicates no real extent available)
-    if (extent[0] === -20037508.342789244 && extent[2] === 20037508.342789244) {
-      console.warn('Layer has maximum extent, cannot zoom to specific area:', layer.get('name'));
-      return;
-    }
-
-    // Check if extent is not empty (all zeros or very small)
-    const width = extent[2] - extent[0];
-    const height = extent[3] - extent[1];
-    if (width < 1 || height < 1) {
-      console.warn('Layer extent is too small or empty:', layer.get('name'));
-      return;
-    }
-
-    // Fit the view to the extent with padding and animation
-    window.mapInstance.getView().fit(extent, {
-      padding: [50, 50, 50, 50], // Add padding around the extent
-      duration: 1000, // Animation duration in milliseconds
-      maxZoom: 16, // Don't zoom in too much for small features
-      callback: function(complete) {
-        if (!complete) {
-          console.warn(`⚠️ Map view fit was interrupted`);
-        }
-      }
-    });
-  } catch (error) {
-    console.error('Error fitting to layer extent:', error);
-  }
-}
-
-/**
- * Fetch WMS layer extent from GeoServer GetCapabilities
- * @param {string} wmsUrl - WMS service URL
- * @param {string} layerName - Full layer name (workspace:layer)
- * @returns {Promise<Array|null>} Extent array [minx, miny, maxx, maxy] or null
- */
-async function fetchWMSLayerExtent(wmsUrl, layerName) {
-  try {
-    // Build GetCapabilities URL
-    const capabilitiesUrl = `${wmsUrl}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities`;
-
-    // Extract layer name without workspace prefix (e.g., "ecoreservas:layer_name" -> "layer_name")
-    const layerNameWithoutWorkspace = layerName.includes(':') ? layerName.split(':')[1] : layerName;
-
-    const response = await fetch(capabilitiesUrl);
-    if (!response.ok) {
-      console.error(`❌ GetCapabilities request failed: ${response.status} ${response.statusText}`);
-      return null;
-    }
-
-    const text = await response.text();
-
-    // Parse XML
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(text, 'text/xml');
-
-    // Check for XML parsing errors
-    const parserError = xmlDoc.getElementsByTagName('parsererror');
-    if (parserError.length > 0) {
-      console.error('❌ XML parsing error:', parserError[0].textContent);
-      return null;
-    }
-
-    // Find the layer in capabilities
-    const layers = xmlDoc.getElementsByTagName('Layer');
-
-    // Collect all available layer names for debugging
-    const availableLayerNames = [];
-    for (let i = 0; i < layers.length; i++) {
-      const nameNode = layers[i].getElementsByTagName('Name')[0];
-      if (nameNode) {
-        availableLayerNames.push(nameNode.textContent);
-      }
-    }
-
-    for (let i = 0; i < layers.length; i++) {
-      const layerNode = layers[i];
-      const nameNode = layerNode.getElementsByTagName('Name')[0];
-
-      // Match against both full name and name without workspace
-      if (nameNode && (nameNode.textContent === layerName || nameNode.textContent === layerNameWithoutWorkspace)) {
-        // Try to get EX_GeographicBoundingBox first (WGS84)
-        const geoBBox = layerNode.getElementsByTagName('EX_GeographicBoundingBox')[0];
-        if (geoBBox) {
-          const westBound = parseFloat(geoBBox.getElementsByTagName('westBoundLongitude')[0].textContent);
-          const eastBound = parseFloat(geoBBox.getElementsByTagName('eastBoundLongitude')[0].textContent);
-          const southBound = parseFloat(geoBBox.getElementsByTagName('southBoundLatitude')[0].textContent);
-          const northBound = parseFloat(geoBBox.getElementsByTagName('northBoundLatitude')[0].textContent);
-
-          // Transform from WGS84 to EPSG:3857
-          const extent = transformExtent([westBound, southBound, eastBound, northBound]);
-          return extent;
-        }
-
-        // Fallback to BoundingBox with CRS
-        const bboxNodes = layerNode.getElementsByTagName('BoundingBox');
-
-        for (let j = 0; j < bboxNodes.length; j++) {
-          const bbox = bboxNodes[j];
-          const crs = bbox.getAttribute('CRS') || bbox.getAttribute('SRS');
-
-          if (crs === 'EPSG:3857' || crs === 'EPSG:900913') {
-            const minx = parseFloat(bbox.getAttribute('minx'));
-            const miny = parseFloat(bbox.getAttribute('miny'));
-            const maxx = parseFloat(bbox.getAttribute('maxx'));
-            const maxy = parseFloat(bbox.getAttribute('maxy'));
-
-            const extent = [minx, miny, maxx, maxy];
-            return extent;
-          }
-        }
-
-        console.warn(`⚠️ Layer found but no suitable bounding box`);
-      }
-    }
-
-    console.warn(`❌ Could not find extent for layer ${layerName} in capabilities`);
-    console.warn(`💡 Searched for: "${layerName}" and "${layerNameWithoutWorkspace}"`);
-    console.warn(`💡 Available layers: ${availableLayerNames.join(', ')}`);
-    return null;
-  } catch (error) {
-    console.error(`❌ Error fetching WMS capabilities:`, error);
-    console.error(`Stack trace:`, error.stack);
-    return null;
-  }
-}
 
 /**
  * Transform extent from WGS84 (EPSG:4326) to Web Mercator (EPSG:3857)
@@ -249,9 +71,12 @@ export function buildHierarchicalLayerTree(projectData, layerGroup) {
   topLevelGroups.forEach((group, index) => {
     renderLayerGroup(group, accordion, layerGroup, `group_${index}`, 0);
   });
+  
+  let currentProject = projectService.getCurrentProject();
+  let panelVisibility = currentProject.panel_visible;
 
   // Show accordion for ecoreservas
-  if (proyecto === "ecoreservas") {
+  if (panelVisibility) {
     accordion.className = "d-block";
   }
 
@@ -334,7 +159,7 @@ function renderBaseLayerGroup(group, accordion, index, groupName) {
   }
 
   const cardLink = document.createElement("a");
-  cardLink.className = "btn btn-link";
+  cardLink.className = "btn btn-link dropdown-toggle bold";
   cardLink.setAttribute("href", "#");
   cardLink.setAttribute("data-toggle", "collapse");
   cardLink.setAttribute("aria-expanded", "true");
@@ -386,11 +211,6 @@ function renderBaseLayer(layer, parentElement, layerIndex, groupIndex) {
     cleanHighlights(ev);
     const isVisible = ev.target.checked;
     layer.setVisible(isVisible);
-
-    // Fit map to layer extent when enabling
-    if (isVisible) {
-      fitMapToLayerExtent(layer);
-    }
 
     // Sync with URL parameters for base layers too
     const layerName = layer.get('name') || layer.get('geoserverName');
@@ -473,6 +293,9 @@ function renderLayerGroup(group, parentElement, layerGroup, groupId, level = 0) 
   // Create card for this group
   const card = document.createElement("div");
   card.className = "card overflow-auto";
+  if (group.layers?.length && !group.subgroups?.length){
+    card.classList.add("layer-container");
+  }
   card.id = `combined_${groupId}`;
   parentElement.appendChild(card);
 
@@ -488,7 +311,7 @@ function renderLayerGroup(group, parentElement, layerGroup, groupId, level = 0) 
 
   // Create collapse link
   const cardLink = document.createElement("a");
-  cardLink.className = "btn btn-link";
+  cardLink.className = "btn btn-link dropdown-toggle";
   cardLink.setAttribute("href", "#");
   cardLink.setAttribute("data-toggle", "collapse");
   cardLink.setAttribute("aria-expanded", group.fold_state === "open");
@@ -497,9 +320,7 @@ function renderLayerGroup(group, parentElement, layerGroup, groupId, level = 0) 
 
   // Style for top-level groups
   if (level === 0) {
-    cardLink.style.fontWeight = "bold";
-    cardLink.style.textDecoration = "underline";
-    cardLink.style.fontStyle = "italic";
+    cardLink.classList.add('bold');
   }
 
   cardHeader.appendChild(cardLink);
@@ -586,11 +407,6 @@ function renderLayer(layerData, parentElement, layerGroup) {
       const isVisible = ev.target.checked;
       olLayer.setVisible(isVisible);
 
-      // Fit map to layer extent when enabling
-      if (isVisible) {
-        fitMapToLayerExtent(olLayer);
-      }
-
       // Sync with URL parameters
       const geoserverName = layerData.nombre_geoserver;
       if (isVisible) {
@@ -626,13 +442,15 @@ function renderLayer(layerData, parentElement, layerGroup) {
   formCheck.appendChild(label);
 
   // Add metadata link if available
-  if (layerData.metadata_id) {
+  let metadata = layerData.metadata_id;
+  if (metadata) {
+    let repositorio = metadata.length == 6 ? DATAVERSE_URL : GEONETWORK_URL;
     const metadataLink = document.createElement("div");
     metadataLink.innerHTML = '<i class="fas fa-link"></i>';
     metadataLink.className = "card-link float-right";
     metadataLink.setAttribute(
       "onclick",
-      `window.open("https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/${layerData.metadata_id}")`
+      `window.open("${repositorio}${metadata}")`
     );
     formCheck.appendChild(metadataLink);
   }

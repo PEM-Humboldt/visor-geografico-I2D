@@ -1,5 +1,3 @@
-import logoi2d from '../../../../../../assets/img/logo-humboldt-v2.png'
-import footeri2d from '../../../../../../assets/img/footer.png'
 import { PDF_ASSET_BASE_URL } from '../../../../../server/url'
 
 import pdfMake from "pdfmake/build/pdfmake.min";
@@ -134,9 +132,11 @@ function imageToDataURL(imagePath) {
 // /** Function that exports PDF*/
 
 export function savePDF() {
+    const logoHumboldt = "https://pem-humboldt.github.io/visor-geografico-I2D/assets/institutional/logo-humboldt-v2.png"
+    const footeri2d = "https://pem-humboldt.github.io/visor-geografico-I2D/assets/ui/footer.png"
     // First, convert images to data URLs, then get chart data
     Promise.all([
-        imageToDataURL(logoi2d),
+        imageToDataURL(logoHumboldt),
         imageToDataURL(footeri2d),
         chartReg.exporting.getJSON("json"),
         chartDangerSp.exporting.getJSON("json")
