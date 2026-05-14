@@ -88,11 +88,11 @@ Ejecute la siguiente sentencia para instalar las dependencias del proyecto:
    NODE_ENV=development
    GEOSERVER_URL=http://localhost:8081/geoserver/
    PYTHONSERVER=http://localhost:8001/api/
-   
+
    # URLs de mapas base
    CARTODB_POSITRON_URL=https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png
    OTM_TILE_URL=https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png
-   
+
    # URLs de servicios externos
    GEONETWORK_URL=https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/
    DATAVERSE_URL=https://doi.org/10.21068/
@@ -222,7 +222,7 @@ docker-compose logs -f frontend
 
 ### 2.1. Compilación del proyecto
 Para desplegar el proyecto, ejecute la siguiente instrucción:
-    
+
     npm run build
 
 ### 2.2. Despliegue
@@ -240,7 +240,7 @@ Para el caso de apache-tomcat:
 
 ### 2.3. Precondición
 
-- Es necesario tener funcional tanto el [backend](https://github.com/PEM-Humboldt/visor-geografico-I2D-backend) para las funcionalidades, como el [geoserver](http://34.231.25.67:8080/geoserver/web/) en el servicio de capas. 
+- Es necesario tener funcional tanto el [backend](https://github.com/PEM-Humboldt/visor-geografico-I2D-backend) para las funcionalidades, como el [geoserver](http://34.231.25.67:8080/geoserver/web/) en el servicio de capas.
 
 Para la correcta ejecución de las funcionalidades del frontend, la siguiente ruta contiene dichas conexiones externas
 ```
@@ -253,7 +253,9 @@ Para la correcta ejecución de las funcionalidades del frontend, la siguiente ru
 
 Alternativamente puede desplegar usando contenedores de docker. Primero construya la imagen:
 
-`docker build -t visor-i2d:1.2.0 .`
+`docker build -t visor-i2d:<version actual> .`
+
+> la versión actual se puede verificar en el [package.json](./package.json)
 
 Detenga el contenedor:
 
@@ -265,7 +267,7 @@ Borre el contenedor antiguo:
 
 Después levante el contenedor:
 
-`docker run --name=visor_i2d --network=i2d.net -p 3000:80 -d visor-i2d:1.2.0`
+`docker run --name=visor_i2d --network=i2d.net -p 3000:80 -d visor-i2d:<version actual>`
 
 ---
 
@@ -374,7 +376,7 @@ Para más detalles: [Backend Documentation](https://github.com/maccevedor/visor-
 
 #### 🗺️ **Controles de Mapa Restaurados**
 - **Zoom In (+)**: Botón funcional con posicionamiento correcto
-- **Zoom Out (-)**: Botón funcional con posicionamiento correcto  
+- **Zoom Out (-)**: Botón funcional con posicionamiento correcto
 - **Full Extent (⛶)**: Botón de extensión completa operativo
 - **CSS Optimizado**: Posicionamiento `left: 0.5em` con `display: block !important`
 
