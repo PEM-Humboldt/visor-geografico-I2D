@@ -54,7 +54,7 @@ var jsonModal = () => {
 
             <button type='submit' id="downloadPDF" value="downloadPDF" class='btn btn-primary btn-block'>Descargar Informe (PDF)</button>
             <button type='submit' id="downloadAll" value="downloadAll" class='btn btn-primary btn-block'>Descargar Informe y datos</button>
-
+            <div class="zeroLegend">Esta descarga puede tomar bastante tiempo</div>
           `
     }]
   }
