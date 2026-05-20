@@ -1,4 +1,4 @@
-import { PDF_ASSET_BASE_URL } from '../../../../../server/url'
+import { getPdfAssetBaseUrl } from '../../../../../server/url'
 
 import pdfMake from "pdfmake/build/pdfmake.min";
 import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -28,10 +28,10 @@ function imageToDataURL(imagePath) {
         if (!imagePath.startsWith('http://') && !imagePath.startsWith('https://')) {
             // For bundled assets, the path is already correct from the import
             // Just ensure it's an absolute URL
-            if (!imagePath.startsWith('/') && !PDF_ASSET_BASE_URL.endsWith('/')) {
+            if (!imagePath.startsWith('/') && !getPdfAssetBaseUrl().endsWith('/')) {
                 fullImagePath = '/' + imagePath;
             }
-            fullImagePath = PDF_ASSET_BASE_URL + fullImagePath;
+            fullImagePath = getPdfAssetBaseUrl() + fullImagePath;
         }
 
         const alternativePaths = [];

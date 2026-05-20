@@ -1,13 +1,13 @@
 import $ from "jquery";
 
-import {PYTHONSERVER} from '../url'
+import {getPythonServerUrl} from '../url'
 // python request 
 // connects with ajax the django backend with the frontend
 
 // get request
 export const pythonGetRequest=(handleData,param,error,errorCallback)=>{
     $.ajax({
-        url: PYTHONSERVER+param,
+        url: getPythonServerUrl()+param,
         type: "GET",
         crossDomain : true,
         success: function (data, status, xhr) {
@@ -24,7 +24,7 @@ export const pythonGetRequest=(handleData,param,error,errorCallback)=>{
 export var pythonPostRequest=(param,dataJson,handleData,handleError)=>{
     $.ajax({
         type: "POST",
-        url: PYTHONSERVER+param,
+        url: getPythonServerUrl()+param,
         data: dataJson,
         success: function (res) {
           handleData(res)

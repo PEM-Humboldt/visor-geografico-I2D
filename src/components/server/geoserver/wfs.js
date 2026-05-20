@@ -1,5 +1,5 @@
 import $ from "jquery";
-import {GEOSERVER_URL} from '../url'
+import {getGeoserverUrl} from '../url'
 //Funcion de consulta
 // retorna el wfs en geojson
 export var wfsLayer =(param, request, request1, request2, request3) =>{
@@ -45,7 +45,7 @@ export var wfsLayer =(param, request, request1, request2, request3) =>{
         };
 
         temp= $.ajax({
-            url: GEOSERVER_URL+'wfs',
+            url: getGeoserverUrl()+'wfs',
             data: wfsParams,
             type: "GET",
             crossDomain : true,

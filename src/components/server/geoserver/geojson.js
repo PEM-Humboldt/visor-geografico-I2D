@@ -2,7 +2,7 @@ import {GeoJSON} from 'ol/format';
 import VectorSource from 'ol/source/Vector';
 
 import {Vector as VectorLayer} from 'ol/layer';
-import {GEOSERVER_URL} from '../url'
+import {getGeoserverUrl} from '../url'
 // import {bbox as bboxStrategy} from 'ol/loadingstrategy';
 
 // geoserver geojson
@@ -11,7 +11,7 @@ export var geojsonLayer = (store,layer,color,params)=>{
   try {
  
     // geoserver 
-    var url_request=`${GEOSERVER_URL}wfs?service=WFS&`;
+    var url_request=`${getGeoserverUrl()}wfs?service=WFS&`;
     var url_params=`version=2.0.0&request=GetFeature&typename=${store}:${layer}&srsname=EPSG:3857&outputFormat=application/json`;
  
     // console.log(url_request + url_params);

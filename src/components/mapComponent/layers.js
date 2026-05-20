@@ -18,12 +18,12 @@ import {
   styleHighlightPoint,
 } from "./layer-style/layers-style";
 import {
-  CARTODB_POSITRON_URL,
-  OTM_TILE_URL,
-  WMFLABS_BW_URL,
-  STAMEN_TERRAIN_URL,
-  ESRI_WORLD_PHYSICAL_URL,
-  ESRI_WORLD_IMAGERY_URL,
+  getCartoDbPositronUrl,
+  getOtmTileUrl,
+  getWmflabsBwUrl,
+  getStamenTerrainUrl,
+  getEsriWorldPhysicalUrl,
+  getEsriWorldImageryUrl,
 } from "../server/url";
 import projectService from "../services/projectService";
 
@@ -65,7 +65,7 @@ const createBaseLayers = (project) => {
       title: "CartoDB Positron",
       visible: baseMapVisible === "cartodb_positron",
       source: new XYZ({ 
-        url: CARTODB_POSITRON_URL,
+        url: getCartoDbPositronUrl(),
         attributions: " © OpenStreetMap contributors",
       }),
       subdomains: "abcd",
@@ -76,7 +76,7 @@ const createBaseLayers = (project) => {
       title: "OTM",
       visible: baseMapVisible === "otm",
       source: new XYZ({
-        url: OTM_TILE_URL,
+        url: getOtmTileUrl(),
         attributions: " © OpenStreetMap contributors",
       }),
       name: "OTM",
@@ -85,7 +85,7 @@ const createBaseLayers = (project) => {
       title: "B & W",
       visible: baseMapVisible === "bw",
       source: new XYZ({
-        url: WMFLABS_BW_URL,
+        url: getWmflabsBwUrl(),
         attributions: " © OpenStreetMap contributors",
       }),
       name: "BW",
@@ -94,7 +94,7 @@ const createBaseLayers = (project) => {
       title: "Terrain",
       visible: baseMapVisible === "terrain",
       source: new XYZ({
-        url: STAMEN_TERRAIN_URL,
+        url: getStamenTerrainUrl(),
         attributions: " © OpenStreetMap contributors",
       }),
       name: "Terrain",
@@ -104,7 +104,7 @@ const createBaseLayers = (project) => {
       visible: baseMapVisible === "esri_physical",
       attribution: "Tiles &copy; Esri &mdash; Source: US National Park Service",
       source: new XYZ({ 
-        url: ESRI_WORLD_PHYSICAL_URL,
+        url: getEsriWorldPhysicalUrl(),
         attributions: " © OpenStreetMap contributors"
       }),
       maxZoom: 8,
@@ -114,7 +114,7 @@ const createBaseLayers = (project) => {
       title: "Esri WorldImagery",
       visible: baseMapVisible === "esri_imagery",
       source: new XYZ({ 
-        url: ESRI_WORLD_IMAGERY_URL,
+        url: getEsriWorldImageryUrl(),
         attributions: "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
        }),
       name: "Esri WorldImagery",

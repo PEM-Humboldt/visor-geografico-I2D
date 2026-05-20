@@ -167,8 +167,8 @@ const setupMapEvents = () => {
   });
 };
 
-// Initialize everything when DOM is ready
-document.addEventListener("DOMContentLoaded", async function () {
+// Envolvemos todo en una función asíncrona normal
+async function iniciarVisorGeografico() {
   try {
     // Initialize map with project configuration
     await initializeMap();
@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const layerGroup = getLayerGroup();
 
     if (layerGroup) {
-      if (currentProject && currentProject.layer_groups) {
+      if (typeof currentProject !== 'undefined' && currentProject && currentProject.layer_groups) {
         // Use hierarchical tree for all projects (respects fold_state from API)
         buildHierarchicalLayerTree(currentProject, layerGroup);
       } else {
@@ -219,23 +219,26 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Project-specific zoom controls
     $('#combinedCapas_Cundi').on('click', function () {
-      fitCenter(ncenter);
+      if (typeof ncenter !== 'undefined') fitCenter(ncenter);
     });
 
     // Ecoreservas specific zoom (San Antero)
-    if (currentProject && currentProject.nombre_corto === 'ecoreservas') {
+    if (typeof currentProject !== 'undefined' && currentProject && currentProject.nombre_corto === 'ecoreservas') {
       $('#combinedCapas_San').on('click', function () {
         fitCenter([-8449332, 1030737]);
       });
     }
 
-    // Process URL parameters for automatic layer loading (dynamic import to avoid circular dependency)
+    // Process URL parameters for automatic layer loading
     import('../utils/urlParams.js').then(({ processURLParams, getAvailableLayerNames }) => {
       processURLParams();
     }).catch(error => {
       console.error('Error loading URL parameter utilities:', error);
     });
+
   } catch (error) {
     console.error('Error during map initialization:', error);
   }
-});
+}
+
+iniciarVisorGeografico();

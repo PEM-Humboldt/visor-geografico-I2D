@@ -4,7 +4,7 @@ import { createModal } from '../../../../modal/createModal'
 import './export-pdf'
 
 //import {GEOSERVER_URL} from '../../../../../server/url'
-import { PYTHONSERVER } from '../../../../../server/url'; // Importa la URL del servidor Python
+import { getPythonServerUrl } from '../../../../../server/url'; // Importa la URL del servidor Python
 
 import { savePDF } from './export-pdf'
 import { pythonPostRequest } from '../../../../../server/pythonserver/pythonRequest'
@@ -128,7 +128,7 @@ $(document).on('submit', 'form#formSolicitante', function (e) {
       params += `&nombre=${encodeURIComponent(nomdownload)}`;
 
       // Cambia la URL al endpoint de tu backend
-      let url = PYTHONSERVER + 'gbif/descargarz?' + params;
+      let url = getPythonServerUrl() + 'gbif/descargarz?' + params;
       window.open(url);
 
       $('#download-status').hide().find('.textoagr').remove();
