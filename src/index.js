@@ -1,11 +1,17 @@
-import 'bootstrap'
-// import 'bootstrap/dist/css/bootstrap.css' // Import precompiled Bootstrap css
-// import '@fortawesome/fontawesome-free/css/all.css'
-// import './scss/index.scss'
-import './components/mapComponent/map-control'
+window.RUNTIME_CONFIG = {};
 
-import './components/pageComponent/side-bar/side-bar'
-import './components/pageComponent/side-options/side-options'
-import './components/uiLinks'
+async function inicializarAplicacion() {
+  try {
+    const response = await fetch('./config.json');
+    if (response.ok) {
+      window.RUNTIME_CONFIG = await response.json();
+      console.log('Configuración cargada exitosamente.');
+    }
+  } catch (error) {
+    console.warn('Error cargando config.json, usando valores por defecto locales.');
+  }
 
-import './components/tutorialComponent/tutorial'
+  await import('./app.js');
+}
+
+document.addEventListener('DOMContentLoaded', inicializarAplicacion);
