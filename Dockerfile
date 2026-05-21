@@ -1,30 +1,27 @@
 # --- Etapa de Construcción (Build stage) ---
-# Usamos alpine también aquí para descargar la imagen más rápido
-FROM node:18-alpine AS builder
+FROM node:18.3.0 AS builder
 
-WORKDIR /app
+USER node
 
-# Copiamos los archivos de dependencias primero para aprovechar el caché de Docker
-COPY package.json package-lock.json ./
+RUN mkdir -p /home/node/app
 
-# npm ci es excelente para instalaciones limpias en CI/CD
+WORKDIR /home/node/app
+
+COPY --chown=node:node package.json package-lock.json /home/node/app/
+
 RUN npm ci
 
-# Copiamos el resto del código
-COPY . .
+COPY src/ src
 
-# Ejecutamos el build de Parcel. Los archivos quedarán en /app/build
 RUN npm run build
 
-
 # --- Etapa de Producción (Production stage) ---
-# Usamos httpd:alpine (Apache HTTP). Es ligero y ya trae envsubst instalado.
 FROM httpd:alpine AS production
 
 RUN apk add --no-cache gettext dos2unix
 
 # 1. Copiamos los archivos generados desde el builder al directorio que sirve Apache
-COPY --from=builder /app/build/ /usr/local/apache2/htdocs/
+COPY --from=builder /home/node/app/build/ /usr/local/apache2/htdocs/
 
 # 2. Copiamos el template de la configuración a la misma carpeta
 COPY config.json.template /usr/local/apache2/htdocs/config.json.template
