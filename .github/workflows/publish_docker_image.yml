@@ -43,6 +43,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=latest-dev,enable=${{ github.ref == 'refs/heads/develop' }}
+            type=raw,value=test,enable=${{ github.ref == 'refs/heads/jorge_higuita/LIB-590' }}
             type=raw,value=latest,enable=${{ github.event_name == 'release' }}
             type=semver,pattern={{version}},enable=${{ github.event_name == 'release' }}
 
