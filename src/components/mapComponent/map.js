@@ -192,6 +192,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Layer toggle functionality with URL parameter sync
     // Use event delegation to handle dynamically created checkboxes
     $(document).on('click', '.layers-input', function () {
+      
+      if (this.type === 'radio') return;
+
       var layername = this.id;
       var layer = findBy(layerGroup, 'name', layername);
       if (layer) {

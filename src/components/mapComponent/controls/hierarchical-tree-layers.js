@@ -427,13 +427,6 @@ function renderBaseLayer(layer, parentElement, layerIndex, groupIndex, siblingLa
   radio.onclick = function () {
     siblingLayers.forEach(siblingLayer => siblingLayer.setVisible(false));
     layer.setVisible(true);
-
-    const layerName = layer.get('name') || layer.get('geoserverName');
-    if (layerName) {
-      import('../../utils/urlParams').then(({ setURLParam }) => {
-        setURLParam('capa', layerName);
-      }).catch(err => console.error('Error setting URL param:', err));
-    }
   };
 
   formCheck.appendChild(radio);
