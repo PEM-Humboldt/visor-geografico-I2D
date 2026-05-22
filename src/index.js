@@ -5,10 +5,10 @@ async function inicializarAplicacion() {
     const response = await fetch('./config.json');
     if (response.ok) {
       window.RUNTIME_CONFIG = await response.json();
-      console.log('Configuración cargada exitosamente.');
+      console.info('Runtime configuration charged successfully');
     }
   } catch (error) {
-    console.warn('Error cargando config.json, usando valores por defecto locales.');
+    console.warn('Failed to load runtime configuration:', error);
   }
 
   await import('./app.js');
