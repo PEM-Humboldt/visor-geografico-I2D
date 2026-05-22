@@ -149,7 +149,7 @@ docker build --no-cache -f Dockerfile -t visor_i2d_frontend .
 Y posteriormente se crea el contenedor y se le cargan las `.env` de la siquiente forma:
 
 ```sh
-docker run -rm --name visor-frontend -d -it --env-file .env -p 3000:80 visor_i2d_frontend
+docker run --rm --name visor-frontend -d -it --env-file .env -p 3000:80 visor_i2d_frontend
 ```
 
 #### Variables de entorno importantes:
