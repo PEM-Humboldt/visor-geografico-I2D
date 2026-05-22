@@ -180,7 +180,7 @@ async function iniciarVisorGeografico() {
     const layerGroup = getLayerGroup();
 
     if (layerGroup) {
-      if (typeof currentProject !== 'undefined' && currentProject && currentProject.layer_groups) {
+      if (currentProject && currentProject.layer_groups) {
         // Use hierarchical tree for all projects (respects fold_state from API)
         buildHierarchicalLayerTree(currentProject, layerGroup);
       } else {
@@ -219,11 +219,11 @@ async function iniciarVisorGeografico() {
 
     // Project-specific zoom controls
     $('#combinedCapas_Cundi').on('click', function () {
-      if (typeof ncenter !== 'undefined') fitCenter(ncenter);
+      if (ncenter) fitCenter(ncenter);
     });
 
     // Ecoreservas specific zoom (San Antero)
-    if (typeof currentProject !== 'undefined' && currentProject && currentProject.nombre_corto === 'ecoreservas') {
+    if (currentProject && currentProject.nombre_corto === 'ecoreservas') {
       $('#combinedCapas_San').on('click', function () {
         fitCenter([-8449332, 1030737]);
       });
