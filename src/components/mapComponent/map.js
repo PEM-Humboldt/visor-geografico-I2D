@@ -167,7 +167,6 @@ const setupMapEvents = () => {
   });
 };
 
-// Envolvemos todo en una función asíncrona normal
 async function iniciarVisorGeografico() {
   try {
     // Initialize map with project configuration
@@ -229,7 +228,7 @@ async function iniciarVisorGeografico() {
       });
     }
 
-    // Process URL parameters for automatic layer loading
+    // Process URL parameters for automatic layer loading (dynamic import to avoid circular dependency)
     import('../utils/urlParams.js').then(({ processURLParams, getAvailableLayerNames }) => {
       processURLParams();
     }).catch(error => {
