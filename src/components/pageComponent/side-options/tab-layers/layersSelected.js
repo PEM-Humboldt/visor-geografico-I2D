@@ -2,6 +2,64 @@ import $ from "jquery";
 
 import {hightlightAdd,hightlightRemove} from '../../../mapComponent/layers'
 // create dynamic click selection, it shows the list of click layers
+
+const orderJson = (json) => {
+    return Object.fromEntries(
+        Object.entries(json).map(([category, list]) => [
+            category,
+            list.map(item =>
+                Object.fromEntries(
+                    Object.entries(item).sort(([a], [b]) => a.localeCompare(b))
+                )
+            )
+        ])
+    );
+}
+
+const isJson = (value) => {
+    try{
+        const parsed = JSON.parse(value)
+        if (parsed && typeof parsed === 'object') {
+            return orderJson(parsed)
+        }
+    } catch {
+        return null;
+    }
+}
+
+
+const buildHtmlTable = (data) => {
+    var table = document.createElement('table');
+    table.className = "table table-sm";
+    table.setAttribute('style', 'border: 1px solid #dee2e6; margin: 1rem; text-align:center; border-collapse: collapse;');
+
+    let html = '';
+    
+    for (const [category, list] of Object.entries(data)){
+        let key = category.toUpperCase();
+
+        for (const json of list){
+            let columns = '';
+            let values = '';
+            const n = Object.keys(json).length;
+            html += `<tr> <th colspan=${n} style=" font-weight: bold; border:1px solid #dee2e6;"> ${key} </th> </tr>`;
+
+            for (const [key, value] of Object.entries(json)){
+                const title = (key.charAt(0).toUpperCase() + key.slice(1)).replaceAll("_", " ")
+                const cellValue = Array.isArray(value) ? value.join(", ") : value;
+                
+                columns+= `<th style="font-weight: bold; vertical-align: middle; border:1px solid #dee2e6;"> ${title} </th>`
+                values+= `<td style="border:1px solid #dee2e6;"> ${cellValue} </td>`
+            }
+
+            html += `<tr> ${columns} </tr> <tr> ${values} </tr>`
+        }
+    }
+    
+    table.innerHTML = html;
+    return table;
+}
+
 export function FeatSelect(features,i) {
     var feature=features[0];
 
@@ -91,11 +149,10 @@ export function FeatSelect(features,i) {
                     url = `<a href=${value}>${value}</a>`;
                 }
 
-                const parsed = isJson(value)
-                if (parsed) {
-                    dataTable = buildHtmlTable(parsed);
+                const parsedJson = isJson(value)
+                if (parsedJson) {
+                    dataTable = buildHtmlTable(parsedJson);
                 }
-
                 
                 cell1.innerHTML = label;
                 if (dataTable){
@@ -106,44 +163,5 @@ export function FeatSelect(features,i) {
                 j = j + 1;
             }
         }
-    }
-    
-    function isJson(value){
-        try{
-            const parse = JSON.parse(value)
-            if (parse && typeof parse === 'object') return parse;
-        } catch {
-            return null;
-        }
-    }
-
-    function buildHtmlTable(data){
-        var table = document.createElement('table');
-        table.className = "table table-sm";
-        table.setAttribute('style', 'border: 5px solid;');
-
-        let html = '';
-        
-        for (const list of Object.values(data)){
-            let key = Object.keys(data).toString().toUpperCase();
-            let columns = '';
-            let values = '';
-
-            for (const json of list){
-                const n = Object.keys(json).length;
-                html += `<th colspan=${n}> ${key} </th> </tr>`;
-
-                console.log(json)
-                for (const [key, value] of Object.entries(json)){
-                    columns+= `<th> ${key} </th>`
-                    values+= `<th> ${key, value} </th>`
-                }
-
-                html += `<tr> ${columns} </tr> <tr> ${values} </tr>`
-            }
-        }
-        
-        table.innerHTML = html;
-        return table;
     }
 }
