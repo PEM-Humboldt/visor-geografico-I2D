@@ -37,22 +37,29 @@ const buildHtmlTable = (data) => {
     
     for (const [category, list] of Object.entries(data)){
         let key = category.toUpperCase();
+        let columns = '';
+
+        // Calculates how many columns the header should take and adds column names
+        const firstJson = list[0];
+        const headers = Object.keys(firstJson);
+        html += `<tr> <th colspan=${headers.length} style=" font-weight: bold; border:1px solid #dee2e6;"> ${key} </th> </tr>`;
+
+        for (const key of headers) {
+            const title = (key.charAt(0).toUpperCase() + key.slice(1)).replaceAll("_", " ")
+            columns+= `<th style="font-weight: bold; vertical-align: middle; border:1px solid #dee2e6;"> ${title} </th>`
+        }
+        html += `<tr> ${columns} </tr>`;
 
         for (const json of list){
-            let columns = '';
             let values = '';
-            const n = Object.keys(json).length;
-            html += `<tr> <th colspan=${n} style=" font-weight: bold; border:1px solid #dee2e6;"> ${key} </th> </tr>`;
 
-            for (const [key, value] of Object.entries(json)){
-                const title = (key.charAt(0).toUpperCase() + key.slice(1)).replaceAll("_", " ")
+            for (const value of Object.values(json)){
                 const cellValue = Array.isArray(value) ? value.join(", ") : value;
                 
-                columns+= `<th style="font-weight: bold; vertical-align: middle; border:1px solid #dee2e6;"> ${title} </th>`
                 values+= `<td style="border:1px solid #dee2e6;"> ${cellValue} </td>`
             }
 
-            html += `<tr> ${columns} </tr> <tr> ${values} </tr>`
+            html += `<tr> ${values} </tr>`
         }
     }
     
