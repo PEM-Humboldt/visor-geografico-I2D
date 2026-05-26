@@ -26,6 +26,8 @@ COPY config.json.template /usr/local/apache2/htdocs/config.json.template
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
+RUN chmod +x /docker-entrypoint.sh
+
 EXPOSE 80
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
