@@ -18,16 +18,13 @@ RUN npm run build
 # --- Etapa de Producción ---
 FROM httpd:alpine AS production
 
-RUN apk add --no-cache gettext dos2unix
+RUN apk add --no-cache gettext
 
 COPY --from=builder /home/node/app/build/ /usr/local/apache2/htdocs/
 
 COPY config.json.template /usr/local/apache2/htdocs/config.json.template
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
-
-RUN dos2unix /docker-entrypoint.sh && \
-    chmod +x /docker-entrypoint.sh
 
 EXPOSE 80
 
