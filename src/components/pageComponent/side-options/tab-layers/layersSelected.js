@@ -130,7 +130,7 @@ export function FeatSelect(features,i) {
         // atributos
         for (i in feature.values_) {
             if (i != 'geometry' && i != 'bbox') {
-                let value = feature.values_[i];
+                const value = feature.values_[i];
                 var row = table.insertRow(j);
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);
