@@ -670,7 +670,7 @@ function renderLayer(layerData, parentElement, layerGroup) {
   if (geoserverStore && layerData.store_geoserver !== null) {
     const logoDiv = document.createElement("div");
     const image = document.createElement("img");
-    image.src = `${GEOSERVER_URL}wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&LAYER=${geoserverStore}:${layerData.nombre_geoserver}&FORMAT=image/png`;
+    image.src = `${getGeoserverUrl()}wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&LAYER=${geoserverStore}:${layerData.nombre_geoserver}&FORMAT=image/png`;
     logoDiv.appendChild(image);
     formCheck.appendChild(logoDiv);
   }
