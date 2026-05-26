@@ -235,7 +235,7 @@ export function buildHierarchicalLayerTree(projectData, layerGroup) {
   // addCloseButton(accordion);
 
   // First, render base layer groups from OpenLayers (Capas Base, División político-administrativa)
-  renderBaseLayers(layerGroup, accordion);
+  renderBaseLayerGroups(layerGroup, accordion);
 
   // Then render hierarchical groups from API
   const topLevelGroups = projectData.layer_groups.filter(
@@ -280,7 +280,7 @@ export function buildHierarchicalLayerTree(projectData, layerGroup) {
  * Render base layer groups (Capas Base, División político-administrativa)
  * These are the first groups in the OpenLayers layer array
  */
-function renderBaseLayers(layerGroup, accordion) {
+function renderBaseLayerGroups(layerGroup, accordion) {
   if (!layerGroup || typeof layerGroup.getLayers !== "function") {
     console.warn("Invalid layerGroup for base layers");
     return;
@@ -288,8 +288,6 @@ function renderBaseLayers(layerGroup, accordion) {
 
   const layers = layerGroup.getLayers().getArray();
 
-  // Always render the first 2 groups (Capas Base, División político-administrativa)
-  // These are created in layers.js and are always present
   for (let i = 0; i < Math.min(2, layers.length); i++) {
     const group = layers[i];
 
@@ -299,8 +297,57 @@ function renderBaseLayers(layerGroup, accordion) {
     }
 
     const groupName = group.get("title") || group.get("name") || `Group ${i}`;
-    renderBaseLayerGroup(group, accordion, i, groupName);
+
+    if (i === 0) {
+      renderBaseLayerGroup(group, accordion, i, groupName);
+    } else {
+      renderDivisionLayerGroup(group, accordion, i, groupName, layerGroup);
+    }
   }
+}
+
+/**
+ * Render División político-administrativa group (checkbox, multiple selection)
+ * Reuses renderLayer by adapting OpenLayers layer data to layerData format
+ */
+function renderDivisionLayerGroup(group, accordion, index, groupName, layerGroup) {
+  const card = document.createElement("div");
+  card.className = "card overflow-auto";
+  card.id = `capas${index}`;
+  accordion.appendChild(card);
+
+  const cardHeader = document.createElement("div");
+  cardHeader.className = "card-header";
+  cardHeader.style.position = "relative";
+  card.appendChild(cardHeader);
+
+  const cardLink = document.createElement("a");
+  cardLink.className = "btn btn-link dropdown-toggle bold";
+  cardLink.setAttribute("href", "#");
+  cardLink.setAttribute("data-toggle", "collapse");
+  cardLink.setAttribute("aria-expanded", "true");
+  cardLink.setAttribute("data-target", `#collapse${index}`);
+  cardLink.innerHTML = groupName;
+  cardHeader.appendChild(cardLink);
+
+  const collapseDiv = document.createElement("div");
+  collapseDiv.id = `collapse${index}`;
+  collapseDiv.className = "collapse";
+  collapseDiv.setAttribute("aria-labelledby", `#collapse${index}`);
+  collapseDiv.setAttribute("data-parent", "#accordion");
+  card.appendChild(collapseDiv);
+
+  const sublayers = group.getLayers().getArray();
+  sublayers.forEach((layer) => {
+    const layerData = {
+      nombre_geoserver: layer.get("name"),
+      nombre_display: layer.get("title") || layer.get("name"),
+      estado_inicial: layer.getVisible(),
+      metadata_id: null,
+      store_geoserver: null,
+    };
+    renderLayer(layerData, collapseDiv, layerGroup);
+  });
 }
 
 /**
@@ -314,14 +361,12 @@ function renderBaseLayerGroup(group, accordion, index, groupName) {
 
   const cardHeader = document.createElement("div");
   cardHeader.className = "card-header";
-  cardHeader.style.position = "relative";  // Required for absolute positioning
+  cardHeader.style.position = "relative";
   card.appendChild(cardHeader);
 
-  // Add close button to first card only
   if (index === 0) {
     const closeButton = document.createElement("a");
     closeButton.className = "card-link float-right";
-    closeButton.setAttribute("data-toggle", "collapse");
     closeButton.setAttribute(
       "style",
       "position:absolute; right:8px; top:8px; color: rgb(42, 71, 80); cursor:pointer; z-index:10; pointer-events:auto;"
@@ -352,17 +397,16 @@ function renderBaseLayerGroup(group, accordion, index, groupName) {
   collapseDiv.setAttribute("data-parent", "#accordion");
   card.appendChild(collapseDiv);
 
-  // Render layers in this group
   const sublayers = group.getLayers().getArray();
   sublayers.forEach((layer, j) => {
-    renderBaseLayer(layer, collapseDiv, j, index);
+    renderBaseLayer(layer, collapseDiv, j, index, sublayers);
   });
 }
 
 /**
- * Render a base layer (from OpenLayers group)
+ * Render a base layer (Capas Base)
  */
-function renderBaseLayer(layer, parentElement, layerIndex, groupIndex) {
+function renderBaseLayer(layer, parentElement, layerIndex, groupIndex, siblingLayers = []) {
   const subname = layer.get("name");
 
   const cardBody = document.createElement("div");
@@ -373,48 +417,26 @@ function renderBaseLayer(layer, parentElement, layerIndex, groupIndex) {
   formCheck.className = "form-check";
   cardBody.appendChild(formCheck);
 
-  const checkbox = document.createElement("input");
-  checkbox.className = "form-check-input layers-input";
-  checkbox.setAttribute("type", "checkbox");
-  checkbox.id = subname;
+  const radio = document.createElement("input");
+  radio.className = "form-check-input layers-input";
+  radio.setAttribute("type", "radio");
+  radio.setAttribute("name", `base-layer-group-${groupIndex}`);
+  radio.id = subname;
+  radio.checked = layer.getVisible();
 
-  // Disable dpto_politico checkbox if it's the first layer
-  if (layerIndex === 0 && subname === "dpto_politico") {
-    checkbox.disabled = true;
-  }
-
-  checkbox.checked = layer.getVisible();
-
-  checkbox.onclick = function (ev) {
-    cleanHighlights(ev);
-    const isVisible = ev.target.checked;
-    layer.setVisible(isVisible);
-
-    // Sync with URL parameters for base layers too
-    const layerName = layer.get('name') || layer.get('geoserverName');
-    if (isVisible && layerName) {
-      import('../../utils/urlParams').then(({ setURLParam }) => {
-        setURLParam('capa', layerName);
-      }).catch(err => console.error('Error setting URL param:', err));
-    } else if (!isVisible && layerName) {
-      import('../../utils/urlParams').then(({ getURLParam, removeURLParam }) => {
-        const currentCapa = getURLParam('capa');
-        if (currentCapa === layerName) {
-          removeURLParam('capa');
-        }
-      }).catch(err => console.error('Error removing URL param:', err));
-    }
+  radio.onclick = function () {
+    siblingLayers.forEach(siblingLayer => siblingLayer.setVisible(false));
+    layer.setVisible(true);
   };
 
-  formCheck.appendChild(checkbox);
+  formCheck.appendChild(radio);
 
   const label = document.createElement("label");
   label.className = "form-check-label";
-  label.setAttribute("for", "defaultCheck1");
+  label.setAttribute("for", subname);
   label.innerHTML = layer.get("title") || layer.get("name");
   formCheck.appendChild(label);
 
-    // Add download link if available
   const urldownload = layer.get("urldownload");
   if (urldownload && urldownload !== "") {
     const downloadLink = document.createElement("div");
@@ -424,12 +446,10 @@ function renderBaseLayer(layer, parentElement, layerIndex, groupIndex) {
     formCheck.appendChild(downloadLink);
   }
 
-  // Store layer reference (skip first group index 0)
   if (groupIndex !== 0) {
     AllLayers[AllLayers.length] = layer;
   }
 }
-
 
 /**
  * Add close button to accordion
@@ -640,18 +660,20 @@ function renderLayer(layerData, parentElement, layerGroup) {
   zoomLayer.className = "card-link float-right";
   zoomLayer.style.marginRight = "8px";
   zoomLayer.title = "Zoom a la capa";
-  zoomLayer.style.display = checkbox.checked ? "block" : "none"; // visibilidad inicial
+  zoomLayer.style.display = checkbox.checked ? "block" : "none";
   zoomLayer.onclick = function () {
     fitMapToLayerExtent(olLayer);
   };
   formCheck.appendChild(zoomLayer);
 
-  const logoDiv = document.createElement("div");
-  const image = document.createElement("img");
   const geoserverStore = layerData.store_geoserver || proyecto;
-  image.src = `${getGeoserverUrl()}wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&LAYER=${layerData.store_geoserver}:${layerData.nombre_geoserver}&FORMAT=image/png`;
-  logoDiv.appendChild(image);
-  formCheck.appendChild(logoDiv);
+  if (geoserverStore && layerData.store_geoserver !== null) {
+    const logoDiv = document.createElement("div");
+    const image = document.createElement("img");
+    image.src = `${GEOSERVER_URL}wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&LAYER=${geoserverStore}:${layerData.nombre_geoserver}&FORMAT=image/png`;
+    logoDiv.appendChild(image);
+    formCheck.appendChild(logoDiv);
+  }
 
 }
 
