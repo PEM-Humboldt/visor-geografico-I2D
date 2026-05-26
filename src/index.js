@@ -19,14 +19,12 @@ window.RUNTIME_CONFIG = {
 };
 
 async function inicializarAplicacion() {
-  console.log('Loading configuration...');
-
+  
   try {
     const response = await fetch('./config.json');
     if (response.ok) {
       const prodConfig = await response.json();
       window.RUNTIME_CONFIG = { ...window.RUNTIME_CONFIG, ...prodConfig };
-      console.log('Runtime configuration loaded successfully');
     }
   } catch (error) {
     console.debug('Could not load config.json, using environment variables or defaults', error);
