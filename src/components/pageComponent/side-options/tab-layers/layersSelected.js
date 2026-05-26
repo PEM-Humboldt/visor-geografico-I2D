@@ -65,12 +65,13 @@ export function FeatSelect(features,i) {
         // atributos
         for (i in feature.values_) {
             if (i != 'geometry' && i != 'bbox') {
-                const value = feature.values_[i];
+                let value = feature.values_[i];
                 var row = table.insertRow(j);
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);
                 let label = i;
                 let url;
+                let dataTable;
                 switch(i) {
                     case 'dpto_nombre':
                         label = 'Departamento';
@@ -89,12 +90,60 @@ export function FeatSelect(features,i) {
                 if (typeof value === 'string' && /^https?:\/\//i.test(value)){
                     url = `<a href=${value}>${value}</a>`;
                 }
+
+                const parsed = isJson(value)
+                if (parsed) {
+                    dataTable = buildHtmlTable(parsed);
+                }
+
                 
                 cell1.innerHTML = label;
-                cell2.innerHTML = url || value;
+                if (dataTable){
+                    cell2.appendChild(dataTable);
+                } else {
+                    cell2.innerHTML = url || value;
+                }
                 j = j + 1;
             }
         }
     }
     
+    function isJson(value){
+        try{
+            const parse = JSON.parse(value)
+            if (parse && typeof parse === 'object') return parse;
+        } catch {
+            return null;
+        }
+    }
+
+    function buildHtmlTable(data){
+        var table = document.createElement('table');
+        table.className = "table table-sm";
+        table.setAttribute('style', 'border: 5px solid;');
+
+        let html = '';
+        
+        for (const list of Object.values(data)){
+            let key = Object.keys(data).toString().toUpperCase();
+            let columns = '';
+            let values = '';
+
+            for (const json of list){
+                const n = Object.keys(json).length;
+                html += `<th colspan=${n}> ${key} </th> </tr>`;
+
+                console.log(json)
+                for (const [key, value] of Object.entries(json)){
+                    columns+= `<th> ${key} </th>`
+                    values+= `<th> ${key, value} </th>`
+                }
+
+                html += `<tr> ${columns} </tr> <tr> ${values} </tr>`
+            }
+        }
+        
+        table.innerHTML = html;
+        return table;
+    }
 }
