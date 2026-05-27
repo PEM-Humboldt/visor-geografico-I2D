@@ -7,7 +7,6 @@ async function inicializarAplicacion() {
     const response = await fetch('./config.json');
     if (response.ok) {
         const prodConfig = await response.json();
-        // Guardamos en la caja fuerte, no en 'window'
         updateConfig(prodConfig);
     }
   } catch (error) {
