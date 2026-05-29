@@ -1,10 +1,10 @@
 import { 
-    getI2DHomeUrl, 
-    getCeibaUrl, 
-    getGeonetworkHomeUrl, 
-    getGuidesUrl, 
-    getContactEmail, 
-    getHumboldtSiteUrl } from './server/url'
+    I2D_HOME_URL, 
+    CEIBA_URL, 
+    GEONETWORK_HOME_URL, 
+    GUIDES_URL, 
+    CONTACT_EMAIL, 
+    HUMBOLDT_SITE_URL } from './server/url'
 
 function setHref(id, url) {
   const el = document.getElementById(id)
@@ -19,12 +19,12 @@ function setHref(id, url) {
 }
 
 function inicializarEnlaces() {
-  setHref('link-i2d-home', getI2DHomeUrl());
-  setHref('link-ceiba', getCeibaUrl());
-  setHref('link-geonetwork-home', getGeonetworkHomeUrl());
-  setHref('link-guides', getGuidesUrl());
-  setHref('link-contact', getContactEmail());
-  setHref('link-humboldt', getHumboldtSiteUrl());
+  setHref('link-i2d-home', I2D_HOME_URL);
+  setHref('link-ceiba', CEIBA_URL);
+  setHref('link-geonetwork-home', GEONETWORK_HOME_URL);
+  setHref('link-guides', GUIDES_URL);
+  setHref('link-contact', CONTACT_EMAIL);
+  setHref('link-humboldt', HUMBOLDT_SITE_URL);
 }
 
 inicializarEnlaces();

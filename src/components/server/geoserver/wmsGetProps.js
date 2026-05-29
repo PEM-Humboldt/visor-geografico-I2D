@@ -1,5 +1,5 @@
 import $ from "jquery";
-import {getGeoserverUrl} from '../url'
+import {GEOSERVER_URL} from '../url'
 
 import WFS from 'ol/format/WFS';
 import TileWMS from 'ol/source/TileWMS';
@@ -22,7 +22,7 @@ var getDynamicBuffer = (resolution) => {
 }
 
 var hasPointPropertyType = async (layerName) => {
-    const url = `${getGeoserverUrl()}wfs?SERVICE=WFS&REQUEST=DescribeFeatureType&TYPENAME=${layerName}`;
+    const url = `${GEOSERVER_URL}wfs?SERVICE=WFS&REQUEST=DescribeFeatureType&TYPENAME=${layerName}`;
     const response = await fetch(url);
     const text = await response.text();
     if (text.includes('PointPropertyType')) return true;
@@ -36,7 +36,7 @@ export var wmsGetProps= (AllLayers,i,coordinate,Selection)=>{
     var layerName = AllLayers[i].values_.geoserverName
     format[i] = new WFS({featureNS: featureNS, featureType: layer});
     wmsSource[i] = new TileWMS({
-        url: getGeoserverUrl()+'ows?',
+        url: GEOSERVER_URL+'ows?',
         params: {
             'LAYERS': featureType,
             'TILED': true

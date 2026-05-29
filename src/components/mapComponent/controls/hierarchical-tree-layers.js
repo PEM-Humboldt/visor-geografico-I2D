@@ -1,7 +1,7 @@
 import $ from "jquery";
 import projectService from "../../services/projectService.js";
 import { closeTutorialOnStep4 } from "../../tutorialComponent/tutorial";
-import {getGeoserverUrl,getGeonetworkUrl,getDataverseUrl} from '../../server/url';
+import {GEOSERVER_URL,GEONETWORK_URL,DATAVERSE_URL} from '../../server/url';
 
 // Get proyecto from URL params instead of importing from layers
 const urlParams = new URLSearchParams(window.location.search);
@@ -643,7 +643,7 @@ function renderLayer(layerData, parentElement, layerGroup) {
   // Add metadata link if available
   let metadata = layerData.metadata_id;
   if (metadata) {
-    let repositorio = metadata.length == 6 ? getDataverseUrl() : getGeonetworkUrl();
+    let repositorio = metadata.length == 6 ? DATAVERSE_URL : GEONETWORK_URL;
     const metadataLink = document.createElement("div");
     metadataLink.innerHTML = '<i class="fas fa-link"></i>';
     metadataLink.className = "card-link float-right";
@@ -670,7 +670,7 @@ function renderLayer(layerData, parentElement, layerGroup) {
   if (geoserverStore && layerData.store_geoserver !== null) {
     const logoDiv = document.createElement("div");
     const image = document.createElement("img");
-    image.src = `${getGeoserverUrl()}wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&LAYER=${geoserverStore}:${layerData.nombre_geoserver}&FORMAT=image/png`;
+    image.src = `${GEOSERVER_URL}wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&LAYER=${geoserverStore}:${layerData.nombre_geoserver}&FORMAT=image/png`;
     logoDiv.appendChild(image);
     formCheck.appendChild(logoDiv);
   }

@@ -2,9 +2,9 @@
  * Project Service - Handles dynamic project loading from backend API
  * Integrates with HU-VisorI2D-0001 project management system
  */
-import { getPythonServerUrl } from '../server/url';  
+import { PYTHONSERVER } from '../server/url';  
 
-const rawUrl = getPythonServerUrl();
+const rawUrl = PYTHONSERVER;
 const API_BASE_URL = rawUrl 
   ? rawUrl.replace(/\/+$/, '') 
   : 'http://localhost:8001/api';

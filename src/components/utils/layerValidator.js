@@ -3,7 +3,7 @@
  * Check if layers exist on GeoServer before creating them
  */
 
-import { getGeoserverUrl } from '../server/url.js';
+import { GEOSERVER_URL } from '../server/url.js';
 
 /**
  * Cache for layer existence checks
@@ -26,7 +26,7 @@ export const checkLayerExists = async (store, layerName) => {
     
     try {
         // Try a simple GetCapabilities request to check if layer exists
-        const capabilitiesUrl = `${getGeoserverUrl()}${store}/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities`;
+        const capabilitiesUrl = `${GEOSERVER_URL}${store}/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities`;
         
         const response = await fetch(capabilitiesUrl);
         if (!response.ok) {
