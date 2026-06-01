@@ -4,9 +4,8 @@
  */
 import { PYTHONSERVER } from '../server/url';  
 
-const rawUrl = PYTHONSERVER;
-const API_BASE_URL = rawUrl 
-  ? rawUrl.replace(/\/+$/, '') 
+const API_BASE_URL = PYTHONSERVER 
+  ? PYTHONSERVER.replace(/\/+$/, '') 
   : 'http://localhost:8001/api';
 
 class ProjectService {
