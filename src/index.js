@@ -1,5 +1,4 @@
- import { updateConfig } from './configStore.js';
-
+import { updateConfig } from './configStore.js';
 
 async function inicializarAplicacion() {
   
