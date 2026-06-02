@@ -2,10 +2,11 @@
  * Project Service - Handles dynamic project loading from backend API
  * Integrates with HU-VisorI2D-0001 project management system
  */
+import { PYTHONSERVER } from '../server/url';  
 
-const API_BASE_URL = (typeof process !== 'undefined' && process.env && process.env.PYTHONSERVER)
-    ? process.env.PYTHONSERVER.replace(/\/+$/, '')
-    : 'http://localhost:8001/api';
+const API_BASE_URL = PYTHONSERVER 
+  ? PYTHONSERVER.replace(/\/+$/, '') 
+  : 'http://localhost:8001/api';
 
 class ProjectService {
     constructor() {
@@ -25,7 +26,6 @@ class ProjectService {
             this.currentProject = this.cache.get(projectName);
             return this.currentProject;
         }
-
         try {
             const response = await fetch(`${API_BASE_URL}/projects/by-name/${projectName}/`);
 

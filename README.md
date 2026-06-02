@@ -137,6 +137,21 @@ Este proyecto incluye soporte completo para desarrollo con Docker a través del 
 - **`.env.test`**: Variables de entorno para pruebas
 - **`.env.example`**: Plantilla de configuración
 
+#### Integración con GHCR
+El proyecto contiene un flujo para la creación y publicación de imágenes Docker cada que se haga push a la rama develop o cuando se crea un nuevo release, esto esta contenido en el archivo [publish_docker_image.yml](.github/workflows/publish_docker_image.yml). Este flujo crea una imagen que tiene como entrypoint el script [docker-entrypoint.sh](/docker-entrypoint.sh) el cual se ejecuta al hacer `docker run`, mediante este script se le inyectan al proyecto las variables de modo que queden disponibles por el `RUNTIME`.
+El proyecto posee un archivo llamado [config.json.template](config.json.template) el cual sirve como plantilla para crear e inyectar dichas variables al proyecto a partir del archivo `.env`. 
+
+En desarrollo local se puede generar la imagen usando el siguiente comando:
+
+```sh
+docker build --no-cache -f Dockerfile -t visor_i2d_frontend .
+```
+Y posteriormente se crea el contenedor y se le cargan las `.env` de la siquiente forma:
+
+```sh
+docker run --rm --name visor-frontend -d -it --env-file .env -p 3000:80 visor_i2d_frontend
+```
+
 #### Variables de entorno importantes:
 ```bash
 # Configuración para desarrollo local

@@ -167,8 +167,7 @@ const setupMapEvents = () => {
   });
 };
 
-// Initialize everything when DOM is ready
-document.addEventListener("DOMContentLoaded", async function () {
+async function iniciarVisorGeografico() {
   try {
     // Initialize map with project configuration
     await initializeMap();
@@ -222,7 +221,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Project-specific zoom controls
     $('#combinedCapas_Cundi').on('click', function () {
-      fitCenter(ncenter);
+      if (ncenter) fitCenter(ncenter);
     });
 
     // Ecoreservas specific zoom (San Antero)
@@ -238,7 +237,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     }).catch(error => {
       console.error('Error loading URL parameter utilities:', error);
     });
+
   } catch (error) {
     console.error('Error during map initialization:', error);
   }
-});
+}
+
+iniciarVisorGeografico();

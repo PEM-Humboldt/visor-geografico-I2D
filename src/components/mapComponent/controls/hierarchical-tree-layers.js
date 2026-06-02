@@ -1,7 +1,7 @@
 import $ from "jquery";
 import projectService from "../../services/projectService.js";
 import { closeTutorialOnStep4 } from "../../tutorialComponent/tutorial";
-import {GEOSERVER_URL,GEONETWORK_URL,DATAVERSE_URL} from '../../server/url'
+import {GEOSERVER_URL,GEONETWORK_URL,DATAVERSE_URL} from '../../server/url';
 
 // Get proyecto from URL params instead of importing from layers
 const urlParams = new URLSearchParams(window.location.search);
