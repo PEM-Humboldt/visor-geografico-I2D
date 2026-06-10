@@ -437,15 +437,6 @@ function renderBaseLayer(layer, parentElement, layerIndex, groupIndex, siblingLa
   label.innerHTML = layer.get("title") || layer.get("name");
   formCheck.appendChild(label);
 
-  const urldownload = layer.get("urldownload");
-  if (urldownload && urldownload !== "") {
-    const downloadLink = document.createElement("div");
-    downloadLink.innerHTML = '<i class="fas fa-link"></i>';
-    downloadLink.className = "card-link float-right";
-    downloadLink.setAttribute("onclick", `window.open("${urldownload}")`);
-    formCheck.appendChild(downloadLink);
-  }
-
   if (groupIndex !== 0) {
     AllLayers[AllLayers.length] = layer;
   }
