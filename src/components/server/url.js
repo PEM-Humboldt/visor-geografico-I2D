@@ -2,8 +2,9 @@ import { getConfig } from '../../configStore.js';
 
 // all external links and URL's
 export const GEOSERVER_URL = getConfig().GEOSERVER_URL || 'https://geoservicios.humboldt.org.co/geoserver/';
-export const GEONETWORK_URL = getConfig().GEONETWORK_URL || 'https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/';
-export const DATAVERSE_URL = getConfig().DATAVERSE_URL || 'https://doi.org/10.21068/';
+export const GEOGRAFICO_URL = getConfig().GEOGRAFICO_URL || 'https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/';
+export const BIOCULTURAL_URL = getConfig().BIOCULTURAL_URL || 'https://doi.org/10.21068/';
+export const BIOLOGICO_URL = getConfig().BIOLOGICO_URL || 'https://i2d.humboldt.org.co/resource?r=';
 export const PYTHONSERVER = getConfig().PYTHONSERVER || 'https://api-v1s0r.humboldt.org.co/';
 
 // UI links to be used in index.html via JS

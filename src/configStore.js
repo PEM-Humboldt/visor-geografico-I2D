@@ -1,7 +1,8 @@
 let privateVars = {
     GEOSERVER_URL: process.env.GEOSERVER_URL,
-    GEONETWORK_URL: process.env.GEONETWORK_URL,
-    DATAVERSE_URL: process.env.DATAVERSE_URL,
+    GEOGRAFICO_URL: process.env.GEOGRAFICO_URL,
+    BIOCULTURAL_URL: process.env.BIOCULTURAL_URL,
+    BIOLOGICO_URL: process.env.BIOLOGICO_URL,
     PYTHONSERVER: process.env.PYTHONSERVER,
     I2D_HOME_URL: process.env.I2D_HOME_URL,
     CEIBA_URL: process.env.CEIBA_URL,

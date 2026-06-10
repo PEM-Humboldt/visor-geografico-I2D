@@ -1,7 +1,7 @@
 import $ from "jquery";
 import projectService from "../../services/projectService.js";
 import { closeTutorialOnStep4 } from "../../tutorialComponent/tutorial";
-import {GEOSERVER_URL,GEONETWORK_URL,DATAVERSE_URL} from '../../server/url';
+import {GEOSERVER_URL,GEOGRAFICO_URL,BIOCULTURAL_URL,BIOLOGICO_URL } from '../../server/url';
 
 // Get proyecto from URL params instead of importing from layers
 const urlParams = new URLSearchParams(window.location.search);
@@ -643,7 +643,19 @@ function renderLayer(layerData, parentElement, layerGroup) {
   // Add metadata link if available
   let metadata = layerData.metadata_id;
   if (metadata) {
-    let repositorio = metadata.length == 6 ? DATAVERSE_URL : GEONETWORK_URL;
+    let repositorio = "";
+    switch (layerData.metadata_selector){
+      case('biocultural'):
+        repositorio = BIOCULTURAL_URL;
+        break;
+      case('geografico'):
+        repositorio = GEOGRAFICO_URL;
+        break;
+      case('biologico'):
+        repositorio = BIOLOGICO_URL; 
+        break;
+    }
+
     const metadataLink = document.createElement("div");
     metadataLink.innerHTML = '<i class="fas fa-link"></i>';
     metadataLink.className = "card-link float-right";

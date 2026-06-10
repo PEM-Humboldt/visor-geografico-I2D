@@ -150,6 +150,7 @@ const createDynamicWMSLayer = (layerConfig) => {
     layerConfig.nombre_display,
     layerConfig.estado_inicial,
     layerConfig.metadata_id,
+    layerConfig.metadata_selector
   );
 
   // Ensure layer is properly configured and visible
@@ -240,6 +241,7 @@ export var mpios = wmsLayer(
   "Municipios",
   true,
   "",
+  ""
 );
 export var deptos = wmsLayer(
   "Capas_Base",
@@ -247,6 +249,7 @@ export var deptos = wmsLayer(
   "Departamentos",
   true,
   "",
+  ""
 );
 
 /**
