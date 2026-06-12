@@ -418,26 +418,22 @@ export const initializeLegacyExports = async () => {
     const layers = await getProjectLayers();
     const project = currentProject || { nombre_corto: "general" };
 
-    // Update legacy exports
-    proyecto = project.nombre_corto;
+    // Update project logos dynamically from API if available
+    if (currentProject) {
+      const logoMini = document.getElementById("logo_mini");
+      const logoFull = document.getElementById("logo_full");
 
-    // Update ecoreservas logos dynamically from API if available
-    if (proyecto === "ecoreservas" && currentProject) {
-      const logoEcoP = document.getElementById("logo_eco_p");
-      const logoEcoG = document.getElementById("logo_eco_g");
+      const urlLogoMini = currentProject.logo_pequeno_url;
+      const urlLogoFull = currentProject.logo_completo_url;
 
-      if (logoEcoP) {
-        logoEcoP.style.display = "inline-block";
-        if (currentProject.logo_pequeno_url) {
-          logoEcoP.src = currentProject.logo_pequeno_url;
-        }
+      if (logoMini && urlLogoMini) {
+        logoMini.style.display = "inline-block";
+        logoMini.src = urlLogoMini;
       }
 
-      if (logoEcoG) {
-        logoEcoG.style.display = "inline-block";
-        if (currentProject.logo_completo_url) {
-          logoEcoG.src = currentProject.logo_completo_url;
-        }
+      if (logoFull && urlLogoFull) {
+        logoFull.style.display = "inline-block";
+        logoFull.src = urlLogoFull;
       }
     }
 
