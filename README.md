@@ -163,6 +163,7 @@ PYTHONSERVER=http://localhost:8001/
 # URLs de servicios externos
 GEOGRAFICO_URL=https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/
 BIOCULTURAL_URL=https://doi.org/10.21068/
+BIOLOGICO_URL=https://i2d.humboldt.org.co/
 ```
 
 ### 🔧 Comandos Docker
@@ -295,6 +296,7 @@ A partir de ahora, las URLs se pueden configurar mediante variables de entorno. 
   - GEOSERVER_URL
   - GEOGRAFICO_URL
   - BIOCULTURAL_URL
+  - BIOLOGICO_URL
   - PYTHONSERVER
   - CARTODB_POSITRON_URL
   - OTM_TILE_URL
