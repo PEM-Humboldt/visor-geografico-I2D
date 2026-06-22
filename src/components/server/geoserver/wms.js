@@ -1,14 +1,8 @@
 import {Tile as TileLayer} from 'ol/layer';
 import TileWMS from 'ol/source/TileWMS';
-import {GEOSERVER_URL,GEONETWORK_URL,DATAVERSE_URL} from '../url'
+import {GEOSERVER_URL,GEOGRAFICO_URL,BIOCULTURAL_URL, BIOLOGICO_URL} from '../url'
 // wms geoserver- load layer function
-export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,metadataId){
-    var metadataLink = '';
-    if (metadataId=!'' && metadataId) {
-        let repositorio = metadataId.length == 6 ? DATAVERSE_URL : GEONETWORK_URL;
-        metadataLink = repositorio+metadataId;
-    } 
-
+export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,metadataId,metadataSelector){
     // Sanitize layer name to handle special characters and long names
     const sanitizedLayerName = geoserverLayer.trim();
     
@@ -36,7 +30,6 @@ export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,
             name: geoserverLayer,
             geoserverName: geoserverLayer, // Store geoserver layer name for URL parameter matching
             displayName: geoserverName,    // Store display name
-            urldownload: metadataLink,
             extent: [-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244]
         });
         

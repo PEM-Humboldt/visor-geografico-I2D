@@ -331,19 +331,6 @@ function createGroupLayersContent(groupLayers, parentElement) {
     lab.innerHTML = groupLayers[j].values_.title;
     fcheck.appendChild(lab);
 
-    if (
-      groupLayers[j].values_.urldownload &&
-      groupLayers[j].values_.urldownload !== ""
-    ) {
-      var down = document.createElement("div");
-      down.innerHTML = '<i class="fas fa-link"></i>';
-      down.className = "card-link float-right";
-      down.setAttribute(
-        "onclick",
-        'window.open("' + groupLayers[j].values_.urldownload + '")',
-      );
-      fcheck.appendChild(down);
-    }
     AllLayers[k] = groupLayers[j];
     k = k + 1;
 
