@@ -2,6 +2,71 @@ import $ from "jquery";
 
 import {hightlightAdd,hightlightRemove} from '../../../mapComponent/layers'
 // create dynamic click selection, it shows the list of click layers
+
+const orderJson = (json) => {
+    return Object.fromEntries(
+        Object.entries(json).map(([category, list]) => [
+            category,
+            list.map(item =>
+                Object.fromEntries(
+                    Object.entries(item).sort(([a], [b]) => a.localeCompare(b))
+                )
+            )
+        ])
+    );
+}
+
+const isJson = (value) => {
+    try{
+        const parsed = JSON.parse(value)
+        if (parsed && typeof parsed === 'object') {
+            return orderJson(parsed)
+        }
+    } catch {
+        return null;
+    }
+}
+
+
+const buildHtmlTable = (data) => {
+    var table = document.createElement('table');
+    table.className = "table table-sm";
+    table.setAttribute('style', 'border: 1px solid #dee2e6; margin: 1rem; text-align:center; border-collapse: collapse; font-size: 11px;');
+
+    let html = '';
+    
+    for (const [category, list] of Object.entries(data)){
+        let key = category.toUpperCase();
+        let columns = '';
+
+        // Calculates how many columns the header should take and adds column names
+        const firstJson = list[0];
+        const headers = Object.keys(firstJson);
+        html += `<tr> <th colspan=${headers.length} style=" font-weight: bold; border:1px solid #dee2e6;"> ${key} </th> </tr>`;
+
+        for (const key of headers) {
+            const title = (key.charAt(0).toUpperCase() + key.slice(1)).replaceAll("_", " ")
+            columns+= `<th style="font-weight: bold; vertical-align: middle; border:1px solid #dee2e6;"> ${title} </th>`
+        }
+        html += `<tr> ${columns} </tr>`;
+
+        for (const json of list){
+            let values = '';
+
+            for (const value of Object.values(json)){
+                const cellValue = Array.isArray(value) ? value.join(", ") : value;
+                
+                values+= `<td style="border:1px solid #dee2e6;"> ${cellValue} </td>`
+            }
+
+            html += `<tr> ${values} </tr>`
+        }
+    }
+    
+    table.innerHTML = html;
+    return table;
+}
+
 export function FeatSelect(features,i) {
     var feature=features[0];
 
@@ -71,6 +136,7 @@ export function FeatSelect(features,i) {
                 var cell2 = row.insertCell(1);
                 let label = i;
                 let url;
+                let dataTable;
                 switch(i) {
                     case 'dpto_nombre':
                         label = 'Departamento';
@@ -89,12 +155,20 @@ export function FeatSelect(features,i) {
                 if (typeof value === 'string' && /^https?:\/\//i.test(value)){
                     url = `<a href=${value}>${value}</a>`;
                 }
+
+                const parsedJson = isJson(value)
+                if (parsedJson) {
+                    dataTable = buildHtmlTable(parsedJson);
+                }
                 
                 cell1.innerHTML = label;
-                cell2.innerHTML = url || value;
+                if (dataTable){
+                    cell2.appendChild(dataTable);
+                } else {
+                    cell2.innerHTML = url || value;
+                }
                 j = j + 1;
             }
         }
     }
-    
 }
