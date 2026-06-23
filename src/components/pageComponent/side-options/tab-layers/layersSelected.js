@@ -42,6 +42,7 @@ const buildHtmlTable = (data) => {
         // Calculates how many columns the header should take and adds column names
         const firstJson = list[0];
         const headers = Object.keys(firstJson);
+        html += `<tr> <th colspan=${headers.length} style=" font-weight: bold; border:1px solid #dee2e6;"> ${key} </th> </tr>`;
 
         for (const key of headers) {
             const title = (key.charAt(0).toUpperCase() + key.slice(1)).replaceAll("_", " ")
