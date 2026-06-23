@@ -31,7 +31,7 @@ const isJson = (value) => {
 const buildHtmlTable = (data) => {
     var table = document.createElement('table');
     table.className = "table table-sm";
-    table.setAttribute('style', 'border: 1px solid #dee2e6; margin: 1rem; text-align:center; border-collapse: collapse;');
+    table.setAttribute('style', 'border: 1px solid #dee2e6; margin: 1rem; text-align:center; border-collapse: collapse; font-size: 11px;');
 
     let html = '';
     
@@ -42,7 +42,6 @@ const buildHtmlTable = (data) => {
         // Calculates how many columns the header should take and adds column names
         const firstJson = list[0];
         const headers = Object.keys(firstJson);
-        html += `<tr> <th colspan=${headers.length} style=" font-weight: bold; border:1px solid #dee2e6;"> ${key} </th> </tr>`;
 
         for (const key of headers) {
             const title = (key.charAt(0).toUpperCase() + key.slice(1)).replaceAll("_", " ")
