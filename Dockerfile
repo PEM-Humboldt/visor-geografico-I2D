@@ -9,7 +9,6 @@ COPY --chown=node:node package.json package-lock.json /home/node/app
 
 RUN npm ci
 
-COPY .env /home/node/app/.env
 COPY src/ src
 RUN npm run build
 

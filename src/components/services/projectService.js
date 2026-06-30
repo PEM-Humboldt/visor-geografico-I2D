@@ -3,9 +3,10 @@
  * Integrates with HU-VisorI2D-0001 project management system
  */
 
-const API_BASE_URL = (typeof process !== 'undefined' && process.env && process.env.PYTHONSERVER)
-    ? process.env.PYTHONSERVER.replace(/\/+$/, '')
-    : 'http://localhost:8001/api';
+const RAW_API_BASE = (typeof window !== 'undefined' && window.APP_CONFIG && window.APP_CONFIG.PYTHONSERVER)
+    || (typeof process !== 'undefined' && process.env && process.env.PYTHONSERVER)
+    || 'http://localhost:8001/api';
+const API_BASE_URL = RAW_API_BASE.replace(/\/+$/, '');
 
 class ProjectService {
     constructor() {

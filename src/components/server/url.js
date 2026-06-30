@@ -2,7 +2,10 @@
 export const GEOSERVER_URL = process.env.GEOSERVER_URL || 'https://geoservicios.humboldt.org.co/geoserver/';
 export const GEONETWORK_URL = process.env.GEONETWORK_URL || 'https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/';
 export const DATAVERSE_URL = process.env.DATAVERSE_URL || 'https://doi.org/10.21068/';
-export const PYTHONSERVER = process.env.PYTHONSERVER || 'https://api-v1s0r.humboldt.org.co/';
+export const PYTHONSERVER =
+    (typeof window !== 'undefined' && window.APP_CONFIG && window.APP_CONFIG.PYTHONSERVER)
+    || process.env.PYTHONSERVER
+    || 'https://api-v1s0r.humboldt.org.co/';
 
 // UI links to be used in index.html via JS
 export const I2D_HOME_URL = process.env.I2D_HOME_URL || 'http://datos.humboldt.org.co/';
