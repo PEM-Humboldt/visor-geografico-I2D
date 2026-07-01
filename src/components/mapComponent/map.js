@@ -6,6 +6,7 @@ import Map from 'ol/Map';
 import View from 'ol/View'
 import { ScaleLine, ZoomToExtent, Zoom, defaults as defaultControls } from 'ol/control';
 import { getCenter } from 'ol/extent';
+import { transformExtent } from 'ol/proj';
 
 // Import dynamic layer system
 import { getProjectLayers, initializeLegacyExports, highlight, highlightPoint, highlightStadistics } from './layers';
@@ -46,6 +47,12 @@ const initializeMap = async () => {
 
     // Create the map with dynamic layers
     const layersArray = selectedLayers._layerArray || Object.values(selectedLayers).filter(layer => layer !== null);
+    const extentValue = currentProject.extent.split(',').map(Number);
+    let mapExtent = extentValue;
+
+    if (Math.abs(extentValue[0]) <= 180){
+      mapExtent = transformExtent(extentValue, 'EPSG:4326', 'EPSG:3857')
+    }
 
     map = new Map({
       controls: defaultControls({
@@ -55,7 +62,7 @@ const initializeMap = async () => {
       }).extend([
         new ScaleLine(),
         new ZoomToExtent({
-          extent: [-7430902, -479413, -8795762, 1408887],
+          extent: mapExtent,
           label: zoom,
           tipLabel: 'Zoom Colombia'
         })
