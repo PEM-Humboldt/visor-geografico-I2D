@@ -31,12 +31,13 @@
     z-index: 3;
     right: 0px;
     top: 5px;
-    height: auto;
-    // height: 202px;
+    height: calc(100vh - 25px);
+    overflow: auto;
     @include desktop {
         min-width: 350px;
     }
 }
+
 #capas{
     max-height: 50vh;
     // height:100vh;

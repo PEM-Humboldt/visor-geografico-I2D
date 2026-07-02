@@ -231,9 +231,6 @@ export function buildHierarchicalLayerTree(projectData, layerGroup) {
   AllLayers = [];
   layerIndex = 0;
 
-  // // Add close button
-  // addCloseButton(accordion);
-
   // First, render base layer groups from OpenLayers (Capas Base, División político-administrativa)
   renderBaseLayerGroups(layerGroup, accordion);
 
@@ -253,7 +250,7 @@ export function buildHierarchicalLayerTree(projectData, layerGroup) {
   let currentProject = projectService.getCurrentProject();
   let panelVisibility = currentProject.panel_visible;
 
-  // Show accordion for ecoreservas
+  // Show accordion 
   if (panelVisibility) {
     accordion.className = "d-block";
   }
