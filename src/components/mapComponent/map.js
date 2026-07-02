@@ -54,6 +54,11 @@ const initializeMap = async () => {
       mapExtent = transformExtent(extentValue, 'EPSG:4326', 'EPSG:3857')
     }
 
+    let zoomName = currentProject.nombre;
+    if (currentProject.nombre == 'Visor General I2D') {
+      zoomName = 'Colombia'
+    }
+
     map = new Map({
       controls: defaultControls({
         attributionOptions: { collapsible: true },
@@ -64,7 +69,7 @@ const initializeMap = async () => {
         new ZoomToExtent({
           extent: mapExtent,
           label: zoom,
-          tipLabel: 'Zoom Colombia'
+          tipLabel: "Zoom " + zoomName
         })
       ]),
       target: document.getElementById('map'),
