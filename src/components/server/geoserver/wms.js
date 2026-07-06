@@ -36,6 +36,9 @@ export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,
         // Add error handling for the WMS source
         const source = wms.getSource();
         source.on('tileloaderror', function(event) {
+            console.log("ERROR")
+            const toast = document.getElementById('toast')
+            toast.style.display = 'block';
             // Silently handle tile load errors
         });
         
