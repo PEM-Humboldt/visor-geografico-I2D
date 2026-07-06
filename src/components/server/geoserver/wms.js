@@ -4,6 +4,8 @@ import {Tile as TileLayer} from 'ol/layer';
 import TileWMS from 'ol/source/TileWMS';
 import {GEOSERVER_URL,GEOGRAFICO_URL,BIOCULTURAL_URL, BIOLOGICO_URL} from '../url'
 // wms geoserver- load layer function
+let nonLoadedLayers = [];
+
 export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,metadataId,metadataSelector){
     // Sanitize layer name to handle special characters and long names
     const sanitizedLayerName = geoserverLayer.trim();
@@ -38,7 +40,13 @@ export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,
         // Add error handling for the WMS source
         const source = wms.getSource();
         source.on('tileloaderror', function(event) {
-            $('#errorToastBody').html(`<div>Ocurrió un error cargando la siguiente capa: <strong>${geoserverLayer}</strong></div>`);
+            if (!nonLoadedLayers.includes(geoserverLayer)){
+                nonLoadedLayers.push(geoserverLayer);
+            }
+
+            const layersList = nonLoadedLayers.join(', ');
+
+            $('#errorToastBody').html(`<div>Ocurrió un error cargando las siguientes capas: <strong>${layersList}</strong></div>`);
             $('#errorToast').toast({ 
             autohide: true, 
             delay: 10000
