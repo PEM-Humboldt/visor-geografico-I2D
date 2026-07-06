@@ -597,6 +597,13 @@ function renderLayer(layerData, parentElement, layerGroup) {
       olLayer.setVisible(isVisible);
       zoomLayer.style.display = isVisible ? "block" : "none";
 
+      if (isVisible) {
+        const source = olLayer.getSource();
+        if (source) {
+          source.refresh(); 
+        }
+      }
+
       // Sync with URL parameters
       const geoserverName = layerData.nombre_geoserver;
       if (isVisible) {
@@ -620,6 +627,12 @@ function renderLayer(layerData, parentElement, layerGroup) {
     layerIndex++;
   } else {
     console.warn(`Layer not found in OpenLayers: ${layerData.nombre_geoserver}`);
+    const toastBody = document.getElementById('errorToastBody');
+    $('#errorToastBody').append(`<div>No se encontró la capa: ${layerData.nombre_geoserver}</div>`);
+    $('#errorToast').toast({ 
+      autohide: true, 
+      delay: 10000
+    }).toast('show');
   }
 
   formCheck.appendChild(checkbox);

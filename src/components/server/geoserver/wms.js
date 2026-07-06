@@ -1,3 +1,5 @@
+import $ from "jquery";
+
 import {Tile as TileLayer} from 'ol/layer';
 import TileWMS from 'ol/source/TileWMS';
 import {GEOSERVER_URL,GEOGRAFICO_URL,BIOCULTURAL_URL, BIOLOGICO_URL} from '../url'
@@ -36,9 +38,11 @@ export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,
         // Add error handling for the WMS source
         const source = wms.getSource();
         source.on('tileloaderror', function(event) {
-            console.log("ERROR")
-            const toast = document.getElementById('toast')
-            toast.style.display = 'block';
+            $('#errorToastBody').html(`<div>Ocurrió un error cargando la siguiente capa: <strong>${geoserverLayer}</strong></div>`);
+            $('#errorToast').toast({ 
+            autohide: true, 
+            delay: 10000
+            }).toast('show');
             // Silently handle tile load errors
         });
         
