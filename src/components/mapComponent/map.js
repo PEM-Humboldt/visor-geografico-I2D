@@ -47,6 +47,12 @@ const initializeMap = async () => {
 
     // Create the map with dynamic layers
     const layersArray = selectedLayers._layerArray || Object.values(selectedLayers).filter(layer => layer !== null);
+    const extentValue = currentProject.extent.split(',').map(Number);
+    let mapExtent = extentValue;
+
+    if (Math.abs(extentValue[0]) <= 180){
+      mapExtent = transformExtent(extentValue, 'EPSG:4326', 'EPSG:3857')
+    }
 
     let zoomName = currentProject.nombre;
     if (currentProject.nombre == 'Visor General I2D') {
@@ -60,6 +66,11 @@ const initializeMap = async () => {
         rotate: false
       }).extend([
         new ScaleLine(),
+        new ZoomToExtent({
+          extent: mapExtent,
+          label: zoom,
+          tipLabel: "Zoom " + zoomName
+        })
       ]),
       target: document.getElementById('map'),
       renderer: 'canvas',
@@ -71,23 +82,6 @@ const initializeMap = async () => {
         extent: [-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244]
       })
     });
-
-    map.once('postrender',  () => {
-      const view = map.getView();
-      const size = map.getSize();
-
-      if (size){
-        const calcExtent = view.calculateExtent(size);
-
-        const zoomToExtent = new ZoomToExtent({
-          extent: calcExtent,
-          label: zoom,
-          tipLabel: "Zoom " + zoomName
-        })
-
-        map.addControl(zoomToExtent);
-      }
-    })
 
     // Expose map globally for URL parameter handling
     window.mapInstance = map;
