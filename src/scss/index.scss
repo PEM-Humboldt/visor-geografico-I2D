@@ -77,6 +77,11 @@ button, *:focus {
     position: absolute;
     right: 0px;
     bottom: 0px;
+    pointer-events: none;
+}
+
+.toast.show{
+    pointer-events: auto;
 }
 
 .close {
