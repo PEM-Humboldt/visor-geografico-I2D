@@ -75,8 +75,9 @@ button, *:focus {
     margin: auto;
     z-index: 100;
     position: absolute;
-    right: 0px;
-    bottom: 0px;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .close {
