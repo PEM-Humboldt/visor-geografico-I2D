@@ -596,14 +596,7 @@ function renderLayer(layerData, parentElement, layerGroup) {
       const isVisible = ev.target.checked;
       olLayer.setVisible(isVisible);
       zoomLayer.style.display = isVisible ? "block" : "none";
-
-      if (isVisible) {
-        const source = olLayer.getSource();
-        if (source) {
-          source.refresh(); 
-        }
-      }
-
+      
       // Sync with URL parameters
       const geoserverName = layerData.nombre_geoserver;
       if (isVisible) {

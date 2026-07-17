@@ -208,7 +208,7 @@ const createDynamicLayerGroups = async (project) => {
           console.error(
             `❌ Failed to create layer ${layerConfig.nombre_display} in group ${group.nombre}`,
           );
-          $('#errorToastBody').append(`<div>Ocurrió un error al crear la capa ${layerData.nombre_geoserver}</div>`);
+          $('#errorToastBody').append(`<div>Ocurrió un error al cargar la capa ${layerData.nombre_geoserver}</div>`);
           $('#errorToast').toast({ 
             autohide: true, 
             delay: 10000
