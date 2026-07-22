@@ -113,7 +113,11 @@ $(document).on('submit', 'form#formSolicitante', function (e) {
     if (type == 'downloadCSV' || type == 'downloadAll') {
       // Nueva lógica: descarga directa del ZIP desde el backend
       $('#download-resume').hide();
-      $('#download-status').show().prepend('<span class="textoagr">¡Preparando tu archivo para descarga! Por favor espera unos segundos...<\span>');
+      $('#downloadToast').toast({
+        autohide: true,
+        delay: 5000
+      }).toast('show');
+      $('#downloadToastBody').prepend('<span class="textoagr">¡Se inició la descarga de tus archivos! \n Esto puede tardar...</span>');
 
       let selectedStadistics = $('#stadisticstype').children("option:selected").val();
       let params = '';
@@ -131,7 +135,6 @@ $(document).on('submit', 'form#formSolicitante', function (e) {
       let url = PYTHONSERVER + 'gbif/descargarz?' + params;
       window.open(url);
 
-      $('#download-status').hide().find('.textoagr').remove();
       $('#download-resume').show();
       return; // Salir para no ejecutar la lógica de GeoServer ni JSZip
     }
