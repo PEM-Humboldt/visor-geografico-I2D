@@ -1,5 +1,4 @@
 import $ from "jquery";
-import './export-modal.scss'
 import { createModal } from '../../../../modal/createModal'
 import './export-pdf'
 
