@@ -132,7 +132,12 @@ $(document).on('submit', 'form#formSolicitante', function (e) {
 
       // Cambia la URL al endpoint de tu backend
       let url = PYTHONSERVER + 'gbif/descargarz?' + params;
-      window.open(url);
+      const link = document.createElement('a');
+      link.href = url;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
       $('#download-resume').show();
       return; // Salir para no ejecutar la lógica de GeoServer ni JSZip
