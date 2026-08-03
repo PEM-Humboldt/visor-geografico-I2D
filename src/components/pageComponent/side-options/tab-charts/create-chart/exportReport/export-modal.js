@@ -116,7 +116,7 @@ $(document).on('submit', 'form#formSolicitante', function (e) {
         autohide: true,
         delay: 5000
       }).toast('show');
-      $('#downloadToastBody').prepend('<span class="textoagr">¡Se inició la descarga de tus archivos! \n Esto puede tardar...</span>');
+      $('#downloadToastBody').empty().prepend('<span class="textoagr">¡Se inició la descarga de tus archivos! \n Esto puede tardar...</span>');
 
       let selectedStadistics = $('#stadisticstype').children("option:selected").val();
       let params = '';
