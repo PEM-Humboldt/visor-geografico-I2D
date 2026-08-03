@@ -10,6 +10,7 @@ export function closeSideBar(){
     $('.sideBarSpanActive').addClass('sideBarSpanNoActive').removeClass('sideBarSpanActive');
     $('#dropdown-catalogs').removeClass('active').addClass('nonactive')
     $('#tutorialstep2').removeClass('active');
+    $('.sideBarMiniLogo').removeClass('hidden');
 
     setTimeout(function(){updateSize()}, 100);
   }
