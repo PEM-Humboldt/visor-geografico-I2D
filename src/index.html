@@ -341,8 +341,13 @@
             </div>
         </section>
         <!-- recuadro de descarga mientras se comprimen los archivos -->
-        <div id="download-status">
-            <img id="loadimg" src="https://pem-humboldt.github.io/visor-geografico-I2D/assets/ui/loading1.gif">
+
+        <div class="toast" id="downloadToast" >
+            <div class="toast-header">
+                <strong class="mr-auto"><img id="loadimg" src="https://pem-humboldt.github.io/visor-geografico-I2D/assets/ui/loading1.gif"> Información</strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+            </div>
+            <div class="toast-body" id="downloadToastBody"></div>
         </div>
 
         <!-- toast -->
