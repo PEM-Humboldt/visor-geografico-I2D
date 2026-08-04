@@ -589,19 +589,29 @@ function renderLayer(layerData, parentElement, layerGroup) {
 
     // Add click handler with URL parameter sync
     checkbox.onclick = function (ev) {
+      const geoserverName = layerData.nombre_geoserver;
+      const alreadyFailed = olLayer.get('hasLoadError') === true;
       cleanHighlights(ev);
       const isVisible = ev.target.checked;
       olLayer.setVisible(isVisible);
       zoomLayer.style.display = isVisible ? "block" : "none";
       
       // Sync with URL parameters
-      const geoserverName = layerData.nombre_geoserver;
       if (isVisible) {
+        if (alreadyFailed == true){
+          
+          $('#errorToastBody').html(`<div>Ocurrió un error cargando la capa: <strong>${layerData.nombre_display}</strong></div>`);
+          $('#errorToast').toast({ 
+          autohide: true, 
+          delay: 5000
+          }).toast('show');
+        }
         // Dynamically import to avoid circular dependencies
         import('../../utils/urlParams').then(({ setURLParam }) => {
           setURLParam('capa', geoserverName);
         }).catch(err => console.error('Error setting URL param:', err));
       } else {
+        $('#errorToast').toast('hide');
         // Remove URL parameter if this was the active layer
         import('../../utils/urlParams').then(({ getURLParam, removeURLParam }) => {
           const currentCapa = getURLParam('capa');

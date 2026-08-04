@@ -40,16 +40,17 @@ export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,
         // Add error handling for the WMS source
         const source = wms.getSource();
         source.on('tileloaderror', function(event) {
-            if (!nonLoadedLayers.includes(geoserverLayer)){
-                nonLoadedLayers.push(geoserverLayer);
+            wms.set('hasLoadError', true);
+            if (!nonLoadedLayers.includes(geoserverName)){
+                nonLoadedLayers.push(geoserverName);
             }
 
             const layersList = nonLoadedLayers.join(', ');
 
-            $('#errorToastBody').html(`<div>Ocurrió un error cargando las siguientes capas: <strong>${layersList}</strong></div>`);
+            $('#errorToastBody').html(`<div>No fue posible cargar las siguientes capas: <strong>${layersList}</strong></div>`);
             $('#errorToast').toast({ 
             autohide: true, 
-            delay: 10000
+            delay: 5000
             }).toast('show');
             // Silently handle tile load errors
         });
