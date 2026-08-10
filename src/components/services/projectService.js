@@ -3,6 +3,7 @@
  * Integrates with HU-VisorI2D-0001 project management system
  */
 import { PYTHONSERVER } from '../server/url';  
+import $ from "jquery";
 
 const API_BASE_URL = PYTHONSERVER 
   ? PYTHONSERVER.replace(/\/+$/, '') 
@@ -31,6 +32,7 @@ class ProjectService {
 
             if (!response.ok) {
                 console.warn(`Project '${projectName}' not found, using fallback`);
+                this.showErrorWindow();
                 return this.getFallbackProject(projectName);
             }
 
@@ -46,6 +48,10 @@ class ProjectService {
             // Fallback to hardcoded project if API fails
             return this.getFallbackProject(projectName);
         }
+    }
+
+    showErrorWindow(){
+        $('.errorWindow').show();
     }
 
     /**
@@ -168,18 +174,6 @@ class ProjectService {
                 coordenada_central_y: 464737,
                 panel_visible: true,
                 base_map_visible: 'streetmap',
-                layer_groups: [],
-                default_layers: []
-            },
-            ecoreservas: {
-                id: 2,
-                nombre_corto: 'ecoreservas',
-                nombre: 'Ecoreservas',
-                nivel_zoom: 9.2,
-                coordenada_central_x: -8249332,
-                coordenada_central_y: 544737,
-                panel_visible: true,
-                base_map_visible: 'cartodb_positron',
                 layer_groups: [],
                 default_layers: []
             }

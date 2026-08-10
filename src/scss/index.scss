@@ -120,3 +120,18 @@ a.card-link {
     height: 55px;
     width: auto;
 }
+
+.errorWindow{
+    position: relative;
+    background-color: #fff;
+    width: 40vw;
+    display: none;
+}
+
+.closeErrorView{
+    margin-top: 0.8em;
+}
+
+.returnToGeneral{
+    margin-bottom: 0.8em;
+}

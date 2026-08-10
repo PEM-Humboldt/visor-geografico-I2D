@@ -47,7 +47,14 @@ const initializeMap = async () => {
 
     // Create the map with dynamic layers
     const layersArray = selectedLayers._layerArray || Object.values(selectedLayers).filter(layer => layer !== null);
-    const extentValue = currentProject.extent.split(',').map(Number);
+    const defaultExtent = [-7430902, -479413, -8795762, 1408887]
+    let extentValue;
+    if (currentProject.extent) {
+      extentValue = currentProject.extent.split(',').map(Number);
+    } else {
+      extentValue = defaultExtent;
+    }
+
     let mapExtent = extentValue;
 
     if (Math.abs(extentValue[0]) <= 180){
@@ -253,6 +260,21 @@ async function iniciarVisorGeografico() {
   } catch (error) {
     console.error('Error during map initialization:', error);
   }
+}
+
+// Redirects user to Visor when project does not exists
+$('.closeErrorView').on( "click", function() {
+  closeErrorWindow();
+})
+
+$('.returnToGeneral').on( "click", function(e) {
+  e.preventDefault();
+  window.location.href = window.location.pathname;
+  closeErrorWindow();
+})
+
+var closeErrorWindow =()=>{
+  $('.errorWindow').hide();
 }
 
 iniciarVisorGeografico();
