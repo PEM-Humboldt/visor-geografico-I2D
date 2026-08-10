@@ -88,13 +88,7 @@ export function FeatSelect(features,i) {
         cardlink.id='#collapse' + feature.ol_uid;
         cardlink.setAttribute('data-toggle', 'collapse');
         cardlink.setAttribute('href', '#collapse' + feature.ol_uid);
-        cardlink.onclick=function(e){  
-            hightlightRemove();
-            $('#contenedorg').on('shown.bs.collapse', function () {
-                hightlightRemove();
-                feature.getGeometry().getType()=='Point'?hightlightAdd(feature,'point'):hightlightAdd(feature);
-            })
-        }
+
         cardh.appendChild(cardlink);
 
         var cardIcon = document.createElement('i');
@@ -119,8 +113,20 @@ export function FeatSelect(features,i) {
 
         var cardbody = document.createElement('div');
         cardbody.className = "card-body";
-        cardbody.setAttribute('style', 'min-height: 150px; max-height: 350px; height: auto; overflo: auto');
+        cardbody.setAttribute('style', 'min-height: 150px; height: 100%; overflow: auto;');
         collapseOne.appendChild(cardbody);
+
+        cardlink.onclick=function(e){  
+            hightlightRemove();
+            $('#contenedorg').on('shown.bs.collapse', function () {
+                hightlightRemove();
+                feature.getGeometry().getType()=='Point'?hightlightAdd(feature,'point'):hightlightAdd(feature);
+                collapseOne.setAttribute('style', 'height: auto')
+            })
+            $('#contenedorg').on('hidden.bs.collapse', function (){
+                collapseOne.setAttribute('style', 'height: 0px')
+            })
+        }
 
         var table = document.createElement('table');
         table.className = "table table-sm";
