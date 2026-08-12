@@ -118,12 +118,16 @@ export function FeatSelect(features,i) {
 
         cardlink.onclick=function(e){  
             hightlightRemove();
-            $('#contenedorg').on('shown.bs.collapse', function () {
+            $('#contenedorg').off('shown.bs.collapse').on('shown.bs.collapse', function () {
                 hightlightRemove();
-                feature.getGeometry().getType()=='Point'?hightlightAdd(feature,'point'):hightlightAdd(feature);
+                if (feature.getGeometry().getType() == 'Point'){
+                    hightlightAdd(feature,'point')
+                } else {
+                    hightlightAdd(feature);
+                }
                 collapseOne.setAttribute('style', 'height: auto')
             })
-            $('#contenedorg').on('hidden.bs.collapse', function (){
+            $('#contenedorg').off('hidden.bs.collapse').on('hidden.bs.collapse', function (){
                 collapseOne.setAttribute('style', 'height: 0px')
             })
         }
