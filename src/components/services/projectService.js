@@ -51,7 +51,7 @@ class ProjectService {
     }
 
     showErrorWindow(){
-        $('.errorWindow').show();
+        $('.error-card').show();
     }
 
     /**

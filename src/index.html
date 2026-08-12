@@ -447,22 +447,22 @@
             </div>
         </div>
         <!-- error view for non-existing project -->
-         <div class="container mt-5 errorWindow" id="project_error">
-            <div class="row">
-                <button type="button" class="close closed closeErrorView">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="row">
-                <h5 class="titleh5">Error</h5>
-            </div>
-            <div class="row">
-                <p> 
-                    La página a la que estás intentando acceder no existe
-                </p>
-            </div>
-            <div class="row"> 
-                <a href="#" class="btn btn-primary returnToGeneral">Ir a Visor</a>
+         <div class="container error-card">
+            <div class="error-card-body">
+                <div class="row">
+                    <button type="button" class="close closed close-error-card">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="error-card-title">Proyecto no disponible</div>
+                </div>
+                <div class="row">
+                    <p class="error-card-desc"> 
+                        La dirección que abrió no corresponde a ningún proyecto disponible. Explore proyectos disponibles en el Visor.
+                    </p>
+                </div>
+                    <a href="#" class="error-card-btn return-visor">Continuar al Visor</a>
             </div>
          </div>
     </div>

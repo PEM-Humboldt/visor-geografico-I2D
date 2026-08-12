@@ -263,10 +263,10 @@ async function iniciarVisorGeografico() {
 }
 
 // Redirects user to Visor when project does not exists
-$('.closeErrorView, .returnToGeneral').on( "click", function(e) {
+$('.close-error-card, .return-visor').on( "click", function(e) {
   e.preventDefault();
   window.location.href = window.location.pathname;
-  $('.errorWindow').hide();
+  $('.errorWierror-cardndow').hide();
 })
 
 iniciarVisorGeografico();
