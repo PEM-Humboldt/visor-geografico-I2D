@@ -56,10 +56,11 @@
                             Infraestructura Institucional de Datos e Información
                         </div>
                     </a>
-                    <img id="logo_eco_p" src="https://pem-humboldt.github.io/visor-geografico-I2D/assets/projects/ecoreservas/logo-ecoreservas-mini.png" alt="logo_ecoreservas" width="46" height="46" style="display: none;">
-                    <!--<div class="sideBarSpanNoActive visortext">Ecoreservas</div>-->
+                    <div class="sideBarMiniLogo">
+                        <img id="logo_mini" src="" alt="Current project mini logo" width="46" height="auto" style="display: none;">
+                    </div>
                     <div class="sideBarSpanNoActive">
-                        <img id="logo_eco_g" src="https://pem-humboldt.github.io/visor-geografico-I2D/assets/projects/ecoreservas/logo-ecoreservas-texto.png" alt="logo_ecoreservas" width="170" height="46" style="display: none;">
+                        <img id="logo_full" src="" alt="Current project full logo" width="180" height="auto" style="display: none;">
                     </div>
                 </li>
             </ul>
@@ -106,6 +107,7 @@
                 <p class="sideBarSpanNoActive mini">© 2021</p>
             </ul>
         </nav>
+
         <!-- mapa y control de capas -->
         <section class="nonactive" id="mapSection">
             <div id="map">
@@ -340,11 +342,24 @@
             </div>
         </section>
         <!-- recuadro de descarga mientras se comprimen los archivos -->
-        <div id="download-status">
-            <img id="loadimg" src="https://pem-humboldt.github.io/visor-geografico-I2D/assets/ui/loading1.gif">
+
+        <div class="toast" id="downloadToast" >
+            <div class="toast-header">
+                <strong class="mr-auto"><img id="loadimg" src="https://pem-humboldt.github.io/visor-geografico-I2D/assets/ui/loading1.gif"> Información</strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+            </div>
+            <div class="toast-body" id="downloadToastBody"></div>
         </div>
 
         <!-- toast -->
+        <div class="toast" id="errorToast" >
+            <div class="toast-header">
+                <strong class="mr-auto"><i class="fa fa-info-circle"></i>Advertencia</strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+            </div>
+            <div class="toast-body" id="errorToastBody"></div>
+        </div>
+
         <div class="toast fade" data-delay="3000">
             <div class="toast-header">
                 <strong class="mr-auto"><i class="fa fa-info-circle"></i>Advertencia</strong>
@@ -431,6 +446,25 @@
                 </button>
             </div>
         </div>
+        <!-- error view for non-existing project -->
+         <div class="container error-card">
+            <div class="error-card-body">
+                <div class="row">
+                    <button type="button" class="close closed close-error-card">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="error-card-title">Proyecto no disponible</div>
+                </div>
+                <div class="row">
+                    <p class="error-card-desc"> 
+                        La dirección que abrió no corresponde a ningún proyecto disponible. Explore proyectos disponibles en el Visor.
+                    </p>
+                </div>
+                    <a href="#" class="error-card-btn return-visor">Continuar al Visor</a>
+            </div>
+         </div>
     </div>
     <script defer src="index.js"></script>
 </body>

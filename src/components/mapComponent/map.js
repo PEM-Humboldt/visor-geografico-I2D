@@ -6,6 +6,7 @@ import Map from 'ol/Map';
 import View from 'ol/View'
 import { ScaleLine, ZoomToExtent, Zoom, defaults as defaultControls } from 'ol/control';
 import { getCenter } from 'ol/extent';
+import { transformExtent } from 'ol/proj';
 
 // Import dynamic layer system
 import { getProjectLayers, initializeLegacyExports, highlight, highlightPoint, highlightStadistics } from './layers';
@@ -46,6 +47,24 @@ const initializeMap = async () => {
 
     // Create the map with dynamic layers
     const layersArray = selectedLayers._layerArray || Object.values(selectedLayers).filter(layer => layer !== null);
+    const defaultExtent = [-7430902, -479413, -8795762, 1408887]
+    let extentValue;
+    if (currentProject.extent) {
+      extentValue = currentProject.extent.split(',').map(Number);
+    } else {
+      extentValue = defaultExtent;
+    }
+
+    let mapExtent = extentValue;
+
+    if (Math.abs(extentValue[0]) <= 180){
+      mapExtent = transformExtent(extentValue, 'EPSG:4326', 'EPSG:3857')
+    }
+
+    let zoomName = currentProject.nombre;
+    if (currentProject.nombre == 'Visor General I2D') {
+      zoomName = 'Colombia'
+    }
 
     map = new Map({
       controls: defaultControls({
@@ -55,9 +74,9 @@ const initializeMap = async () => {
       }).extend([
         new ScaleLine(),
         new ZoomToExtent({
-          extent: [-7430902, -479413, -8795762, 1408887],
+          extent: mapExtent,
           label: zoom,
-          tipLabel: 'Zoom Colombia'
+          tipLabel: "Zoom " + zoomName
         })
       ]),
       target: document.getElementById('map'),
@@ -167,8 +186,7 @@ const setupMapEvents = () => {
   });
 };
 
-// Initialize everything when DOM is ready
-document.addEventListener("DOMContentLoaded", async function () {
+async function iniciarVisorGeografico() {
   try {
     // Initialize map with project configuration
     await initializeMap();
@@ -192,6 +210,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Layer toggle functionality with URL parameter sync
     // Use event delegation to handle dynamically created checkboxes
     $(document).on('click', '.layers-input', function () {
+      
+      if (this.type === 'radio') return;
+
       var layername = this.id;
       var layer = findBy(layerGroup, 'name', layername);
       if (layer) {
@@ -219,7 +240,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Project-specific zoom controls
     $('#combinedCapas_Cundi').on('click', function () {
-      fitCenter(ncenter);
+      if (ncenter) fitCenter(ncenter);
     });
 
     // Ecoreservas specific zoom (San Antero)
@@ -235,7 +256,17 @@ document.addEventListener("DOMContentLoaded", async function () {
     }).catch(error => {
       console.error('Error loading URL parameter utilities:', error);
     });
+
   } catch (error) {
     console.error('Error during map initialization:', error);
   }
-});
+}
+
+// Redirects user to Visor when project does not exists
+$('.close-error-card, .return-visor').on( "click", function(e) {
+  e.preventDefault();
+  window.location.href = window.location.pathname;
+  $('.errorWierror-cardndow').hide();
+})
+
+iniciarVisorGeografico();

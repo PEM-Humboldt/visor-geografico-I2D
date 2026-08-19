@@ -1,14 +1,12 @@
+import $ from "jquery";
+
 import {Tile as TileLayer} from 'ol/layer';
 import TileWMS from 'ol/source/TileWMS';
-import {GEOSERVER_URL,GEONETWORK_URL,DATAVERSE_URL} from '../url'
+import {GEOSERVER_URL,GEOGRAFICO_URL,BIOCULTURAL_URL, BIOLOGICO_URL} from '../url'
 // wms geoserver- load layer function
-export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,metadataId){
-    var metadataLink = '';
-    if (metadataId=!'' && metadataId) {
-        let repositorio = metadataId.length == 6 ? DATAVERSE_URL : GEONETWORK_URL;
-        metadataLink = repositorio+metadataId;
-    } 
+let nonLoadedLayers = [];
 
+export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,metadataId,metadataSelector){
     // Sanitize layer name to handle special characters and long names
     const sanitizedLayerName = geoserverLayer.trim();
     
@@ -36,13 +34,24 @@ export function wmsLayer(geoserverStore,geoserverLayer,geoserverName,visibility,
             name: geoserverLayer,
             geoserverName: geoserverLayer, // Store geoserver layer name for URL parameter matching
             displayName: geoserverName,    // Store display name
-            urldownload: metadataLink,
             extent: [-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244]
         });
         
         // Add error handling for the WMS source
         const source = wms.getSource();
         source.on('tileloaderror', function(event) {
+            wms.set('hasLoadError', true);
+            if (!nonLoadedLayers.includes(geoserverName)){
+                nonLoadedLayers.push(geoserverName);
+            }
+
+            const layersList = nonLoadedLayers.join(', ');
+
+            $('#errorToastBody').html(`<div>No fue posible cargar las siguientes capas: <strong>${layersList}</strong></div>`);
+            $('#errorToast').toast({ 
+            autohide: true, 
+            delay: 5000
+            }).toast('show');
             // Silently handle tile load errors
         });
         

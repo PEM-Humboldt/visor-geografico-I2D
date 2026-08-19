@@ -1,11 +1,189 @@
 import $ from "jquery";
 import projectService from "../../services/projectService.js";
 import { closeTutorialOnStep4 } from "../../tutorialComponent/tutorial";
-import {GEOSERVER_URL,GEONETWORK_URL,DATAVERSE_URL} from '../../server/url'
+import {GEOSERVER_URL,GEOGRAFICO_URL,BIOCULTURAL_URL,BIOLOGICO_URL } from '../../server/url';
 
 // Get proyecto from URL params instead of importing from layers
 const urlParams = new URLSearchParams(window.location.search);
 const proyecto = urlParams.get('proyecto') || 'general';
+
+/**
+* Fit map view to layer extent with animation
+* Fetches actual extent from GeoServer for WMS layers
+* @param {Object} layer - OpenLayers layer
+*/
+async function fitMapToLayerExtent(layer) {
+  if (!layer || !window.mapInstance) {
+      console.warn('Cannot fit to extent: layer or map not available');
+      return;
+  }
+
+  try {
+      const source = layer.getSource();
+      if (!source) {
+      console.warn('Layer has no source');
+      return;
+      }
+
+      let extent = null;
+
+      // For WMS/TileWMS layers, fetch extent from GeoServer
+      if (source.constructor.name === 'TileWMS' || source.getParams) {
+      const params = source.getParams();
+      const layerName = params.LAYERS;
+
+      if (layerName) {
+          extent = await fetchWMSLayerExtent(source.getUrls()[0], layerName);
+      }
+      }
+
+      // For vector layers, use source extent
+      if (!extent && typeof source.getExtent === 'function') {
+      extent = source.getExtent();
+      }
+
+      // Fallback to layer property extent (but check if it's not the max extent)
+      if (!extent || !isFinite(extent[0])) {
+      const layerExtent = layer.get('extent');
+      // Only use if it's not the maximum EPSG:3857 extent
+      if (layerExtent && layerExtent[0] !== -20037508.342789244) {
+          extent = layerExtent;
+      }
+      }
+
+      // Check if extent is valid
+      if (!extent || !isFinite(extent[0]) || !isFinite(extent[1]) ||
+          !isFinite(extent[2]) || !isFinite(extent[3])) {
+      console.warn('Layer extent is not valid or could not be fetched:', layer.get('name'));
+      return;
+      }
+
+      // Check if extent is not the maximum extent (indicates no real extent available)
+      if (extent[0] === -20037508.342789244 && extent[2] === 20037508.342789244) {
+      console.warn('Layer has maximum extent, cannot zoom to specific area:', layer.get('name'));
+      return;
+      }
+
+      // Check if extent is not empty (all zeros or very small)
+      const width = extent[2] - extent[0];
+      const height = extent[3] - extent[1];
+      if (width < 1 || height < 1) {
+      console.warn('Layer extent is too small or empty:', layer.get('name'));
+      return;
+      }
+
+      // Fit the view to the extent with padding and animation
+      window.mapInstance.getView().fit(extent, {
+      padding: [50, 50, 50, 50], // Add padding around the extent
+      duration: 1000, // Animation duration in milliseconds
+      maxZoom: 16, // Don't zoom in too much for small features
+      callback: function(complete) {
+          if (!complete) {
+          console.warn(`⚠️ Map view fit was interrupted`);
+          }
+      }
+      });
+  } catch (error) {
+      console.error('Error fitting to layer extent:', error);
+  }
+}
+
+/**
+* Fetch WMS layer extent from GeoServer GetCapabilities
+* @param {string} wmsUrl - WMS service URL
+* @param {string} layerName - Full layer name (workspace:layer)
+* @returns {Promise<Array|null>} Extent array [minx, miny, maxx, maxy] or null
+*/
+async function fetchWMSLayerExtent(wmsUrl, layerName) {
+  try {
+      // Build GetCapabilities URL
+      const capabilitiesUrl = `${wmsUrl}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities`;
+
+      // Extract layer name without workspace prefix (e.g., "ecoreservas:layer_name" -> "layer_name")
+      const layerNameWithoutWorkspace = layerName.includes(':') ? layerName.split(':')[1] : layerName;
+
+      const response = await fetch(capabilitiesUrl);
+      if (!response.ok) {
+      console.error(`❌ GetCapabilities request failed: ${response.status} ${response.statusText}`);
+      return null;
+      }
+
+      const text = await response.text();
+
+      // Parse XML
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(text, 'text/xml');
+
+      // Check for XML parsing errors
+      const parserError = xmlDoc.getElementsByTagName('parsererror');
+      if (parserError.length > 0) {
+      console.error('❌ XML parsing error:', parserError[0].textContent);
+      return null;
+      }
+
+      // Find the layer in capabilities
+      const layers = xmlDoc.getElementsByTagName('Layer');
+
+      // Collect all available layer names for debugging
+      const availableLayerNames = [];
+      for (let i = 0; i < layers.length; i++) {
+      const nameNode = layers[i].getElementsByTagName('Name')[0];
+      if (nameNode) {
+          availableLayerNames.push(nameNode.textContent);
+      }
+      }
+
+      for (let i = 0; i < layers.length; i++) {
+      const layerNode = layers[i];
+      const nameNode = layerNode.getElementsByTagName('Name')[0];
+
+      // Match against both full name and name without workspace
+      if (nameNode && (nameNode.textContent === layerName || nameNode.textContent === layerNameWithoutWorkspace)) {
+          // Try to get EX_GeographicBoundingBox first (WGS84)
+          const geoBBox = layerNode.getElementsByTagName('EX_GeographicBoundingBox')[0];
+          if (geoBBox) {
+          const westBound = parseFloat(geoBBox.getElementsByTagName('westBoundLongitude')[0].textContent);
+          const eastBound = parseFloat(geoBBox.getElementsByTagName('eastBoundLongitude')[0].textContent);
+          const southBound = parseFloat(geoBBox.getElementsByTagName('southBoundLatitude')[0].textContent);
+          const northBound = parseFloat(geoBBox.getElementsByTagName('northBoundLatitude')[0].textContent);
+
+          // Transform from WGS84 to EPSG:3857
+          const extent = transformExtent([westBound, southBound, eastBound, northBound]);
+          return extent;
+          }
+
+          // Fallback to BoundingBox with CRS
+          const bboxNodes = layerNode.getElementsByTagName('BoundingBox');
+
+          for (let j = 0; j < bboxNodes.length; j++) {
+          const bbox = bboxNodes[j];
+          const crs = bbox.getAttribute('CRS') || bbox.getAttribute('SRS');
+
+          if (crs === 'EPSG:3857' || crs === 'EPSG:900913') {
+              const minx = parseFloat(bbox.getAttribute('minx'));
+              const miny = parseFloat(bbox.getAttribute('miny'));
+              const maxx = parseFloat(bbox.getAttribute('maxx'));
+              const maxy = parseFloat(bbox.getAttribute('maxy'));
+
+              const extent = [minx, miny, maxx, maxy];
+              return extent;
+          }
+          }
+
+          console.warn(`⚠️ Layer found but no suitable bounding box`);
+      }
+      }
+
+      console.warn(`❌ Could not find extent for layer ${layerName} in capabilities`);
+      console.warn(`💡 Searched for: "${layerName}" and "${layerNameWithoutWorkspace}"`);
+      console.warn(`💡 Available layers: ${availableLayerNames.join(', ')}`);
+      return null;
+  } catch (error) {
+      console.error(`❌ Error fetching WMS capabilities:`, error);
+      console.error(`Stack trace:`, error.stack);
+      return null;
+  }
+}
 
 /**
  * Transform extent from WGS84 (EPSG:4326) to Web Mercator (EPSG:3857)
@@ -53,11 +231,8 @@ export function buildHierarchicalLayerTree(projectData, layerGroup) {
   AllLayers = [];
   layerIndex = 0;
 
-  // // Add close button
-  // addCloseButton(accordion);
-
   // First, render base layer groups from OpenLayers (Capas Base, División político-administrativa)
-  renderBaseLayers(layerGroup, accordion);
+  renderBaseLayerGroups(layerGroup, accordion);
 
   // Then render hierarchical groups from API
   const topLevelGroups = projectData.layer_groups.filter(
@@ -75,7 +250,7 @@ export function buildHierarchicalLayerTree(projectData, layerGroup) {
   let currentProject = projectService.getCurrentProject();
   let panelVisibility = currentProject.panel_visible;
 
-  // Show accordion for ecoreservas
+  // Show accordion 
   if (panelVisibility) {
     accordion.className = "d-block";
   }
@@ -102,7 +277,7 @@ export function buildHierarchicalLayerTree(projectData, layerGroup) {
  * Render base layer groups (Capas Base, División político-administrativa)
  * These are the first groups in the OpenLayers layer array
  */
-function renderBaseLayers(layerGroup, accordion) {
+function renderBaseLayerGroups(layerGroup, accordion) {
   if (!layerGroup || typeof layerGroup.getLayers !== "function") {
     console.warn("Invalid layerGroup for base layers");
     return;
@@ -110,8 +285,6 @@ function renderBaseLayers(layerGroup, accordion) {
 
   const layers = layerGroup.getLayers().getArray();
 
-  // Always render the first 2 groups (Capas Base, División político-administrativa)
-  // These are created in layers.js and are always present
   for (let i = 0; i < Math.min(2, layers.length); i++) {
     const group = layers[i];
 
@@ -121,8 +294,57 @@ function renderBaseLayers(layerGroup, accordion) {
     }
 
     const groupName = group.get("title") || group.get("name") || `Group ${i}`;
-    renderBaseLayerGroup(group, accordion, i, groupName);
+
+    if (i === 0) {
+      renderBaseLayerGroup(group, accordion, i, groupName);
+    } else {
+      renderDivisionLayerGroup(group, accordion, i, groupName, layerGroup);
+    }
   }
+}
+
+/**
+ * Render División político-administrativa group (checkbox, multiple selection)
+ * Reuses renderLayer by adapting OpenLayers layer data to layerData format
+ */
+function renderDivisionLayerGroup(group, accordion, index, groupName, layerGroup) {
+  const card = document.createElement("div");
+  card.className = "card overflow-auto";
+  card.id = `capas${index}`;
+  accordion.appendChild(card);
+
+  const cardHeader = document.createElement("div");
+  cardHeader.className = "card-header";
+  cardHeader.style.position = "relative";
+  card.appendChild(cardHeader);
+
+  const cardLink = document.createElement("a");
+  cardLink.className = "btn btn-link dropdown-toggle bold";
+  cardLink.setAttribute("href", "#");
+  cardLink.setAttribute("data-toggle", "collapse");
+  cardLink.setAttribute("aria-expanded", "true");
+  cardLink.setAttribute("data-target", `#collapse${index}`);
+  cardLink.innerHTML = groupName;
+  cardHeader.appendChild(cardLink);
+
+  const collapseDiv = document.createElement("div");
+  collapseDiv.id = `collapse${index}`;
+  collapseDiv.className = "collapse";
+  collapseDiv.setAttribute("aria-labelledby", `#collapse${index}`);
+  collapseDiv.setAttribute("data-parent", "#accordion");
+  card.appendChild(collapseDiv);
+
+  const sublayers = group.getLayers().getArray();
+  sublayers.forEach((layer) => {
+    const layerData = {
+      nombre_geoserver: layer.get("name"),
+      nombre_display: layer.get("title") || layer.get("name"),
+      estado_inicial: layer.getVisible(),
+      metadata_id: null,
+      store_geoserver: null,
+    };
+    renderLayer(layerData, collapseDiv, layerGroup);
+  });
 }
 
 /**
@@ -136,14 +358,12 @@ function renderBaseLayerGroup(group, accordion, index, groupName) {
 
   const cardHeader = document.createElement("div");
   cardHeader.className = "card-header";
-  cardHeader.style.position = "relative";  // Required for absolute positioning
+  cardHeader.style.position = "relative";
   card.appendChild(cardHeader);
 
-  // Add close button to first card only
   if (index === 0) {
     const closeButton = document.createElement("a");
     closeButton.className = "card-link float-right";
-    closeButton.setAttribute("data-toggle", "collapse");
     closeButton.setAttribute(
       "style",
       "position:absolute; right:8px; top:8px; color: rgb(42, 71, 80); cursor:pointer; z-index:10; pointer-events:auto;"
@@ -174,17 +394,16 @@ function renderBaseLayerGroup(group, accordion, index, groupName) {
   collapseDiv.setAttribute("data-parent", "#accordion");
   card.appendChild(collapseDiv);
 
-  // Render layers in this group
   const sublayers = group.getLayers().getArray();
   sublayers.forEach((layer, j) => {
-    renderBaseLayer(layer, collapseDiv, j, index);
+    renderBaseLayer(layer, collapseDiv, j, index, sublayers);
   });
 }
 
 /**
- * Render a base layer (from OpenLayers group)
+ * Render a base layer (Capas Base)
  */
-function renderBaseLayer(layer, parentElement, layerIndex, groupIndex) {
+function renderBaseLayer(layer, parentElement, layerIndex, groupIndex, siblingLayers = []) {
   const subname = layer.get("name");
 
   const cardBody = document.createElement("div");
@@ -195,63 +414,30 @@ function renderBaseLayer(layer, parentElement, layerIndex, groupIndex) {
   formCheck.className = "form-check";
   cardBody.appendChild(formCheck);
 
-  const checkbox = document.createElement("input");
-  checkbox.className = "form-check-input layers-input";
-  checkbox.setAttribute("type", "checkbox");
-  checkbox.id = subname;
+  const radio = document.createElement("input");
+  radio.className = "form-check-input layers-input";
+  radio.setAttribute("type", "radio");
+  radio.setAttribute("name", `base-layer-group-${groupIndex}`);
+  radio.id = subname;
+  radio.checked = layer.getVisible();
 
-  // Disable dpto_politico checkbox if it's the first layer
-  if (layerIndex === 0 && subname === "dpto_politico") {
-    checkbox.disabled = true;
-  }
-
-  checkbox.checked = layer.getVisible();
-
-  checkbox.onclick = function (ev) {
-    cleanHighlights(ev);
-    const isVisible = ev.target.checked;
-    layer.setVisible(isVisible);
-
-    // Sync with URL parameters for base layers too
-    const layerName = layer.get('name') || layer.get('geoserverName');
-    if (isVisible && layerName) {
-      import('../../utils/urlParams').then(({ setURLParam }) => {
-        setURLParam('capa', layerName);
-      }).catch(err => console.error('Error setting URL param:', err));
-    } else if (!isVisible && layerName) {
-      import('../../utils/urlParams').then(({ getURLParam, removeURLParam }) => {
-        const currentCapa = getURLParam('capa');
-        if (currentCapa === layerName) {
-          removeURLParam('capa');
-        }
-      }).catch(err => console.error('Error removing URL param:', err));
-    }
+  radio.onclick = function () {
+    siblingLayers.forEach(siblingLayer => siblingLayer.setVisible(false));
+    layer.setVisible(true);
   };
 
-  formCheck.appendChild(checkbox);
+  formCheck.appendChild(radio);
 
   const label = document.createElement("label");
   label.className = "form-check-label";
-  label.setAttribute("for", "defaultCheck1");
+  label.setAttribute("for", subname);
   label.innerHTML = layer.get("title") || layer.get("name");
   formCheck.appendChild(label);
 
-    // Add download link if available
-  const urldownload = layer.get("urldownload");
-  if (urldownload && urldownload !== "") {
-    const downloadLink = document.createElement("div");
-    downloadLink.innerHTML = '<i class="fas fa-link"></i>';
-    downloadLink.className = "card-link float-right";
-    downloadLink.setAttribute("onclick", `window.open("${urldownload}")`);
-    formCheck.appendChild(downloadLink);
-  }
-
-  // Store layer reference (skip first group index 0)
   if (groupIndex !== 0) {
     AllLayers[AllLayers.length] = layer;
   }
 }
-
 
 /**
  * Add close button to accordion
@@ -403,18 +589,29 @@ function renderLayer(layerData, parentElement, layerGroup) {
 
     // Add click handler with URL parameter sync
     checkbox.onclick = function (ev) {
+      const geoserverName = layerData.nombre_geoserver;
+      const alreadyFailed = olLayer.get('hasLoadError') === true;
       cleanHighlights(ev);
       const isVisible = ev.target.checked;
       olLayer.setVisible(isVisible);
-
+      zoomLayer.style.display = isVisible ? "block" : "none";
+      
       // Sync with URL parameters
-      const geoserverName = layerData.nombre_geoserver;
       if (isVisible) {
+        if (alreadyFailed == true){
+          
+          $('#errorToastBody').html(`<div>Ocurrió un error cargando la capa: <strong>${layerData.nombre_display}</strong></div>`);
+          $('#errorToast').toast({ 
+          autohide: true, 
+          delay: 5000
+          }).toast('show');
+        }
         // Dynamically import to avoid circular dependencies
         import('../../utils/urlParams').then(({ setURLParam }) => {
           setURLParam('capa', geoserverName);
         }).catch(err => console.error('Error setting URL param:', err));
       } else {
+        $('#errorToast').toast('hide');
         // Remove URL parameter if this was the active layer
         import('../../utils/urlParams').then(({ getURLParam, removeURLParam }) => {
           const currentCapa = getURLParam('capa');
@@ -430,6 +627,12 @@ function renderLayer(layerData, parentElement, layerGroup) {
     layerIndex++;
   } else {
     console.warn(`Layer not found in OpenLayers: ${layerData.nombre_geoserver}`);
+    const toastBody = document.getElementById('errorToastBody');
+    $('#errorToastBody').append(`<div>No se encontró la capa: ${layerData.nombre_geoserver}</div>`);
+    $('#errorToast').toast({ 
+      autohide: true, 
+      delay: 10000
+    }).toast('show');
   }
 
   formCheck.appendChild(checkbox);
@@ -444,10 +647,23 @@ function renderLayer(layerData, parentElement, layerGroup) {
   // Add metadata link if available
   let metadata = layerData.metadata_id;
   if (metadata) {
-    let repositorio = metadata.length == 6 ? DATAVERSE_URL : GEONETWORK_URL;
+    let repositorio = "";
+    switch (layerData.metadata_selector){
+      case('biocultural'):
+        repositorio = BIOCULTURAL_URL;
+        break;
+      case('geografico'):
+        repositorio = GEOGRAFICO_URL;
+        break;
+      case('biologico'):
+        repositorio = BIOLOGICO_URL; 
+        break;
+    }
+
     const metadataLink = document.createElement("div");
     metadataLink.innerHTML = '<i class="fas fa-link"></i>';
     metadataLink.className = "card-link float-right";
+    metadataLink.title = "Ver metadatos";
     metadataLink.setAttribute(
       "onclick",
       `window.open("${repositorio}${metadata}")`
@@ -455,12 +671,25 @@ function renderLayer(layerData, parentElement, layerGroup) {
     formCheck.appendChild(metadataLink);
   }
 
-  const logoDiv = document.createElement("div");
-  const image = document.createElement("img");
+  const zoomLayer = document.createElement("div");
+  zoomLayer.innerHTML = '<i class="fa fa-expand"></i>';
+  zoomLayer.className = "card-link float-right";
+  zoomLayer.style.marginRight = "8px";
+  zoomLayer.title = "Zoom a la capa";
+  zoomLayer.style.display = checkbox.checked ? "block" : "none";
+  zoomLayer.onclick = function () {
+    fitMapToLayerExtent(olLayer);
+  };
+  formCheck.appendChild(zoomLayer);
+
   const geoserverStore = layerData.store_geoserver || proyecto;
-  image.src = `${GEOSERVER_URL}wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&LAYER=${layerData.store_geoserver}:${layerData.nombre_geoserver}&FORMAT=image/png`;
-  logoDiv.appendChild(image);
-  formCheck.appendChild(logoDiv);
+  if (geoserverStore && layerData.store_geoserver !== null) {
+    const logoDiv = document.createElement("div");
+    const image = document.createElement("img");
+    image.src = `${GEOSERVER_URL}wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&LAYER=${geoserverStore}:${layerData.nombre_geoserver}&FORMAT=image/png`;
+    logoDiv.appendChild(image);
+    formCheck.appendChild(logoDiv);
+  }
 
 }
 

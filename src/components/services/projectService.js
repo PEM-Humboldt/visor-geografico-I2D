@@ -2,6 +2,8 @@
  * Project Service - Handles dynamic project loading from backend API
  * Integrates with HU-VisorI2D-0001 project management system
  */
+import { PYTHONSERVER } from '../server/url';  
+import $ from "jquery";
 
 const RAW_API_BASE = (typeof window !== 'undefined' && window.APP_CONFIG && window.APP_CONFIG.PYTHONSERVER)
     || (typeof process !== 'undefined' && process.env && process.env.PYTHONSERVER)
@@ -26,12 +28,12 @@ class ProjectService {
             this.currentProject = this.cache.get(projectName);
             return this.currentProject;
         }
-
         try {
             const response = await fetch(`${API_BASE_URL}/projects/by-name/${projectName}/`);
 
             if (!response.ok) {
                 console.warn(`Project '${projectName}' not found, using fallback`);
+                this.showErrorWindow();
                 return this.getFallbackProject(projectName);
             }
 
@@ -47,6 +49,10 @@ class ProjectService {
             // Fallback to hardcoded project if API fails
             return this.getFallbackProject(projectName);
         }
+    }
+
+    showErrorWindow(){
+        $('.error-card').show();
     }
 
     /**
@@ -169,18 +175,6 @@ class ProjectService {
                 coordenada_central_y: 464737,
                 panel_visible: true,
                 base_map_visible: 'streetmap',
-                layer_groups: [],
-                default_layers: []
-            },
-            ecoreservas: {
-                id: 2,
-                nombre_corto: 'ecoreservas',
-                nombre: 'Ecoreservas',
-                nivel_zoom: 9.2,
-                coordenada_central_x: -8249332,
-                coordenada_central_y: 544737,
-                panel_visible: true,
-                base_map_visible: 'cartodb_positron',
                 layer_groups: [],
                 default_layers: []
             }
