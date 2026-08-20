@@ -1,5 +1,3 @@
-import { getConfig } from '../../configStore.js';
-
 // all external links and URL's
 export const GEOSERVER_URL = process.env.GEOSERVER_URL || 'https://geoservicios.humboldt.org.co/geoserver/';
 export const GEOGRAFICO_URL = process.env.GEONETWORK_URL || 'https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/';
