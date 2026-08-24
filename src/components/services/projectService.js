@@ -5,9 +5,10 @@
 import { PYTHONSERVER } from '../server/url';  
 import $ from "jquery";
 
-const API_BASE_URL = PYTHONSERVER 
-  ? PYTHONSERVER.replace(/\/+$/, '') 
-  : 'http://localhost:8001/api';
+const RAW_API_BASE = (typeof window !== 'undefined' && window.APP_CONFIG && window.APP_CONFIG.PYTHONSERVER)
+    || (typeof process !== 'undefined' && process.env && process.env.PYTHONSERVER)
+    || 'http://localhost:8001/api';
+const API_BASE_URL = RAW_API_BASE.replace(/\/+$/, '');
 
 class ProjectService {
     constructor() {

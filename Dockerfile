@@ -1,5 +1,5 @@
-# --- Etapa de Construcción ---
-FROM node:18.3.0 AS builder
+# Build stage
+FROM public.ecr.aws/docker/library/node:18.3.0-alpine3.15 AS builder
 
 USER node
 
@@ -21,15 +21,12 @@ FROM httpd:alpine AS production
 RUN apk add --no-cache gettext
 
 COPY --from=builder /home/node/app/build/ /usr/local/apache2/htdocs/
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-COPY config.json.template /usr/local/apache2/htdocs/config.json.template
-
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-
-RUN chmod +x /docker-entrypoint.sh
+# PYTHONSERVER se inyecta en runtime via docker-entrypoint.sh (genera config.js
+# desde la variable de entorno PYTHONSERVER del contenedor).
+ENV PYTHONSERVER=https://t4mpvisoge.humboldt.org.co/api/
 
 EXPOSE 80
-
-ENTRYPOINT ["/docker-entrypoint.sh"]
-
-CMD ["httpd-foreground"]
+CMD ["/usr/local/bin/docker-entrypoint.sh"]

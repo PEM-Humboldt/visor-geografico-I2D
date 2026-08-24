@@ -1,12 +1,20 @@
 #!/bin/sh
-
 set -e
 
-echo "Creando config.json..."
+HTDOCS_DIR="/usr/local/apache2/htdocs"
+CONFIG_FILE="${HTDOCS_DIR}/config.js"
+INDEX_FILE="${HTDOCS_DIR}/index.html"
 
-envsubst < /usr/local/apache2/htdocs/config.json.template \
-         > /usr/local/apache2/htdocs/config.json
+PYTHONSERVER_VALUE="${PYTHONSERVER:-https://t4mpvisoge.humboldt.org.co/api/}"
 
-echo "Archivo config.json generado en la ruta: /usr/local/apache2/htdocs/config.json"
+cat > "${CONFIG_FILE}" <<EOF
+window.APP_CONFIG = {
+  PYTHONSERVER: "${PYTHONSERVER_VALUE}"
+};
+EOF
 
-exec "$@"
+if ! grep -q 'config.js' "${INDEX_FILE}"; then
+  sed -i 's|</head>|<script src="config.js"></script></head>|' "${INDEX_FILE}"
+fi
+
+exec httpd-foreground

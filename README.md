@@ -133,7 +133,7 @@ La instrucción iniciará el proyecto en su entorno local y se abrirá en el nav
 Este proyecto incluye soporte completo para desarrollo con Docker a través del repositorio principal `humboldt`. El contenedor Docker maneja automáticamente la configuración del entorno y las dependencias.
 
 #### Archivos Docker:
-- **`DockerfileDev`**: Contenedor de desarrollo con hot-reload
+- **`Dockerfile`**: Construye imagen estática
 - **`.env`**: Variables de entorno personalizadas para desarrollo local
 - **`.env.test`**: Variables de entorno para pruebas
 - **`.env.example`**: Plantilla de configuración
@@ -150,7 +150,7 @@ docker build --no-cache -f Dockerfile -t visor_i2d_frontend .
 Y posteriormente se crea el contenedor y se le cargan las `.env` de la siquiente forma:
 
 ```sh
-docker run --rm --name visor-frontend -d -it --env-file .env -p 3000:80 visor_i2d_frontend
+docker run --rm --name visor_i2d -d -it --env-file .env -p 3000:80 visor_i2d_frontend
 ```
 
 #### Variables de entorno importantes:
@@ -196,24 +196,6 @@ docker exec -it visor_i2d_frontend bash
 | **Frontend Prod** | 8080 | http://localhost:8080 | Servidor de producción |
 
 ### ⚠️ Troubleshooting Docker
-
-#### ✅ Error Resuelto: Frontend conecta a servidores de prueba
-**Problema**: Errores `ERR_NAME_NOT_RESOLVED` con URLs como `test-geoserver.humboldt.org.co`
-
-**Solución Implementada**:
-- `DockerfileDev` corregido para usar `COPY .env /home/node/app/.env`
-- Comando cambiado de `npm run dev:test` a `npm run dev`
-- Frontend ahora usa configuración local correctamente
-
-**Verificación**:
-```bash
-# Verificar comando correcto
-docker logs visor_i2d_frontend --tail 5
-# Debe mostrar: "npm run dev"
-
-# Verificar conectividad local
-curl http://localhost:1234/
-```
 
 #### ✅ Error Resuelto: Protobuf serialization
 **Problema**: Error "invalid uint 32: -13" en parent_injection.js
