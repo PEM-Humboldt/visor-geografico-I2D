@@ -139,7 +139,7 @@ Este proyecto incluye soporte completo para desarrollo con Docker a través del 
 - **`.env.example`**: Plantilla de configuración
 
 #### Integración con GHCR
-El proyecto contiene un flujo para la creación y publicación de imágenes Docker cada vez que se haga push a la rama develop o cuando se crea un nuevo release, esto esta contenido en el archivo [publish_docker_image.yml](.github/workflows/publish_docker_image.yml). Este flujo crea una imagen que tiene como entrypoint el script [docker-entrypoint.sh](/docker-entrypoint.sh) el cual se ejecuta al hacer `docker run`, mediante este script se le inyectan al proyecto las variables de modo que queden disponibles por el `RUNTIME`.
+El proyecto contiene un flujo para la creación y publicación de imágenes Docker cada vez que se haga push a la rama develop o cuando se cree un nuevo release, esto esta contenido en el archivo [publish_docker_image.yml](.github/workflows/publish_docker_image.yml). Este flujo crea una imagen que tiene como entrypoint el script [docker-entrypoint.sh](/docker-entrypoint.sh) el cual se ejecuta al hacer `docker run`. Mediante este script se le inyectan al proyecto las variables de modo que queden disponibles por el `RUNTIME`.
 El proyecto posee un archivo llamado [config.json.template](config.json.template) el cual sirve como plantilla para crear e inyectar dichas variables al proyecto a partir del archivo `.env`. 
 
 Para usar la última imagen disponible en GHCR, ejecute:
