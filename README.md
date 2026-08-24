@@ -151,14 +151,14 @@ Y posteriormente, levante el contenedor con:
 Para desarrollo, también puede generar la imagen localmente usando el siguiente comando:
 
 ```sh
-docker build --no-cache -f Dockerfile -t visor_i2d_frontend:tag .
+docker build --no-cache -f Dockerfile -t visor_i2d_frontend:1.3.0 .
 ```
 > Si desea generar un nuevo tag, puede verificar la versión actual en el [package.json](./package.json)
 
 Y posteriormente se crea el contenedor y se le cargan las `.env` de la siquiente forma:
 
 ```sh
-docker run --rm --name visor_i2d -d -it --env-file .env -p 3000:80 visor_i2d_frontend:tag
+docker run --rm --name visor_i2d -d -it --env-file .env -p 3000:80 visor_i2d_frontend:1.3.0
 ```
 
 #### Variables de entorno importantes:
@@ -217,8 +217,8 @@ docker exec -it visor_i2d bash
 ```bash
 # Reconstruir localmente y reiniciar
 docker rm -f visor_i2d
-docker build --no-cache -f Dockerfile -t visor_i2d_frontend:tag .
-docker run --name=visor_i2d --network=i2d_net -p 3000:80 --env-file .env -d visor_i2d_frontend:tag
+docker build --no-cache -f Dockerfile -t visor_i2d_frontend:1.3.0 .
+docker run --name=visor_i2d --network=i2d_net -p 3000:80 --env-file .env -d visor_i2d_frontend:1.3.0
 
 
 # Verificar logs
