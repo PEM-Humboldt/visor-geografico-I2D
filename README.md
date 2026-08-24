@@ -139,18 +139,26 @@ Este proyecto incluye soporte completo para desarrollo con Docker a través del 
 - **`.env.example`**: Plantilla de configuración
 
 #### Integración con GHCR
-El proyecto contiene un flujo para la creación y publicación de imágenes Docker cada que se haga push a la rama develop o cuando se crea un nuevo release, esto esta contenido en el archivo [publish_docker_image.yml](.github/workflows/publish_docker_image.yml). Este flujo crea una imagen que tiene como entrypoint el script [docker-entrypoint.sh](/docker-entrypoint.sh) el cual se ejecuta al hacer `docker run`, mediante este script se le inyectan al proyecto las variables de modo que queden disponibles por el `RUNTIME`.
+El proyecto contiene un flujo para la creación y publicación de imágenes Docker cada vez que se haga push a la rama develop o cuando se crea un nuevo release, esto esta contenido en el archivo [publish_docker_image.yml](.github/workflows/publish_docker_image.yml). Este flujo crea una imagen que tiene como entrypoint el script [docker-entrypoint.sh](/docker-entrypoint.sh) el cual se ejecuta al hacer `docker run`, mediante este script se le inyectan al proyecto las variables de modo que queden disponibles por el `RUNTIME`.
 El proyecto posee un archivo llamado [config.json.template](config.json.template) el cual sirve como plantilla para crear e inyectar dichas variables al proyecto a partir del archivo `.env`. 
 
-En desarrollo local se puede generar la imagen usando el siguiente comando:
+Para usar la última imagen disponible en GHCR, ejecute:
+`docker pull ghcr.io/pem-humboldt/visor-geografico-i2d:latest-dev`
+
+Y posteriormente, levante el contenedor con:
+`docker run --name=visor_i2d --network=i2d_net -p 3000:80 --env-file .env -d ghcr.io/pem-humboldt/visor-geografico-i2d:latest-dev`
+
+Para desarrollo, también puede generar la imagen localmente usando el siguiente comando:
 
 ```sh
-docker build --no-cache -f Dockerfile -t visor_i2d_frontend .
+docker build --no-cache -f Dockerfile -t visor_i2d_frontend:tag .
 ```
+> Si desea generar un nuevo tag, puede verificar la versión actual en el [package.json](./package.json)
+
 Y posteriormente se crea el contenedor y se le cargan las `.env` de la siquiente forma:
 
 ```sh
-docker run --rm --name visor_i2d -d -it --env-file .env -p 3000:80 visor_i2d_frontend
+docker run --rm --name visor_i2d -d -it --env-file .env -p 3000:80 visor_i2d_frontend:tag
 ```
 
 #### Variables de entorno importantes:
@@ -184,7 +192,7 @@ docker-compose logs -f frontend
 docker-compose restart frontend
 
 # Entrar al contenedor frontend
-docker exec -it visor_i2d_frontend bash
+docker exec -it visor_i2d bash
 ```
 
 ### 🌐 Puertos y URLs
@@ -205,11 +213,13 @@ docker exec -it visor_i2d_frontend bash
 - Procesos Parcel reiniciados correctamente
 - Variables de entorno validadas
 
-#### Reconstruir después de cambios
+#### Reconstruir contenedor después de cambios
 ```bash
-# Reconstruir y reiniciar
-docker-compose build frontend
-docker-compose down && docker-compose up -d
+# Reconstruir localmente y reiniciar
+docker rm -f visor_i2d
+docker build --no-cache -f Dockerfile -t visor_i2d_frontend:tag .
+docker run --name=visor_i2d --network=i2d_net -p 3000:80 --env-file .env -d visor_i2d_frontend:tag
+
 
 # Verificar logs
 docker-compose logs -f frontend
@@ -250,13 +260,11 @@ Para la correcta ejecución de las funcionalidades del frontend, la siguiente ru
 
 ## Despliegue usando docker
 
-Alternativamente puede desplegar usando contenedores de docker. Primero construya la imagen:
+Alternativamente puede desplegar usando contenedores de docker. Primero, descargue la última imagen de GHCR:
 
-`docker build -t visor-i2d:<version actual> .`
+`docker pull ghcr.io/pem-humboldt/visor-geografico-i2d:latest-dev`
 
-> la versión actual se puede verificar en el [package.json](./package.json)
-
-Detenga el contenedor:
+En caso de que ya tenga un contenedor corriendo, deténgalo:
 
 `docker stop visor_i2d`
 
@@ -266,7 +274,7 @@ Borre el contenedor antiguo:
 
 Después levante el contenedor:
 
-`docker run --name=visor_i2d --network=i2d.net -p 3000:80 -d visor-i2d:<version actual>`
+`docker run --name=visor_i2d --network=i2d_net -p 3000:80 --env-file .env -d ghcr.io/pem-humboldt/visor-geografico-i2d:latest-dev`
 
 ---
 
