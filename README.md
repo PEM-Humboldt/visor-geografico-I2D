@@ -363,9 +363,7 @@ Para más detalles: [Backend Documentation](https://github.com/maccevedor/visor-
 
 ### 👥 Equipo de Desarrollo
 
-- **Julián David Torres Caicedo** - *Desarrollo Frontend* - [juliant8805](https://github.com/juliant8805)
-- **Liceth Barandica Diaz** - *Desarrollo Frontend* - [licethbarandicadiaz](https://github.com/licethbarandicadiaz)
-- **Daniel López** - *DevOps y Despliegue* - [danflop](https://github.com/danflop)
+- **Gerencia de Información Científica**
 
 ### 📝 Cómo Contribuir
 
