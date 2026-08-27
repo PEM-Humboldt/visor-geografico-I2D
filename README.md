@@ -151,14 +151,14 @@ Y posteriormente, levante el contenedor con:
 Para desarrollo, también puede generar la imagen localmente usando el siguiente comando:
 
 ```sh
-docker build --no-cache -f Dockerfile -t visor_i2d_frontend:1.3.0 .
+docker build --no-cache -f Dockerfile -t visor_i2d_frontend:tag .
 ```
 > Si desea generar un nuevo tag, puede verificar la versión actual en el [package.json](./package.json)
 
 Y posteriormente se crea el contenedor y se le cargan las `.env` de la siquiente forma:
 
 ```sh
-docker run --rm --name visor_i2d -d -it --env-file .env -p 3000:80 visor_i2d_frontend:1.3.0
+docker run --rm --name visor_i2d -d -it --env-file .env -p 3000:80 visor_i2d_frontend:tag
 ```
 
 #### Variables de entorno importantes:
@@ -174,22 +174,14 @@ BIOCULTURAL_URL=https://doi.org/10.21068/
 BIOLOGICO_URL=https://i2d.humboldt.org.co/
 ```
 
-### 🔧 Comandos Docker
-
-Desde el directorio principal `humboldt/`:
+### 🔧 Otros Comandos Docker
 
 ```bash
-# Construir el contenedor frontend
-docker-compose build frontend
-
-# Iniciar todos los servicios (incluye frontend)
-docker-compose up -d
-
 # Ver logs del frontend
-docker-compose logs -f frontend
+docker logs -f visor_i2d
 
 # Reiniciar solo el frontend
-docker-compose restart frontend
+docker restart visor_i2d
 
 # Entrar al contenedor frontend
 docker exec -it visor_i2d bash
@@ -205,21 +197,12 @@ docker exec -it visor_i2d bash
 
 ### ⚠️ Troubleshooting Docker
 
-#### ✅ Error Resuelto: Protobuf serialization
-**Problema**: Error "invalid uint 32: -13" en parent_injection.js
-
-**Solución Implementada**:
-- Archivo `.env` restaurado con variables requeridas
-- Procesos Parcel reiniciados correctamente
-- Variables de entorno validadas
-
 #### Reconstruir contenedor después de cambios
 ```bash
 # Reconstruir localmente y reiniciar
 docker rm -f visor_i2d
-docker build --no-cache -f Dockerfile -t visor_i2d_frontend:1.3.0 .
-docker run --name=visor_i2d --network=i2d_net -p 3000:80 --env-file .env -d visor_i2d_frontend:1.3.0
-
+docker build --no-cache -f Dockerfile -t visor_i2d_frontend:tag .
+docker run --name=visor_i2d --network=i2d_net -p 3000:80 --env-file .env -d visor_i2d_frontend:tag
 
 # Verificar logs
 docker-compose logs -f frontend
@@ -375,106 +358,6 @@ src/components/server/url.js
 - `GEOSERVER_URL`: Servidor de mapas (http://localhost:8081/geoserver/)
 
 Para más detalles: [Backend Documentation](https://github.com/maccevedor/visor-geografico-I2D-backend)
-
----
-
-## 🎯 Funcionalidades Implementadas
-
-### ✅ **Características Completamente Funcionales**
-
-#### 🗺️ **Controles de Mapa Restaurados**
-- **Zoom In (+)**: Botón funcional con posicionamiento correcto
-- **Zoom Out (-)**: Botón funcional con posicionamiento correcto
-- **Full Extent (⛶)**: Botón de extensión completa operativo
-- **CSS Optimizado**: Posicionamiento `left: 0.5em` con `display: block !important`
-
-#### 🔍 **Sistema de Búsqueda Completo**
-- **Dropdown Interactivo**: Elementos `<a>` clickeables con `data-coord`
-- **Navegación Automática**: Click en resultado navega automáticamente al municipio
-- **Manejo de Eventos**: Event delegation con `$('#dropdown-items').on('click', '.dropdown-item')`
-- **Prevención de Duplicados**: Inicialización con guard para evitar múltiples handlers
-
-#### 📊 **Gestión Dinámica de Proyectos**
-- **Carga Sin Código**: Nuevos proyectos configurables vía base de datos
-- **Cambio de Contexto**: URL parameter `?proyecto=` para switching
-- **Inicialización Asíncrona**: `waitForMap()` polling para timing correcto
-- **Manejo de Errores**: Null checks y fallbacks robustos
-
-#### 🔧 **Correcciones JavaScript Críticas**
-- **Referencias Nulas**: Eliminadas con null checks comprehensivos
-- **Conflictos de Funciones**: Resueltos (attachMapEvents, getCenter)
-- **Timing de DOM**: DOMContentLoaded handling mejorado
-- **Imports/Exports**: Compatibilidad CommonJS para OpenLayers
-
-### 🛠️ **Arquitectura de Componentes**
-
-Estructura modular en `src/components/`:
-```
-src/components/
-├── mapComponent/
-│   ├── map.js              # Inicialización estática
-│   └── dynamicMap.js       # Carga dinámica de proyectos
-├── services/
-│   └── projectService.js   # Servicios de API
-└── server/
-    └── url.js              # Configuración de URLs
-```
-
----
-
-## 🔒 Seguridad y Mejores Prácticas
-
-### ✅ **Implementadas**
-- **Separación de Responsabilidades**: Frontend/Backend claramente definidos
-- **Variables de Entorno**: Configuración sensible externalizada
-- **Validación de Entrada**: Parámetros validados en backend
-- **CORS Configurado**: Headers apropiados para cross-origin requests
-- **Gitignore Completo**: Archivos sensibles excluidos (`.env`, `node_modules`)
-
-### 🔐 **Recomendaciones de Seguridad**
-- ✅ Archivo `.env` en `.gitignore`
-- ✅ URLs de servicios configurables
-- ✅ Sin credenciales hardcodeadas
-- ✅ Validación de parámetros en backend
-- ✅ HTTPS en producción (configurado en variables)
-
-### 📋 **Estándares de Código**
-- **JavaScript**: ESLint compatible
-- **CSS/SCSS**: BEM methodology en componentes
-- **Commits**: Conventional commits
-- **Documentación**: JSDoc en funciones críticas
-
----
-
-## 🔄 Changelog Reciente
-
-### ✅ Versión Actual (2025-08-28)
-
-#### 🎯 **Funcionalidades Críticas Restauradas**:
-- **Controles de Mapa**: Zoom in/out y full extent completamente funcionales
-- **Búsqueda Geográfica**: Sistema completo con navegación automática
-- **Proyectos Dinámicos**: Gestión sin cambios de código implementada
-- **Integración Backend**: APIs REST completamente funcionales
-
-#### 🐛 **Errores JavaScript Eliminados**:
-- **Null References**: Checks comprehensivos implementados
-- **Function Conflicts**: Naming collisions resueltos
-- **DOM Timing**: DOMContentLoaded handling optimizado
-- **Event Delegation**: Click handlers corregidos
-
-#### 🔧 **Mejoras de Desarrollo**:
-- **Docker Environment**: Variables de entorno corregidas
-- **Hot Reload**: Parcel funcionando correctamente
-- **Error Handling**: Fallbacks robustos implementados
-- **Code Organization**: Estructura modular mejorada
-
-#### 🌐 **Integración Completa**:
-- **GeoServer**: Conectividad WMS restaurada
-- **Backend APIs**: Todos los endpoints funcionales
-- **Map Layers**: Carga correcta de capas geográficas
-- **Search System**: Búsqueda con coordenadas operativa
-
----
 
 ## 🤝 Contribución
 
