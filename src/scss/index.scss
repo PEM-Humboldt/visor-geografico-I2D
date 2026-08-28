@@ -1,4 +1,5 @@
 @import './color';
+@import 'sizes';
 
 *, *:after, *:before { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
 body, html {
@@ -35,8 +36,8 @@ button, *:focus {
 }
 
 .layer-container {
-    max-height: 65vh;
-    overflow: auto;
+    max-height: none;
+    overflow: visible;
 }
 
 #content {
@@ -75,8 +76,14 @@ button, *:focus {
     margin: auto;
     z-index: 100;
     position: absolute;
-    right: 0px;
-    bottom: 0px;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.toast.show{
+    pointer-events: auto;
 }
 
 .close {
@@ -112,4 +119,67 @@ a.card-link {
 .logo-humboldt{
     height: 55px;
     width: auto;
+}
+
+.error-card {
+  border: 1px solid #e6edea;
+  display: none;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #ffffff;
+  flex-direction: column;
+  box-shadow: 0 8px 28px rgba(10, 61, 58, 0.09);
+  position: relative;
+  width: 30vw;
+  min-width: 200px;
+  transition:
+    box-shadow 200ms,
+    border-color 200ms,
+    transform 200ms;
+}
+
+.error-card-body {
+  padding: 20px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.error-card-title {
+  font-size: 17px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: #1a2420;
+  margin-bottom: 6px;
+  line-height: 1.15;
+}
+
+.error-card-desc {
+  font-size: 13.5px;
+  color: var(--n-700);
+  line-height: 1.55;
+  margin-bottom: 16px;
+  flex: 1;
+}
+
+.error-card-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: 100px;
+  background: #008990;
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 150ms;
+  align-self: flex-start;
+}
+.error-card-btn:hover {
+  background: #125750;
+  color: #fff;
+  text-decoration: none;
 }
