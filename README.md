@@ -205,7 +205,7 @@ docker build --no-cache -f Dockerfile -t visor_i2d_frontend:tag .
 docker run --name=visor_i2d --network=i2d_net -p 3000:80 --env-file .env -d visor_i2d_frontend:tag
 
 # Verificar logs
-docker-compose logs -f frontend
+docker logs -f visor_i2d
 ```
 
 ---
