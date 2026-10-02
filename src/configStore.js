@@ -5,6 +5,7 @@ let privateVars = {
     GEOSERVER_URL: runtimeConfig.GEOSERVER_URL,
     GEONETWORK_URL: runtimeConfig.GEONETWORK_URL,
     DATAVERSE_URL: runtimeConfig.DATAVERSE_URL,
+    BIOLOGICO_URL: runtimeConfig.BIOLOGICO_URL,
     PYTHONSERVER: runtimeConfig.PYTHONSERVER,
     I2D_HOME_URL: runtimeConfig.I2D_HOME_URL,
     CEIBA_URL: runtimeConfig.CEIBA_URL,
