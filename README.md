@@ -90,7 +90,7 @@ Ejecute la siguiente sentencia para instalar las dependencias del proyecto:
    PYTHONSERVER=http://localhost:8001/api/
 
    # URLs de mapas base
-   CARTODB_POSITRON_URL=https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png
+   CARTODB_POSITRON_URL=https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}
    OTM_TILE_URL=https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png
 
    # URLs de servicios externos

@@ -17,7 +17,7 @@ export const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'i2d@humboldt.org.co';
 export const HUMBOLDT_SITE_URL = process.env.HUMBOLDT_SITE_URL || 'http://www.humboldt.org.co';
 
 // Base map and tile servers
-export const CARTODB_POSITRON_URL = process.env.CARTODB_POSITRON_URL || 'http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
+export const CARTODB_POSITRON_URL = process.env.CARTODB_POSITRON_URL || 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}';
 export const OTM_TILE_URL = process.env.OTM_TILE_URL || 'https://tile.opentopomap.org/{z}/{x}/{y}.png';
 export const WMFLABS_BW_URL = process.env.WMFLABS_BW_URL || 'https://api.maptiler.com/maps/toner-v2/256 /{z}/{x}/{y}.png?key=Ky7K1wE0D0jgsipnioH8';
 export const STAMEN_TERRAIN_URL = process.env.STAMEN_TERRAIN_URL || 'https://tileserver.memomaps.de/tilegen /{z}/{x}/{y}.png';

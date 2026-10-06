@@ -62,15 +62,15 @@ const createBaseLayers = (project) => {
       name: "Street Map",
     }),
     cartodb_positron: new TileLayer({
-      title: "CartoDB Positron",
+      title: "Esri World Light Gray",
       visible: baseMapVisible === "cartodb_positron",
       source: new XYZ({ 
         url: CARTODB_POSITRON_URL,
-        attributions: " © OpenStreetMap contributors",
+        attributions: "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ",
       }),
       subdomains: "abcd",
       maxZoom: 19,
-      name: "CartoDB Positron",
+      name: "Esri World Light Gray",
     }),
     otm: new TileLayer({
       title: "OTM",
