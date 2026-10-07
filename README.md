@@ -85,18 +85,22 @@ Ejecute la siguiente sentencia para instalar las dependencias del proyecto:
 
 2. **Configurar URLs de servicios locales**:
    ```bash
-   NODE_ENV=development
-   GEOSERVER_URL=http://localhost:8081/geoserver/
-   PYTHONSERVER=http://localhost:8001/api/
+    NODE_ENV=development
+    GEOSERVER_URL=http://localhost:8081/geoserver/
+    PYTHONSERVER=http://localhost:8001/api/
 
-   # URLs de mapas base
-   CARTODB_POSITRON_URL=https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}
-   OTM_TILE_URL=https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png
+    # URLs de mapas base
+    CARTODB_POSITRON_URL=https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}
+    OTM_TILE_URL=https://tile.opentopomap.org/{z}/{x}/{y}.png
+    WMFLABS_BW_URL=https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png
+    STAMEN_TERRAIN_URL=https://{a-c}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png
+    ESRI_WORLD_PHYSICAL_URL=https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}
+    ESRI_WORLD_IMAGERY_URL=https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}
 
-   # URLs de servicios externos
-   GEOGRAFICO_URL=https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/
-   BIOCULTURAL_URL=https://doi.org/10.21068/
-   BIOLOGICO_URL=https://i2d.humboldt.org.co/
+    # URLs de servicios externos
+    GEOGRAFICO_URL=https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/
+    BIOCULTURAL_URL=https://doi.org/10.21068/
+    BIOLOGICO_URL=https://i2d.humboldt.org.co/
    ```
 
 3. **Variables importantes**:
