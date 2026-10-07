@@ -50,11 +50,12 @@ const initializeProject = async () => {
  */
 const createBaseLayers = (project) => {
   const isEcoreservas = project && project.nombre_corto === "ecoreservas";
+  const baseMapVisible = project?.base_map_visible ?? "streetmap";
 
   return {
     streetmap: new TileLayer({
-      title: "Streetmap",
-      visible: !isEcoreservas,
+      title: "OpenStreetMap",
+      visible: baseMapVisible === "streetmap",
       source: new OSM({ crossOrigin: null }),
       maxZoom: 20,
       minResolution: 2,
@@ -62,7 +63,7 @@ const createBaseLayers = (project) => {
     }),
     cartodb_positron: new TileLayer({
       title: "CartoDB Positron",
-      visible: isEcoreservas,
+      visible: baseMapVisible === "cartodb_positron",
       source: new XYZ({ 
         url: CARTODB_POSITRON_URL,
         attributions: " © OpenStreetMap contributors",
@@ -73,7 +74,7 @@ const createBaseLayers = (project) => {
     }),
     otm: new TileLayer({
       title: "OTM",
-      visible: false,
+      visible: baseMapVisible === "otm",
       source: new XYZ({
         url: OTM_TILE_URL,
         attributions: " © OpenStreetMap contributors",
@@ -82,7 +83,7 @@ const createBaseLayers = (project) => {
     }),
     bw: new TileLayer({
       title: "B & W",
-      visible: false,
+      visible: baseMapVisible === "bw",
       source: new XYZ({
         url: WMFLABS_BW_URL,
         attributions: " © OpenStreetMap contributors",
@@ -91,7 +92,7 @@ const createBaseLayers = (project) => {
     }),
     terrain: new TileLayer({
       title: "Terrain",
-      visible: false,
+      visible: baseMapVisible === "terrain",
       source: new XYZ({
         url: STAMEN_TERRAIN_URL,
         attributions: " © OpenStreetMap contributors",
@@ -100,7 +101,7 @@ const createBaseLayers = (project) => {
     }),
     esri_physical: new TileLayer({
       title: "Esri WorldPhysical",
-      visible: false,
+      visible: baseMapVisible === "esri_physical",
       attribution: "Tiles &copy; Esri &mdash; Source: US National Park Service",
       source: new XYZ({ 
         url: ESRI_WORLD_PHYSICAL_URL,
@@ -111,7 +112,7 @@ const createBaseLayers = (project) => {
     }),
     esri_imagery: new TileLayer({
       title: "Esri WorldImagery",
-      visible: false,
+      visible: baseMapVisible === "esri_imagery",
       source: new XYZ({ 
         url: ESRI_WORLD_IMAGERY_URL,
         attributions: "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
@@ -149,6 +150,7 @@ const createDynamicWMSLayer = (layerConfig) => {
     layerConfig.nombre_display,
     layerConfig.estado_inicial,
     layerConfig.metadata_id,
+    layerConfig.metadata_selector
   );
 
   // Ensure layer is properly configured and visible
@@ -206,6 +208,11 @@ const createDynamicLayerGroups = async (project) => {
           console.error(
             `❌ Failed to create layer ${layerConfig.nombre_display} in group ${group.nombre}`,
           );
+          $('#errorToastBody').append(`<div>Ocurrió un error al cargar la capa ${layerData.nombre_geoserver}</div>`);
+          $('#errorToast').toast({ 
+            autohide: true, 
+            delay: 10000
+          }).toast('show');
         }
       }
     }
@@ -239,6 +246,7 @@ export var mpios = wmsLayer(
   "Municipios",
   true,
   "",
+  ""
 );
 export var deptos = wmsLayer(
   "Capas_Base",
@@ -246,6 +254,7 @@ export var deptos = wmsLayer(
   "Departamentos",
   true,
   "",
+  ""
 );
 
 /**
@@ -417,26 +426,22 @@ export const initializeLegacyExports = async () => {
     const layers = await getProjectLayers();
     const project = currentProject || { nombre_corto: "general" };
 
-    // Update legacy exports
-    proyecto = project.nombre_corto;
+    // Update project logos dynamically from API if available
+    if (currentProject) {
+      const logoMini = document.getElementById("logo_mini");
+      const logoFull = document.getElementById("logo_full");
 
-    // Update ecoreservas logos dynamically from API if available
-    if (proyecto === "ecoreservas" && currentProject) {
-      const logoEcoP = document.getElementById("logo_eco_p");
-      const logoEcoG = document.getElementById("logo_eco_g");
+      const urlLogoMini = currentProject.logo_pequeno_url;
+      const urlLogoFull = currentProject.logo_completo_url;
 
-      if (logoEcoP) {
-        logoEcoP.style.display = "inline-block";
-        if (currentProject.logo_pequeno_url) {
-          logoEcoP.src = currentProject.logo_pequeno_url;
-        }
+      if (logoMini && urlLogoMini) {
+        logoMini.style.display = "inline-block";
+        logoMini.src = urlLogoMini;
       }
 
-      if (logoEcoG) {
-        logoEcoG.style.display = "inline-block";
-        if (currentProject.logo_completo_url) {
-          logoEcoG.src = currentProject.logo_completo_url;
-        }
+      if (logoFull && urlLogoFull) {
+        logoFull.style.display = "inline-block";
+        logoFull.src = urlLogoFull;
       }
     }
 

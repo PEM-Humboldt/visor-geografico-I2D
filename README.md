@@ -94,8 +94,9 @@ Ejecute la siguiente sentencia para instalar las dependencias del proyecto:
    OTM_TILE_URL=https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png
 
    # URLs de servicios externos
-   GEONETWORK_URL=https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/
-   DATAVERSE_URL=https://doi.org/10.21068/
+   GEOGRAFICO_URL=https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/
+   BIOCULTURAL_URL=https://doi.org/10.21068/
+   BIOLOGICO_URL=https://i2d.humboldt.org.co/
    ```
 
 3. **Variables importantes**:
@@ -132,10 +133,33 @@ La instrucción iniciará el proyecto en su entorno local y se abrirá en el nav
 Este proyecto incluye soporte completo para desarrollo con Docker a través del repositorio principal `humboldt`. El contenedor Docker maneja automáticamente la configuración del entorno y las dependencias.
 
 #### Archivos Docker:
-- **`DockerfileDev`**: Contenedor de desarrollo con hot-reload
+- **`Dockerfile`**: Construye imagen estática
 - **`.env`**: Variables de entorno personalizadas para desarrollo local
 - **`.env.test`**: Variables de entorno para pruebas
 - **`.env.example`**: Plantilla de configuración
+
+#### Integración con GHCR
+El proyecto contiene un flujo para la creación y publicación de imágenes Docker cada vez que se haga push a la rama develop o cuando se cree un nuevo release, esto esta contenido en el archivo [publish_docker_image.yml](.github/workflows/publish_docker_image.yml). Este flujo crea una imagen que tiene como entrypoint el script [docker-entrypoint.sh](/docker-entrypoint.sh) el cual se ejecuta al hacer `docker run`. Mediante este script se le inyectan al proyecto las variables de modo que queden disponibles por el `RUNTIME`.
+El proyecto posee un archivo llamado [config.json.template](config.json.template) el cual sirve como plantilla para crear e inyectar dichas variables al proyecto a partir del archivo `.env`. 
+
+Para usar la última imagen disponible en GHCR, ejecute:
+`docker pull ghcr.io/pem-humboldt/visor-geografico-i2d:latest-dev`
+
+Y posteriormente, levante el contenedor con:
+`docker run --name=visor_i2d --network=i2d_net -p 3000:80 --env-file .env -d ghcr.io/pem-humboldt/visor-geografico-i2d:latest-dev`
+
+Para desarrollo, también puede generar la imagen localmente usando el siguiente comando:
+
+```sh
+docker build --no-cache -f Dockerfile -t visor_i2d_frontend:tag .
+```
+> Si desea generar un nuevo tag, puede verificar la versión actual en el [package.json](./package.json)
+
+Y posteriormente se crea el contenedor y se le cargan las `.env` de la siquiente forma:
+
+```sh
+docker run --rm --name visor_i2d -d -it --env-file .env -p 3000:80 visor_i2d_frontend:tag
+```
 
 #### Variables de entorno importantes:
 ```bash
@@ -145,29 +169,22 @@ GEOSERVER_URL=http://localhost:8081/geoserver/
 PYTHONSERVER=http://localhost:8001/
 
 # URLs de servicios externos
-GEONETWORK_URL=https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/
-DATAVERSE_URL=https://doi.org/10.21068/
+GEOGRAFICO_URL=https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/
+BIOCULTURAL_URL=https://doi.org/10.21068/
+BIOLOGICO_URL=https://i2d.humboldt.org.co/
 ```
 
-### 🔧 Comandos Docker
-
-Desde el directorio principal `humboldt/`:
+### 🔧 Otros Comandos Docker
 
 ```bash
-# Construir el contenedor frontend
-docker-compose build frontend
-
-# Iniciar todos los servicios (incluye frontend)
-docker-compose up -d
-
 # Ver logs del frontend
-docker-compose logs -f frontend
+docker logs -f visor_i2d
 
 # Reiniciar solo el frontend
-docker-compose restart frontend
+docker restart visor_i2d
 
 # Entrar al contenedor frontend
-docker exec -it visor_i2d_frontend bash
+docker exec -it visor_i2d bash
 ```
 
 ### 🌐 Puertos y URLs
@@ -180,40 +197,15 @@ docker exec -it visor_i2d_frontend bash
 
 ### ⚠️ Troubleshooting Docker
 
-#### ✅ Error Resuelto: Frontend conecta a servidores de prueba
-**Problema**: Errores `ERR_NAME_NOT_RESOLVED` con URLs como `test-geoserver.humboldt.org.co`
-
-**Solución Implementada**:
-- `DockerfileDev` corregido para usar `COPY .env /home/node/app/.env`
-- Comando cambiado de `npm run dev:test` a `npm run dev`
-- Frontend ahora usa configuración local correctamente
-
-**Verificación**:
+#### Reconstruir contenedor después de cambios
 ```bash
-# Verificar comando correcto
-docker logs visor_i2d_frontend --tail 5
-# Debe mostrar: "npm run dev"
-
-# Verificar conectividad local
-curl http://localhost:1234/
-```
-
-#### ✅ Error Resuelto: Protobuf serialization
-**Problema**: Error "invalid uint 32: -13" en parent_injection.js
-
-**Solución Implementada**:
-- Archivo `.env` restaurado con variables requeridas
-- Procesos Parcel reiniciados correctamente
-- Variables de entorno validadas
-
-#### Reconstruir después de cambios
-```bash
-# Reconstruir y reiniciar
-docker-compose build frontend
-docker-compose down && docker-compose up -d
+# Reconstruir localmente y reiniciar
+docker rm -f visor_i2d
+docker build --no-cache -f Dockerfile -t visor_i2d_frontend:tag .
+docker run --name=visor_i2d --network=i2d_net -p 3000:80 --env-file .env -d visor_i2d_frontend:tag
 
 # Verificar logs
-docker-compose logs -f frontend
+docker logs -f visor_i2d
 ```
 
 ---
@@ -251,13 +243,11 @@ Para la correcta ejecución de las funcionalidades del frontend, la siguiente ru
 
 ## Despliegue usando docker
 
-Alternativamente puede desplegar usando contenedores de docker. Primero construya la imagen:
+Alternativamente puede desplegar usando contenedores de docker. Primero, descargue la última imagen de GHCR:
 
-`docker build -t visor-i2d:<version actual> .`
+`docker pull ghcr.io/pem-humboldt/visor-geografico-i2d:latest-dev`
 
-> la versión actual se puede verificar en el [package.json](./package.json)
-
-Detenga el contenedor:
+En caso de que ya tenga un contenedor corriendo, deténgalo:
 
 `docker stop visor_i2d`
 
@@ -267,7 +257,7 @@ Borre el contenedor antiguo:
 
 Después levante el contenedor:
 
-`docker run --name=visor_i2d --network=i2d.net -p 3000:80 -d visor-i2d:<version actual>`
+`docker run --name=visor_i2d --network=i2d_net -p 3000:80 --env-file .env -d ghcr.io/pem-humboldt/visor-geografico-i2d:latest-dev`
 
 ---
 
@@ -277,8 +267,9 @@ A partir de ahora, las URLs se pueden configurar mediante variables de entorno. 
 
 - Variables disponibles:
   - GEOSERVER_URL
-  - GEONETWORK_URL
-  - DATAVERSE_URL
+  - GEOGRAFICO_URL
+  - BIOCULTURAL_URL
+  - BIOLOGICO_URL
   - PYTHONSERVER
   - CARTODB_POSITRON_URL
   - OTM_TILE_URL
@@ -368,113 +359,11 @@ src/components/server/url.js
 
 Para más detalles: [Backend Documentation](https://github.com/maccevedor/visor-geografico-I2D-backend)
 
----
-
-## 🎯 Funcionalidades Implementadas
-
-### ✅ **Características Completamente Funcionales**
-
-#### 🗺️ **Controles de Mapa Restaurados**
-- **Zoom In (+)**: Botón funcional con posicionamiento correcto
-- **Zoom Out (-)**: Botón funcional con posicionamiento correcto
-- **Full Extent (⛶)**: Botón de extensión completa operativo
-- **CSS Optimizado**: Posicionamiento `left: 0.5em` con `display: block !important`
-
-#### 🔍 **Sistema de Búsqueda Completo**
-- **Dropdown Interactivo**: Elementos `<a>` clickeables con `data-coord`
-- **Navegación Automática**: Click en resultado navega automáticamente al municipio
-- **Manejo de Eventos**: Event delegation con `$('#dropdown-items').on('click', '.dropdown-item')`
-- **Prevención de Duplicados**: Inicialización con guard para evitar múltiples handlers
-
-#### 📊 **Gestión Dinámica de Proyectos**
-- **Carga Sin Código**: Nuevos proyectos configurables vía base de datos
-- **Cambio de Contexto**: URL parameter `?proyecto=` para switching
-- **Inicialización Asíncrona**: `waitForMap()` polling para timing correcto
-- **Manejo de Errores**: Null checks y fallbacks robustos
-
-#### 🔧 **Correcciones JavaScript Críticas**
-- **Referencias Nulas**: Eliminadas con null checks comprehensivos
-- **Conflictos de Funciones**: Resueltos (attachMapEvents, getCenter)
-- **Timing de DOM**: DOMContentLoaded handling mejorado
-- **Imports/Exports**: Compatibilidad CommonJS para OpenLayers
-
-### 🛠️ **Arquitectura de Componentes**
-
-Estructura modular en `src/components/`:
-```
-src/components/
-├── mapComponent/
-│   ├── map.js              # Inicialización estática
-│   └── dynamicMap.js       # Carga dinámica de proyectos
-├── services/
-│   └── projectService.js   # Servicios de API
-└── server/
-    └── url.js              # Configuración de URLs
-```
-
----
-
-## 🔒 Seguridad y Mejores Prácticas
-
-### ✅ **Implementadas**
-- **Separación de Responsabilidades**: Frontend/Backend claramente definidos
-- **Variables de Entorno**: Configuración sensible externalizada
-- **Validación de Entrada**: Parámetros validados en backend
-- **CORS Configurado**: Headers apropiados para cross-origin requests
-- **Gitignore Completo**: Archivos sensibles excluidos (`.env`, `node_modules`)
-
-### 🔐 **Recomendaciones de Seguridad**
-- ✅ Archivo `.env` en `.gitignore`
-- ✅ URLs de servicios configurables
-- ✅ Sin credenciales hardcodeadas
-- ✅ Validación de parámetros en backend
-- ✅ HTTPS en producción (configurado en variables)
-
-### 📋 **Estándares de Código**
-- **JavaScript**: ESLint compatible
-- **CSS/SCSS**: BEM methodology en componentes
-- **Commits**: Conventional commits
-- **Documentación**: JSDoc en funciones críticas
-
----
-
-## 🔄 Changelog Reciente
-
-### ✅ Versión Actual (2025-08-28)
-
-#### 🎯 **Funcionalidades Críticas Restauradas**:
-- **Controles de Mapa**: Zoom in/out y full extent completamente funcionales
-- **Búsqueda Geográfica**: Sistema completo con navegación automática
-- **Proyectos Dinámicos**: Gestión sin cambios de código implementada
-- **Integración Backend**: APIs REST completamente funcionales
-
-#### 🐛 **Errores JavaScript Eliminados**:
-- **Null References**: Checks comprehensivos implementados
-- **Function Conflicts**: Naming collisions resueltos
-- **DOM Timing**: DOMContentLoaded handling optimizado
-- **Event Delegation**: Click handlers corregidos
-
-#### 🔧 **Mejoras de Desarrollo**:
-- **Docker Environment**: Variables de entorno corregidas
-- **Hot Reload**: Parcel funcionando correctamente
-- **Error Handling**: Fallbacks robustos implementados
-- **Code Organization**: Estructura modular mejorada
-
-#### 🌐 **Integración Completa**:
-- **GeoServer**: Conectividad WMS restaurada
-- **Backend APIs**: Todos los endpoints funcionales
-- **Map Layers**: Carga correcta de capas geográficas
-- **Search System**: Búsqueda con coordenadas operativa
-
----
-
 ## 🤝 Contribución
 
 ### 👥 Equipo de Desarrollo
 
-- **Julián David Torres Caicedo** - *Desarrollo Frontend* - [juliant8805](https://github.com/juliant8805)
-- **Liceth Barandica Diaz** - *Desarrollo Frontend* - [licethbarandicadiaz](https://github.com/licethbarandicadiaz)
-- **Daniel López** - *DevOps y Despliegue* - [danflop](https://github.com/danflop)
+- **Gerencia de Información Científica**
 
 ### 📝 Cómo Contribuir
 
