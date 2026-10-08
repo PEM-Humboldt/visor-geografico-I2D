@@ -16,12 +16,12 @@ export const CONTACT_EMAIL = getConfig().CONTACT_EMAIL || 'i2d@humboldt.org.co';
 export const HUMBOLDT_SITE_URL = getConfig().HUMBOLDT_SITE_URL || 'http://www.humboldt.org.co';
 
 // Base map and tile servers
-export const CARTODB_POSITRON_URL = process.env.CARTODB_POSITRON_URL || 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}';
-export const OTM_TILE_URL = process.env.OTM_TILE_URL || 'https://tile.opentopomap.org/{z}/{x}/{y}.png';
-export const WMFLABS_BW_URL = process.env.WMFLABS_BW_URL || 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png';
-export const STAMEN_TERRAIN_URL = process.env.STAMEN_TERRAIN_URL || 'https://{a-c}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png';
-export const ESRI_WORLD_PHYSICAL_URL = process.env.ESRI_WORLD_PHYSICAL_URL || 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}';
-export const ESRI_WORLD_IMAGERY_URL = process.env.ESRI_WORLD_IMAGERY_URL || 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+export const CARTODB_POSITRON_URL = getConfig().CARTODB_POSITRON_URL || 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}';
+export const OTM_TILE_URL = getConfig().OTM_TILE_URL || 'https://tile.opentopomap.org/{z}/{x}/{y}.png';
+export const WMFLABS_BW_URL = getConfig().WMFLABS_BW_URL || 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png';
+export const STAMEN_TERRAIN_URL = getConfig().STAMEN_TERRAIN_URL || 'https://{a-c}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png';
+export const ESRI_WORLD_PHYSICAL_URL = getConfig().ESRI_WORLD_PHYSICAL_URL || 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}';
+export const ESRI_WORLD_IMAGERY_URL = getConfig().ESRI_WORLD_IMAGERY_URL || 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
 
 // Public base URL used to resolve asset URLs in generated PDFs
 // Example: https://i2d.humboldt.org.co/visor-I2D/
