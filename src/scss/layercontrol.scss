@@ -31,19 +31,19 @@
     z-index: 3;
     right: 0px;
     top: 5px;
-    height: auto;
-    // height: 202px;
+    height: calc(100vh - 25px);
+    overflow: auto;
     @include desktop {
         min-width: 350px;
     }
 }
+
 #capas{
     max-height: 50vh;
     // height:100vh;
 }
 
 .card-body{
-    max-height: 1px;
     margin-bottom: 10px;
     padding: 1.2rem 2.25rem;
 }
@@ -130,7 +130,7 @@
 
 .fa-link {
     cursor: pointer;
-    opacity: 0.4;
+    opacity: 0.7;
     &:hover{
         opacity: 1;
     }
@@ -138,6 +138,8 @@
 
 .fa-expand {
     line-height: 1.4;
+    cursor: pointer;
+    opacity: 0.7;
 }
 
 .bold {
