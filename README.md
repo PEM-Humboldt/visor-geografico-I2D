@@ -14,6 +14,7 @@ El Frontend del Visor Geográfico I2D es una aplicación web interactiva que pro
 ## 🚀 Estado Actual del Sistema
 
 ### ✅ **COMPLETAMENTE FUNCIONAL**
+
 - **Mapas Interactivos**: OpenLayers 6.5.0 con controles de zoom y navegación completos
 - **Búsqueda Geográfica**: Sistema de búsqueda de municipios con dropdown interactivo
 - **Proyectos Dinámicos**: Cambio de proyecto vía URL sin recarga de página
@@ -35,17 +36,20 @@ El Frontend del Visor Geográfico I2D es una aplicación web interactiva que pro
 ## 🛠️ Stack Tecnológico
 
 ### Frontend Core
+
 - **Node.js**: 18.3.0
 - **Build Tool**: Parcel 1.12.4 con hot-reload
 - **JavaScript**: Vanilla JS + jQuery 3.5.1
 - **CSS Framework**: Bootstrap 4.5.3 + SCSS personalizado
 
 ### Mapas y Visualización
+
 - **OpenLayers**: 6.5.0 para mapas interactivos
 - **GeoServer**: Integración con capas WMS
 - **Proyecciones**: Soporte EPSG:3857 y EPSG:4326
 
 ### UI/UX
+
 - **Icons**: FontAwesome 5.15.1
 - **Responsive**: Bootstrap grid system
 - **Components**: 45+ componentes modulares en `src/components/`
@@ -55,6 +59,7 @@ El Frontend del Visor Geográfico I2D es una aplicación web interactiva que pro
 ## 📋 Configuración Inicial
 
 ### Prerrequisitos
+
 - **Node.js**: 18.3.0+ (recomendado usar nvm)
 - **npm**: 6.0+ o yarn
 - **Docker**: Para desarrollo con contenedores (opcional)
@@ -63,13 +68,14 @@ El Frontend del Visor Geográfico I2D es una aplicación web interactiva que pro
 
 Clone el proyecto e instale las dependencias:
 
-### 1.1. Clone el repositorio:
+### 1.1. Clone el repositorio
 
 ```
-$ git clone https://github.com/PEM-Humboldt/visor-geografico-I2D.git
+git clone https://github.com/PEM-Humboldt/visor-geografico-I2D.git
 ```
 
-### 1.2. Instalación de paquetes:
+### 1.2. Instalación de paquetes
+
 Ejecute la siguiente sentencia para instalar las dependencias del proyecto:
 
     npm install
@@ -79,24 +85,31 @@ Ejecute la siguiente sentencia para instalar las dependencias del proyecto:
 **Variables de entorno críticas para funcionamiento:**
 
 1. **Crear archivo de configuración**:
+
    ```bash
    cp .env.example .env
    ```
 
 2. **Configurar URLs de servicios locales**:
+
    ```bash
-   NODE_ENV=development
-   GEOSERVER_URL=http://localhost:8081/geoserver/
-   PYTHONSERVER=http://localhost:8001/api/
+    NODE_ENV=development
+    GEOSERVER_URL=http://localhost:8081/geoserver/
+    PYTHONSERVER=http://localhost:8001/api/
 
-   # URLs de mapas base
-   CARTODB_POSITRON_URL=https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png
-   OTM_TILE_URL=https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png
+    # URLs de mapas base
+    # Es posible que el nombre de la variable no corresponda en este momento con el nombre de la capa
+    CARTODB_POSITRON_URL=https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}
+    OTM_TILE_URL=https://tile.opentopomap.org/{z}/{x}/{y}.png
+    WMFLABS_BW_URL=https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png
+    STAMEN_TERRAIN_URL=https://{a-c}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png
+    ESRI_WORLD_PHYSICAL_URL=https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}
+    ESRI_WORLD_IMAGERY_URL=https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}
 
-   # URLs de servicios externos
-   GEOGRAFICO_URL=https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/
-   BIOCULTURAL_URL=https://doi.org/10.21068/
-   BIOLOGICO_URL=https://i2d.humboldt.org.co/
+    # URLs de servicios externos
+    GEOGRAFICO_URL=https://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/
+    BIOCULTURAL_URL=https://doi.org/10.21068/
+    BIOLOGICO_URL=https://i2d.humboldt.org.co/
    ```
 
 3. **Variables importantes**:
@@ -104,25 +117,29 @@ Ejecute la siguiente sentencia para instalar las dependencias del proyecto:
    - `PYTHONSERVER`: Backend Django con APIs REST
    - `PDF_ASSET_BASE_URL`: Base URL para recursos en PDFs (opcional)
 
-### 1.4. Ejecución:
+### 1.4. Ejecución
+
 Ejecute una de las siguientes instrucciones:
 
 - **Entorno de desarrollo** (usa .env personalizado):
+
     ```bash
     npm run dev
     ```
 
 - **Entorno de pruebas** (usa .env.test):
+
     ```bash
     npm run dev:test
     ```
 
 - **Entorno por defecto**:
+
     ```bash
     npm start
     ```
 
-La instrucción iniciará el proyecto en su entorno local y se abrirá en el navegador en http://localhost:1234.
+La instrucción iniciará el proyecto en su entorno local y se abrirá en el navegador en <http://localhost:1234>.
 
 ---
 
@@ -132,15 +149,17 @@ La instrucción iniciará el proyecto en su entorno local y se abrirá en el nav
 
 Este proyecto incluye soporte completo para desarrollo con Docker a través del repositorio principal `humboldt`. El contenedor Docker maneja automáticamente la configuración del entorno y las dependencias.
 
-#### Archivos Docker:
+#### Archivos Docker
+
 - **`Dockerfile`**: Construye imagen estática
 - **`.env`**: Variables de entorno personalizadas para desarrollo local
 - **`.env.test`**: Variables de entorno para pruebas
 - **`.env.example`**: Plantilla de configuración
 
 #### Integración con GHCR
+
 El proyecto contiene un flujo para la creación y publicación de imágenes Docker cada vez que se haga push a la rama develop o cuando se cree un nuevo release, esto esta contenido en el archivo [publish_docker_image.yml](.github/workflows/publish_docker_image.yml). Este flujo crea una imagen que tiene como entrypoint el script [docker-entrypoint.sh](/docker-entrypoint.sh) el cual se ejecuta al hacer `docker run`. Mediante este script se le inyectan al proyecto las variables de modo que queden disponibles por el `RUNTIME`.
-El proyecto posee un archivo llamado [config.json.template](config.json.template) el cual sirve como plantilla para crear e inyectar dichas variables al proyecto a partir del archivo `.env`. 
+El proyecto posee un archivo llamado [config.json.template](config.json.template) el cual sirve como plantilla para crear e inyectar dichas variables al proyecto a partir del archivo `.env`.
 
 Para usar la última imagen disponible en GHCR, ejecute:
 `docker pull ghcr.io/pem-humboldt/visor-geografico-i2d:latest-dev`
@@ -153,6 +172,7 @@ Para desarrollo, también puede generar la imagen localmente usando el siguiente
 ```sh
 docker build --no-cache -f Dockerfile -t visor_i2d_frontend:tag .
 ```
+
 > Si desea generar un nuevo tag, puede verificar la versión actual en el [package.json](./package.json)
 
 Y posteriormente se crea el contenedor y se le cargan las `.env` de la siquiente forma:
@@ -161,7 +181,8 @@ Y posteriormente se crea el contenedor y se le cargan las `.env` de la siquiente
 docker run --rm --name visor_i2d -d -it --env-file .env -p 3000:80 visor_i2d_frontend:tag
 ```
 
-#### Variables de entorno importantes:
+#### Variables de entorno importantes
+
 ```bash
 # Configuración para desarrollo local
 NODE_ENV=development
@@ -191,13 +212,14 @@ docker exec -it visor_i2d bash
 
 | Servicio | Puerto | URL | Descripción |
 |----------|--------|-----|-------------|
-| **Frontend Dev** | 1234 | http://localhost:1234 | Servidor de desarrollo con hot-reload |
+| **Frontend Dev** | 1234 | <http://localhost:1234> | Servidor de desarrollo con hot-reload |
 | **Frontend HMR** | 1235 | - | Hot Module Replacement |
-| **Frontend Prod** | 8080 | http://localhost:8080 | Servidor de producción |
+| **Frontend Prod** | 8080 | <http://localhost:8080> | Servidor de producción |
 
 ### ⚠️ Troubleshooting Docker
 
 #### Reconstruir contenedor después de cambios
+
 ```bash
 # Reconstruir localmente y reiniciar
 docker rm -f visor_i2d
@@ -213,6 +235,7 @@ docker logs -f visor_i2d
 ## Despliegue
 
 ### 2.1. Compilación del proyecto
+
 Para desplegar el proyecto, ejecute la siguiente instrucción:
 
     npm run build
@@ -222,10 +245,13 @@ Para desplegar el proyecto, ejecute la siguiente instrucción:
 Para el caso de apache-tomcat:
 
 - Copie la carpeta *build* en el directorio de despliegue según el servidor web seleccionado. Posteriormente inicie el servidor
+
 ```
 /DIRECTORIO-APACHE-TOMCAT/webapps/
 ```
+
 - Inicie el servicio de tomcat
+
 ```
 /DIRECTORIO-APACHE-TOMCAT/bin/startup.sh
 ```
@@ -235,6 +261,7 @@ Para el caso de apache-tomcat:
 - Es necesario tener funcional tanto el [backend](https://github.com/PEM-Humboldt/visor-geografico-I2D-backend) para las funcionalidades, como el [geoserver](http://34.231.25.67:8080/geoserver/web/) en el servicio de capas.
 
 Para la correcta ejecución de las funcionalidades del frontend, la siguiente ruta contiene dichas conexiones externas
+
 ```
  src/components/server/url
 ```
@@ -280,27 +307,36 @@ A partir de ahora, las URLs se pueden configurar mediante variables de entorno. 
   - PDF_ASSET_BASE_URL (opcional; URL base pública para resolver imágenes en PDFs)
 
 - Ubicación central de configuración en código:
+
   ```
   src/components/server/url.js
   ```
 
 ### Entornos
+
 - Desarrollo local (por defecto):
   - Ejecuta:
+
     ```
     npm run dev
     ```
+
 - Pruebas (usa .env.test):
   - Ejecuta:
+
     ```
     npm run dev:test
     ```
+
 - Compilación para despliegue:
   - Producción por defecto:
+
     ```
     npm run build
     ```
+
   - Pruebas (inyecta .env.test):
+
     ```
     npm run build:test
     ```
@@ -316,6 +352,7 @@ Nota: Parcel resuelve process.env.* en tiempo de compilación. Los scripts :test
 El frontend consume las siguientes APIs del backend Django:
 
 #### 🔍 Búsqueda Geográfica
+
 ```javascript
 // Búsqueda de municipios implementada
 GET /api/mpio/search/<término>/
@@ -324,6 +361,7 @@ GET /api/mpio/search/<término>/
 ```
 
 #### 📊 Gestión de Proyectos
+
 ```javascript
 // Sistema dinámico de proyectos
 GET /api/projects/                    // Lista todos los proyectos
@@ -334,12 +372,14 @@ window.location = '/?proyecto=HU-VisorI2D-0001'
 ```
 
 #### 🗺️ Datos Geográficos
+
 ```javascript
 GET /api/dpto/          // Lista departamentos con geometrías
 GET /api/mpio/          // Lista municipios con geometrías
 ```
 
 #### 🐛 Datos GBIF
+
 ```javascript
 GET /api/gbif/gbifinfo                           // Información general
 GET /api/gbif/descargar-zip/?codigo_mpio=<code>  // Descarga por municipio
@@ -349,13 +389,15 @@ GET /api/gbif/descargar-zip/?codigo_dpto=<code>  // Descarga por departamento
 ### 🔧 Configuración de Conectividad
 
 La configuración de URLs se centraliza en:
+
 ```
 src/components/server/url.js
 ```
 
 **Variables de entorno críticas**:
-- `PYTHONSERVER`: Backend Django (http://localhost:8001/api/)
-- `GEOSERVER_URL`: Servidor de mapas (http://localhost:8081/geoserver/)
+
+- `PYTHONSERVER`: Backend Django (<http://localhost:8001/api/>)
+- `GEOSERVER_URL`: Servidor de mapas (<http://localhost:8081/geoserver/>)
 
 Para más detalles: [Backend Documentation](https://github.com/maccevedor/visor-geografico-I2D-backend)
 
@@ -396,15 +438,18 @@ npm run build
 ## 📞 Soporte
 
 ### 🏢 Instituto Alexander von Humboldt Colombia
+
 - **Programa**: Evaluación y Monitoreo de la Biodiversidad
 - **Área**: Ingeniería de Datos y Desarrollo
 - **Website**: [http://www.humboldt.org.co](http://www.humboldt.org.co)
 
 ### 🐛 Reportar Issues
+
 - **GitHub**: [Reportar problema](https://github.com/maccevedor/visor-geografico-I2D/issues)
 - **Funcionalidades**: Verificar con `npm run dev` antes de reportar
 
 ### 📚 Recursos Técnicos
+
 - [OpenLayers Documentation](https://openlayers.org/en/latest/doc/)
 - [Bootstrap 4 Documentation](https://getbootstrap.com/docs/4.5/)
 - [Parcel Documentation](https://parceljs.org/)
