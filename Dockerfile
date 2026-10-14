@@ -21,6 +21,7 @@ FROM httpd:alpine AS production
 RUN apk add --no-cache gettext
 
 COPY --from=builder /home/node/app/build/ /usr/local/apache2/htdocs/
+COPY config.js.template /usr/local/apache2/htdocs/config.js.template
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 

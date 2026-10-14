@@ -62,15 +62,15 @@ const createBaseLayers = (project) => {
       name: "Street Map",
     }),
     cartodb_positron: new TileLayer({
-      title: "CartoDB Positron",
+      title: "Esri World Light Gray",
       visible: baseMapVisible === "cartodb_positron",
       source: new XYZ({ 
         url: CARTODB_POSITRON_URL,
-        attributions: " © OpenStreetMap contributors",
+        attributions: "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ",
       }),
       subdomains: "abcd",
       maxZoom: 19,
-      name: "CartoDB Positron",
+      name: "Esri World Light Gray",
     }),
     otm: new TileLayer({
       title: "OTM",
@@ -82,22 +82,22 @@ const createBaseLayers = (project) => {
       name: "OTM",
     }),
     bw: new TileLayer({
-      title: "B & W",
+      title: "Stadia AlidadeSmoothDark",
       visible: baseMapVisible === "bw",
       source: new XYZ({
         url: WMFLABS_BW_URL,
-        attributions: " © OpenStreetMap contributors",
+        attributions: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
       }),
-      name: "BW",
+      name: "Stadia AlidadeSmooth",
     }),
     terrain: new TileLayer({
-      title: "Terrain",
+      title: "CyclOSM",
       visible: baseMapVisible === "terrain",
       source: new XYZ({
         url: STAMEN_TERRAIN_URL,
-        attributions: " © OpenStreetMap contributors",
+        attributions: '<a href="https://github.com/cyclosm/cyclosm-cartocss-style/releases" title="CyclOSM - Open Bicycle render">CyclOSM</a> | Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }),
-      name: "Terrain",
+      name: "CyclOSM",
     }),
     esri_physical: new TileLayer({
       title: "Esri WorldPhysical",
